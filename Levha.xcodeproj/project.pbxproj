@@ -1,0 +1,464 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		09EF829A3A1676141CAA6BB8 /* LevhaLint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086ED309033F9C4E76B79FB7 /* LevhaLint.swift */; };
+		13F2208ACD3F92398912DF93 /* BugunView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F4D6118D8C13D134D6152C /* BugunView.swift */; };
+		2983308B0B69A38B605458E2 /* PaketIceAktarici.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7166D37488535310D59C4C4 /* PaketIceAktarici.swift */; };
+		34770AC66A750BF48566BF49 /* LevhaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2CA3710B6CDF93370CFF39A /* LevhaApp.swift */; };
+		352508771227D68FB0389EE9 /* SayiCetveliCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1C080CA23A06025BC7E618 /* SayiCetveliCanvas.swift */; };
+		3DC4D0A91A82CE27F01A716F /* Tema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59EDB97EBA134790E87609A8 /* Tema.swift */; };
+		669A6DA4A6607EF00CF154DE /* MatrisCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61EC349922B1B554B91E686 /* MatrisCanvas.swift */; };
+		754A3CC73267CAB15CDA89AF /* LevhaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F716D6E9B946B2EF159301A9 /* LevhaView.swift */; };
+		7B4175F839595F2EC7A7DA59 /* LevhaSekmesi.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB02A4F90DF7C1F5FF068CAE /* LevhaSekmesi.swift */; };
+		8A24682A56DFFCBB485D59D3 /* ped.neo.sarilik.json in Resources */ = {isa = PBXBuildFile; fileRef = 19EBA0CC81EDDC85B29BA6C3 /* ped.neo.sarilik.json */; };
+		931C01F0D9AD353FE12A7631 /* PaketKlasoru.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70CC0C0F2C9F79BC1A64D32B /* PaketKlasoru.swift */; };
+		BA5EB838BA319A6505B7639A /* AlgoritmaCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE64A650C4187FA0543E953 /* AlgoritmaCanvas.swift */; };
+		D7F8A246FC726D3660B2ADC2 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98253F4DA2FF23305BD4055 /* RootView.swift */; };
+		F27D94B590330EB76CCEA912 /* LevhaSayfasi.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD3A7B37CF15C73C0302EBCA /* LevhaSayfasi.swift */; };
+		F2BADEDCC7BBE8C729A6C771 /* IcerikView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E43DE18A1811513A80BEE6 /* IcerikView.swift */; };
+		F2EF42D01F36F5F25976EEFA /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = A326F20B205747EC2F1137A7 /* Models.swift */; };
+		F414DB3DA825B5D7C35837C9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B2A81C8A5593C98DD2586E5D /* Assets.xcassets */; };
+		F97BF840A622E1FFA96C9AAE /* PaketJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B7A6ED05001662CB8BBFF9 /* PaketJSON.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		07E43DE18A1811513A80BEE6 /* IcerikView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IcerikView.swift; sourceTree = "<group>"; };
+		086ED309033F9C4E76B79FB7 /* LevhaLint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevhaLint.swift; sourceTree = "<group>"; };
+		19EBA0CC81EDDC85B29BA6C3 /* ped.neo.sarilik.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ped.neo.sarilik.json; sourceTree = "<group>"; };
+		45F4D6118D8C13D134D6152C /* BugunView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BugunView.swift; sourceTree = "<group>"; };
+		4CA47953E105A8D79B76C5E3 /* Levha.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Levha.entitlements; sourceTree = "<group>"; };
+		59EDB97EBA134790E87609A8 /* Tema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tema.swift; sourceTree = "<group>"; };
+		70CC0C0F2C9F79BC1A64D32B /* PaketKlasoru.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaketKlasoru.swift; sourceTree = "<group>"; };
+		8D9BBD186F0B3E41894E7DED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		9CE64A650C4187FA0543E953 /* AlgoritmaCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlgoritmaCanvas.swift; sourceTree = "<group>"; };
+		A2CA3710B6CDF93370CFF39A /* LevhaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevhaApp.swift; sourceTree = "<group>"; };
+		A326F20B205747EC2F1137A7 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
+		AD3A7B37CF15C73C0302EBCA /* LevhaSayfasi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevhaSayfasi.swift; sourceTree = "<group>"; };
+		B2A81C8A5593C98DD2586E5D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		B6B7A6ED05001662CB8BBFF9 /* PaketJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaketJSON.swift; sourceTree = "<group>"; };
+		CB02A4F90DF7C1F5FF068CAE /* LevhaSekmesi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevhaSekmesi.swift; sourceTree = "<group>"; };
+		CC1C080CA23A06025BC7E618 /* SayiCetveliCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SayiCetveliCanvas.swift; sourceTree = "<group>"; };
+		D98253F4DA2FF23305BD4055 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
+		DEFB666D6D5A13D20D7B9425 /* Levha.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Levha.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E61EC349922B1B554B91E686 /* MatrisCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrisCanvas.swift; sourceTree = "<group>"; };
+		E7166D37488535310D59C4C4 /* PaketIceAktarici.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaketIceAktarici.swift; sourceTree = "<group>"; };
+		F716D6E9B946B2EF159301A9 /* LevhaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevhaView.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		059CE33E9BAB5FF624129FC0 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				DEFB666D6D5A13D20D7B9425 /* Levha.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		06C8C38336D972289F047428 = {
+			isa = PBXGroup;
+			children = (
+				6CB8ED8E682818C619135220 /* Levha */,
+				8A88951CD00261A9E9D49F41 /* SamplePackages */,
+				FDE5FCD9B426B2B7AA4AC950 /* Tools */,
+				059CE33E9BAB5FF624129FC0 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		1359D12CBA7B1B88AD263CEF /* Design */ = {
+			isa = PBXGroup;
+			children = (
+				59EDB97EBA134790E87609A8 /* Tema.swift */,
+			);
+			path = Design;
+			sourceTree = "<group>";
+		};
+		1583CFF03B2FFEE169CDD40A /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				A326F20B205747EC2F1137A7 /* Models.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		175C4194059764A449B5C542 /* LevhaSema */ = {
+			isa = PBXGroup;
+			children = (
+				086ED309033F9C4E76B79FB7 /* LevhaLint.swift */,
+				B6B7A6ED05001662CB8BBFF9 /* PaketJSON.swift */,
+			);
+			path = LevhaSema;
+			sourceTree = "<group>";
+		};
+		2DB22904BA10DB5DA13D4FFB /* Import */ = {
+			isa = PBXGroup;
+			children = (
+				E7166D37488535310D59C4C4 /* PaketIceAktarici.swift */,
+				70CC0C0F2C9F79BC1A64D32B /* PaketKlasoru.swift */,
+			);
+			path = Import;
+			sourceTree = "<group>";
+		};
+		2FE4579B9DD7A70061EC1C34 /* levha-lint */ = {
+			isa = PBXGroup;
+			children = (
+				ABA15E3FB24279D1928FCAD7 /* Sources */,
+			);
+			path = "levha-lint";
+			sourceTree = "<group>";
+		};
+		6CB8ED8E682818C619135220 /* Levha */ = {
+			isa = PBXGroup;
+			children = (
+				B2A81C8A5593C98DD2586E5D /* Assets.xcassets */,
+				8D9BBD186F0B3E41894E7DED /* Info.plist */,
+				4CA47953E105A8D79B76C5E3 /* Levha.entitlements */,
+				A2CA3710B6CDF93370CFF39A /* LevhaApp.swift */,
+				1359D12CBA7B1B88AD263CEF /* Design */,
+				2DB22904BA10DB5DA13D4FFB /* Import */,
+				1583CFF03B2FFEE169CDD40A /* Models */,
+				74EE66AAF083D70EC8DDE051 /* Render */,
+				AF08E46FDD2BACBC8E450C6E /* Screens */,
+			);
+			path = Levha;
+			sourceTree = "<group>";
+		};
+		74EE66AAF083D70EC8DDE051 /* Render */ = {
+			isa = PBXGroup;
+			children = (
+				9CE64A650C4187FA0543E953 /* AlgoritmaCanvas.swift */,
+				F716D6E9B946B2EF159301A9 /* LevhaView.swift */,
+				E61EC349922B1B554B91E686 /* MatrisCanvas.swift */,
+				CC1C080CA23A06025BC7E618 /* SayiCetveliCanvas.swift */,
+			);
+			path = Render;
+			sourceTree = "<group>";
+		};
+		8A88951CD00261A9E9D49F41 /* SamplePackages */ = {
+			isa = PBXGroup;
+			children = (
+				19EBA0CC81EDDC85B29BA6C3 /* ped.neo.sarilik.json */,
+			);
+			path = SamplePackages;
+			sourceTree = "<group>";
+		};
+		ABA15E3FB24279D1928FCAD7 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				175C4194059764A449B5C542 /* LevhaSema */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		AF08E46FDD2BACBC8E450C6E /* Screens */ = {
+			isa = PBXGroup;
+			children = (
+				45F4D6118D8C13D134D6152C /* BugunView.swift */,
+				07E43DE18A1811513A80BEE6 /* IcerikView.swift */,
+				AD3A7B37CF15C73C0302EBCA /* LevhaSayfasi.swift */,
+				CB02A4F90DF7C1F5FF068CAE /* LevhaSekmesi.swift */,
+				D98253F4DA2FF23305BD4055 /* RootView.swift */,
+			);
+			path = Screens;
+			sourceTree = "<group>";
+		};
+		FDE5FCD9B426B2B7AA4AC950 /* Tools */ = {
+			isa = PBXGroup;
+			children = (
+				2FE4579B9DD7A70061EC1C34 /* levha-lint */,
+			);
+			path = Tools;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		1CDA4B5DD88A1355C2BD8437 /* Levha */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 64D1D21582281A8151D54C8B /* Build configuration list for PBXNativeTarget "Levha" */;
+			buildPhases = (
+				0DDCCEF01E88A3B1975ACB61 /* Sources */,
+				A0C7A6B28F3E837C7F55D942 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Levha;
+			packageProductDependencies = (
+			);
+			productName = Levha;
+			productReference = DEFB666D6D5A13D20D7B9425 /* Levha.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		98D499308CECAE04D35D505A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					1CDA4B5DD88A1355C2BD8437 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 9B07FC5DF9775CCF80B122FF /* Build configuration list for PBXProject "Levha" */;
+			developmentRegion = tr;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				tr,
+			);
+			mainGroup = 06C8C38336D972289F047428;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 059CE33E9BAB5FF624129FC0 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				1CDA4B5DD88A1355C2BD8437 /* Levha */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A0C7A6B28F3E837C7F55D942 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F414DB3DA825B5D7C35837C9 /* Assets.xcassets in Resources */,
+				8A24682A56DFFCBB485D59D3 /* ped.neo.sarilik.json in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0DDCCEF01E88A3B1975ACB61 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				BA5EB838BA319A6505B7639A /* AlgoritmaCanvas.swift in Sources */,
+				13F2208ACD3F92398912DF93 /* BugunView.swift in Sources */,
+				F2BADEDCC7BBE8C729A6C771 /* IcerikView.swift in Sources */,
+				34770AC66A750BF48566BF49 /* LevhaApp.swift in Sources */,
+				09EF829A3A1676141CAA6BB8 /* LevhaLint.swift in Sources */,
+				F27D94B590330EB76CCEA912 /* LevhaSayfasi.swift in Sources */,
+				7B4175F839595F2EC7A7DA59 /* LevhaSekmesi.swift in Sources */,
+				754A3CC73267CAB15CDA89AF /* LevhaView.swift in Sources */,
+				669A6DA4A6607EF00CF154DE /* MatrisCanvas.swift in Sources */,
+				F2EF42D01F36F5F25976EEFA /* Models.swift in Sources */,
+				2983308B0B69A38B605458E2 /* PaketIceAktarici.swift in Sources */,
+				F97BF840A622E1FFA96C9AAE /* PaketJSON.swift in Sources */,
+				931C01F0D9AD353FE12A7631 /* PaketKlasoru.swift in Sources */,
+				D7F8A246FC726D3660B2ADC2 /* RootView.swift in Sources */,
+				352508771227D68FB0389EE9 /* SayiCetveliCanvas.swift in Sources */,
+				3DC4D0A91A82CE27F01A716F /* Tema.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		028D36AB3AD1417D750ED0A6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Levha/Levha.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = Levha/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = tr.kisisel.levha;
+				PRODUCT_MODULE_NAME = LevhaUygulama;
+				PRODUCT_NAME = Levha;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		31B29DA6394C1FA2FC2CCEA5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 0.1;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		6B41164C32014C71E266BD3F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 0.1;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		EFF200F72A8AC29C4D657F7B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = Levha/Levha.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = Levha/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = tr.kisisel.levha;
+				PRODUCT_MODULE_NAME = LevhaUygulama;
+				PRODUCT_NAME = Levha;
+				SDKROOT = iphoneos;
+				SUPPORTS_MACCATALYST = NO;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		64D1D21582281A8151D54C8B /* Build configuration list for PBXNativeTarget "Levha" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				028D36AB3AD1417D750ED0A6 /* Debug */,
+				EFF200F72A8AC29C4D657F7B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		9B07FC5DF9775CCF80B122FF /* Build configuration list for PBXProject "Levha" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				31B29DA6394C1FA2FC2CCEA5 /* Debug */,
+				6B41164C32014C71E266BD3F /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 98D499308CECAE04D35D505A /* Project object */;
+}

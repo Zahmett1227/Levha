@@ -1,0 +1,9 @@
+.DS_Store
+.build/
+.swiftpm/
+DerivedData/
+build/
+*.xcuserstate
+xcuserdata/
+Levha.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/
+.claude/settings.local.json

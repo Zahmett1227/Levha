@@ -1,0 +1,58 @@
+name: Levha
+options:
+  bundleIdPrefix: tr.kisisel
+  deploymentTarget:
+    iOS: "17.0"
+  developmentLanguage: tr
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "0.1"
+    CURRENT_PROJECT_VERSION: "1"
+targets:
+  Levha:
+    type: application
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: Levha
+        excludes:
+          - "Schema/**"
+      - path: Tools/levha-lint/Sources/LevhaSema
+      - path: SamplePackages
+        buildPhase: resources
+    info:
+      path: Levha/Info.plist
+      properties:
+        CFBundleDisplayName: Levha
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        CFBundleDevelopmentRegion: tr
+        CFBundleLocalizations: [tr]
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        UIApplicationSupportsIndirectInputEvents: true
+        UIFileSharingEnabled: true
+        LSSupportsOpeningDocumentsInPlace: true
+        NSUbiquitousContainers:
+          iCloud.tr.kisisel.levha:
+            NSUbiquitousContainerIsDocumentScopePublic: true
+            NSUbiquitousContainerName: Levha
+            NSUbiquitousContainerSupportedFolderLevels: Any
+    entitlements:
+      path: Levha/Levha.entitlements
+      properties:
+        com.apple.developer.icloud-container-identifiers: [iCloud.tr.kisisel.levha]
+        com.apple.developer.icloud-services: [CloudDocuments]
+        com.apple.developer.ubiquity-container-identifiers: [iCloud.tr.kisisel.levha]
+    settings:
+      base:
+        PRODUCT_NAME: Levha
+        PRODUCT_MODULE_NAME: LevhaUygulama
+        PRODUCT_BUNDLE_IDENTIFIER: tr.kisisel.levha
+        TARGETED_DEVICE_FAMILY: "1"
+        SUPPORTS_MACCATALYST: NO
+        CODE_SIGN_STYLE: Automatic
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+    scheme: {}
