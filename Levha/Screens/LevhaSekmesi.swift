@@ -7,12 +7,14 @@ struct LevhaSekmesi: View {
     private var paketler: [Paket]
     @AppStorage("aktifPaketId") private var aktifPaketId = ""
     @State private var mod: LevhaModu = .kesif
+    private var yonlendirici = Yonlendirici.ortak
 
     var body: some View {
         NavigationStack {
             Group {
                 if let paket = paketler.first(where: { $0.paket_id == aktifPaketId }) ?? paketler.first {
-                    LevhaPager(levhalar: paket.siraliLevhalar, mod: $mod, onek: paket.bolum) {
+                    LevhaPager(levhalar: paket.siraliLevhalar, mod: $mod, onek: paket.bolum,
+                               baslangicId: yonlendirici.hedefLevhaId) {
                         Menu {
                             ForEach(paketler) { p in
                                 Button {
@@ -33,7 +35,8 @@ struct LevhaSekmesi: View {
                         }
                         .accessibilityLabel("Alt konu seç")
                     }
-                    .id(paket.paket_id)
+                    // Yeni açma isteği (deep link) zinciri hedef levhadan yeniden kurar.
+                    .id("\(paket.paket_id)|\(yonlendirici.istek)")
                 } else {
                     ContentUnavailableView("Henüz levha yok", systemImage: "square.dashed",
                                            description: Text("İçerik sekmesinden bir paket içe aktar."))
@@ -41,6 +44,9 @@ struct LevhaSekmesi: View {
             }
             .background(Tema.arkaPlan)
             .toolbar(.hidden, for: .navigationBar)
+        }
+        .onChange(of: yonlendirici.istek, initial: true) {
+            if let m = yonlendirici.hedefMod { mod = m }
         }
     }
 }
@@ -51,10 +57,12 @@ struct LevhaPager<Sag: View>: View {
     @Binding var mod: LevhaModu
     var izinliModlar: [LevhaModu] = LevhaModu.allCases
     let onek: String
+    var baslangicId: String?
     var bildir: (LevhaOlayi) -> Void = { _ in }
     @ViewBuilder var sag: Sag
 
     @State private var indeks = 0
+    @State private var hazir = false
 
     var body: some View {
         VStack(spacing: 6) {
@@ -82,5 +90,10 @@ struct LevhaPager<Sag: View>: View {
             .tabViewStyle(.page(indexDisplayMode: .never))
         }
         .background(Tema.arkaPlan)
+        .onAppear {
+            guard !hazir else { return }
+            hazir = true
+            if let id = baslangicId, let i = levhalar.firstIndex(where: { $0.id == id }) { indeks = i }
+        }
     }
 }

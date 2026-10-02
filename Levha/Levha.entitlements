@@ -14,5 +14,9 @@
 	<array>
 		<string>iCloud.tr.kisisel.levha</string>
 	</array>
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.tr.kisisel.levha</string>
+	</array>
 </dict>
 </plist>

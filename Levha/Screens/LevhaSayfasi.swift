@@ -5,6 +5,14 @@ import SwiftData
 enum LevhaOlayi {
     case ortmeKaydedildi(levhaId: String)
     case sabotajBitti(levhaId: String, bulundu: Bool)
+    case insaBitti(levhaId: String)
+}
+
+/// İnşa şeridindeki etiket çipi.
+struct InsaCipi: Identifiable, Equatable {
+    let id: String
+    let etiket: String
+    let renk: String
 }
 
 /// Zincirdeki tek bir levha: başlık, akılda kalan şeridi, mod seçici, levha kartı, not paneli.
@@ -26,6 +34,17 @@ struct LevhaSayfasi: View {
     @State private var senaryo: SabotajSenaryosu?
     @State private var sabotajDeneme = 0
     @State private var sabotajAsama: SabotajAsamasi = .ariyor(yanlis: 0)
+    // İnşa
+    @State private var insaHedefler: [String] = []
+    @State private var yerlesen: Set<String> = []
+    @State private var ilkDenemeKacan: Set<String> = []
+    @State private var cipler: [InsaCipi] = []
+    @State private var seciliCip: String?
+    @State private var insaHata = 0
+    @State private var insaBaslangic = Date.now
+    @State private var hataliMaske: String?
+    @State private var sallama = 0
+    @State private var insaDeneme = 0
 
     enum OrtmeAsamasi: Equatable {
         case aciliyor
@@ -57,7 +76,36 @@ struct LevhaSayfasi: View {
         case .kesif:
             return LevhaGorunumDurumu(mod: .kesif, katman: katman, secili: secili,
                                       dokunulabilir: katman >= LevhaGorunumDurumu.katmanSayisi)
+        case .insa:
+            var d = LevhaGorunumDurumu(mod: .insa, katman: LevhaGorunumDurumu.katmanSayisi,
+                                       gizli: Set(insaHedefler).subtracting(yerlesen))
+            d.maskeStili = .bos
+            d.maskeIpuclari = insaIpuclari
+            d.hataliMaske = hataliMaske
+            d.sallama = sallama
+            for id in yerlesen { d.halkalar[id] = ilkDenemeKacan.contains(id) ? .sari : .yesil }
+            return d
         }
+    }
+
+    private var insaBitti: Bool { !insaHedefler.isEmpty && yerlesen.count == insaHedefler.count }
+
+    /// Boş kutuda kalan ipucu: cetvelde değer, zaman çizelgesinde zaman; diğer tiplerde konum yeterli.
+    private var insaIpuclari: [String: String] {
+        var sonuc: [String: String] = [:]
+        for d in levha.dugumler where insaHedefler.contains(d.id) {
+            switch levha.levhaTipi {
+            case .sayi_cetveli:
+                sonuc[d.id] = d.deger.map { "\(Bicim.sayi($0)) \(levha.eksenBirim)" } ?? "sabit değil"
+            case .zaman_cizelgesi:
+                let birim = ZamanBirimi(rawValue: levha.eksenBirim)?.ad ?? levha.eksenBirim
+                let bas = Bicim.sayi(d.deger ?? 0)
+                sonuc[d.id] = d.bit.map { "\(bas)–\(Bicim.sayi($0)) \(birim)" } ?? "\(bas). \(birim)"
+            default:
+                break
+            }
+        }
+        return sonuc
     }
 
     var body: some View {
@@ -88,6 +136,7 @@ struct LevhaSayfasi: View {
                 case .kesif: kesifPaneli
                 case .ortme: ortmePaneli
                 case .sabotaj: sabotajPaneli
+                case .insa: insaPaneli
                 }
             }
         }
@@ -95,6 +144,8 @@ struct LevhaSayfasi: View {
         .padding(.bottom, 10)
         .sensoryFeedback(.selection, trigger: katman)
         .sensoryFeedback(.impact(weight: .light), trigger: acilan.count)
+        .sensoryFeedback(.error, trigger: sallama)
+        .sensoryFeedback(.success, trigger: yerlesen.count)
         .sensoryFeedback(trigger: sabotajAsama) { _, yeni in
             switch yeni {
             case .bulundu: return .success
@@ -118,6 +169,23 @@ struct LevhaSayfasi: View {
         if !izinliModlar.contains(mod), let ilk = izinliModlar.first { mod = ilk }
         hedefleriSec()
         sabotajKur()
+        insaKur()
+    }
+
+    /// İnşa: insa_sirasi (yoksa ortme_sirasi) düğümleri boş kalır, etiketleri tohumlu karışık çip olur.
+    private func insaKur() {
+        let idler = Set(levha.dugumler.map(\.id))
+        insaHedefler = (levha.insa_sirasi ?? levha.ortme_sirasi).filter { idler.contains($0) }
+        var rng = TohumluUretec(tohum: "insa|\(levha.id)|\(DurumServisi.gunAnahtari())|\(insaDeneme)")
+        cipler = insaHedefler.compactMap { id in
+            levha.dugumler.first { $0.id == id }.map { InsaCipi(id: id, etiket: $0.etiket, renk: $0.renk) }
+        }.shuffled(using: &rng)
+        yerlesen = []
+        ilkDenemeKacan = []
+        seciliCip = nil
+        insaHata = 0
+        hataliMaske = nil
+        insaBaslangic = .now
     }
 
     /// Örtme maskesi: `ortme_sirasi` düğüm zayıflığına göre yeniden sıralanır (zayıf öne), ilk 3'ü gizlenir.
@@ -160,6 +228,8 @@ struct LevhaSayfasi: View {
             if Set(hedefler).isSubset(of: acilan) {
                 withAnimation(.easeOut(duration: 0.25)) { asama = .degerlendir }
             }
+        case .insa:
+            insaYerlestir(id)
         case .sabotaj:
             guard let s = senaryo, case .ariyor(let yanlis) = sabotajAsama else { return }
             if s.hedef.contains(id) {
@@ -170,6 +240,35 @@ struct LevhaSayfasi: View {
             } else {
                 withAnimation(.easeOut(duration: 0.25)) { sabotajAsama = .bulunamadi }
                 sabotajBitir(bulundu: false, deneme: 2)
+            }
+        }
+    }
+
+    /// Seçili çip boş kutuya: etiket aynıysa yerleşir (aynı etiketli kutular birbirinin yerine geçebilir);
+    /// değilse kutu kırmızı sallanır, çip şeride döner, hata +1.
+    private func insaYerlestir(_ kutu: String) {
+        guard durum.gizli.contains(kutu), let cipId = seciliCip, let cip = cipler.first(where: { $0.id == cipId }) else { return }
+        let hedefEtiket = levha.dugumler.first { $0.id == kutu }?.etiket
+        if cip.etiket == hedefEtiket {
+            withAnimation(.easeOut(duration: 0.25)) {
+                _ = yerlesen.insert(kutu)
+                cipler.removeAll { $0.id == cipId }
+                seciliCip = nil
+            }
+            if insaBitti {
+                DurumServisi.insaKaydet(levha: levha, hata: insaHata, toplam: insaHedefler.count,
+                                        sure: Date.now.timeIntervalSince(insaBaslangic), context)
+                bildir(.insaBitti(levhaId: levha.id))
+            }
+        } else {
+            insaHata += 1
+            ilkDenemeKacan.insert(kutu)
+            hataliMaske = kutu
+            seciliCip = nil
+            withAnimation(.linear(duration: 0.45)) { sallama += 1 }
+            Task {
+                try? await Task.sleep(for: .milliseconds(650))
+                if hataliMaske == kutu { withAnimation(.easeOut(duration: 0.2)) { hataliMaske = nil } }
             }
         }
     }
@@ -203,6 +302,7 @@ struct LevhaSayfasi: View {
         }
         hedefleriSec()
         sabotajKur()
+        insaKur()
     }
 
     // MARK: - Paneller
@@ -351,6 +451,61 @@ struct LevhaSayfasi: View {
                     .foregroundStyle(RenkSeti.kirmizi.yazi)
                 sabotajSonu
             }
+        }
+    }
+
+    @ViewBuilder
+    private var insaPaneli: some View {
+        HStack(spacing: 8) {
+            PanelBasligi(ust: "İNŞA", alt: "Yerleşen \(yerlesen.count)/\(insaHedefler.count)")
+            Spacer()
+            Text("Hata \(insaHata)")
+                .font(.system(size: 12, weight: .semibold).monospacedDigit())
+                .foregroundStyle(insaHata > 0 ? RenkSeti.kirmizi.yazi : Tema.ikincil)
+        }
+        if insaHedefler.isEmpty {
+            Text("Bu levhada inşa sırası yok.")
+                .font(.system(size: 14))
+                .foregroundStyle(Tema.ikincil)
+        } else if insaBitti {
+            let ilk = insaHedefler.count - ilkDenemeKacan.count
+            Label("\(ilk)/\(insaHedefler.count) ilk denemede · hata \(insaHata)", systemImage: "checkmark.seal.fill")
+                .font(.system(size: 15, weight: .bold))
+                .foregroundStyle(ilk == insaHedefler.count ? RenkSeti.yesil.yazi : RenkSeti.sari.yazi)
+            Spacer(minLength: 0)
+            PanelDugmesi(baslik: "Baştan dene", renk: .gri, dolu: false) {
+                insaDeneme += 1
+                withAnimation(.easeOut(duration: 0.25)) { insaKur() }
+            }
+        } else {
+            ScrollView(.horizontal) {
+                HStack(spacing: 6) {
+                    ForEach(cipler) { c in
+                        let secildi = seciliCip == c.id
+                        let renk = RenkSeti.ad(c.renk)
+                        Button {
+                            withAnimation(.easeOut(duration: 0.15)) { seciliCip = secildi ? nil : c.id }
+                        } label: {
+                            Text(c.etiket)
+                                .font(.system(size: 12.5, weight: .semibold))
+                                .foregroundStyle(secildi ? Color.white : renk.yazi)
+                                .lineLimit(1)
+                                .padding(.horizontal, 10)
+                                .frame(minHeight: 40)
+                                .background(secildi ? renk.kenar : renk.zemin, in: RoundedRectangle(cornerRadius: 9, style: .continuous))
+                                .overlay(RoundedRectangle(cornerRadius: 9, style: .continuous).strokeBorder(renk.kenar, lineWidth: 1.5))
+                                .scaleEffect(secildi ? 1.04 : 1)
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityAddTraits(secildi ? .isSelected : [])
+                    }
+                }
+                .padding(.vertical, 2)
+            }
+            .scrollIndicators(.hidden)
+            Text(seciliCip == nil ? "Bir çip seç, sonra boş kutuya dokun." : "Şimdi boş kutuya dokun.")
+                .font(.system(size: 12.5))
+                .foregroundStyle(Tema.ikincil)
         }
     }
 

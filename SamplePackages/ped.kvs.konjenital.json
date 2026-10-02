@@ -1,5 +1,5 @@
 {
-  "sema_surumu": 2,
+  "sema_surumu": 3,
   "paket_id": "ped.kvs.konjenital",
   "ders": "Pediatri",
   "bolum": "Kardiyoloji",
@@ -263,6 +263,15 @@
           ],
           "dogrusu": "Fetüste foramen ovaleden akım sağ atriyumdan sola doğrudur."
         }
+      ],
+      "insa_sirasi": [
+        "f2",
+        "f4",
+        "f7",
+        "f9",
+        "f10",
+        "f11",
+        "f12"
       ]
     },
     {
@@ -437,6 +446,16 @@
           ],
           "dogrusu": "Soldan sağa şantlar (VSD, ASD, PDA) akciğer kanlanmasını artırır; obstrüktif lezyonlarda kanlanma normaldir."
         }
+      ],
+      "insa_sirasi": [
+        "a4",
+        "a5",
+        "a6",
+        "a7",
+        "a8",
+        "a9",
+        "a10",
+        "a11"
       ]
     },
     {
@@ -613,6 +632,15 @@
           ],
           "dogrusu": "Triküspit atrezisinde sol aks, TOF'ta sağ aks sapması vardır."
         }
+      ],
+      "insa_sirasi": [
+        "r0c1",
+        "r1c1",
+        "r2c2",
+        "r4c1",
+        "r0c3",
+        "r1c3",
+        "r4c3"
       ]
     }
   ],
@@ -641,6 +669,16 @@
       "celdirici_dugum": {
         "0": "f12",
         "2": "f9"
+      },
+      "kazanim": "k1",
+      "kalip": "ilac",
+      "zorluk": 1,
+      "secenek_aile": {
+        "0": "İndometasin / ibuprofen",
+        "1": "Prostaglandin E₁",
+        "2": "Oksijen",
+        "3": "Digoksin",
+        "4": "Furosemid"
       }
     },
     {
@@ -667,6 +705,15 @@
       ],
       "celdirici_dugum": {
         "0": "f10"
+      },
+      "kazanim": "k2",
+      "kalip": "ilac",
+      "zorluk": 1,
+      "secenek_aile": {
+        "0": "Prostaglandin E₁",
+        "1": "İndometasin / ibuprofen",
+        "2": "Digoksin",
+        "3": "Propranolol"
       }
     },
     {
@@ -693,6 +740,15 @@
       "celdirici_dugum": {
         "0": "f7",
         "2": "f4"
+      },
+      "kazanim": "k5",
+      "kalip": "esleme",
+      "zorluk": 1,
+      "secenek_aile": {
+        "0": "Duktus arteriyozus",
+        "1": "Duktus venozus",
+        "2": "Foramen ovale",
+        "3": "Umbilikal arter"
       }
     },
     {
@@ -720,7 +776,10 @@
         "1": "f9",
         "2": "f10",
         "4": "f2"
-      }
+      },
+      "kazanim": "k4",
+      "kalip": "mekanizma",
+      "zorluk": 2
     },
     {
       "id": "q5",
@@ -747,6 +806,16 @@
         "0": "f2",
         "3": "f4",
         "4": "f8"
+      },
+      "kazanim": "k6",
+      "kalip": "esleme",
+      "zorluk": 1,
+      "secenek_aile": {
+        "0": "Duktus venozus",
+        "1": "Umbilikal ven",
+        "2": "Duktus arteriyozus",
+        "3": "Foramen ovale",
+        "4": "Umbilikal arter"
       }
     },
     {
@@ -776,6 +845,16 @@
         "2": "a10",
         "3": "a8",
         "4": "a9"
+      },
+      "kazanim": "k13",
+      "kalip": "en_olasi_tani",
+      "zorluk": 1,
+      "secenek_aile": {
+        "0": "Fallot tetralojisi",
+        "1": "Büyük arterlerin transpozisyonu",
+        "2": "Triküspit atrezisi",
+        "3": "VSD",
+        "4": "Pulmoner stenoz"
       }
     },
     {
@@ -805,6 +884,16 @@
         "2": "a11",
         "3": "a11",
         "4": "a8"
+      },
+      "kazanim": "k10",
+      "kalip": "en_olasi_tani",
+      "zorluk": 1,
+      "secenek_aile": {
+        "0": "Fallot tetralojisi",
+        "1": "TAPVD",
+        "2": "Büyük arterlerin transpozisyonu",
+        "3": "Trunkus arteriyozus",
+        "4": "ASD"
       }
     },
     {
@@ -834,6 +923,16 @@
         "2": "a10",
         "3": "a9",
         "4": "a11"
+      },
+      "kazanim": "k12",
+      "kalip": "en_olasi_tani",
+      "zorluk": 1,
+      "secenek_aile": {
+        "0": "Fallot tetralojisi",
+        "1": "VSD",
+        "2": "Triküspit atrezisi",
+        "3": "Aort koarktasyonu",
+        "4": "Büyük arterlerin transpozisyonu"
       }
     },
     {
@@ -863,6 +962,16 @@
         "1": "a6",
         "2": "a6",
         "4": "a9"
+      },
+      "kazanim": "k9",
+      "kalip": "ayirici_cift",
+      "zorluk": 2,
+      "secenek_aile": {
+        "0": "Fallot tetralojisi",
+        "1": "Triküspit atrezisi",
+        "2": "Pulmoner atrezi",
+        "3": "Trunkus arteriyozus",
+        "4": "Pulmoner stenoz"
       }
     },
     {
@@ -890,6 +999,16 @@
         "1": "r1c2",
         "3": "r3c2",
         "4": "r4c2"
+      },
+      "kazanim": "k14",
+      "kalip": "patognomonik",
+      "zorluk": 2,
+      "secenek_aile": {
+        "0": "Fallot tetralojisi",
+        "1": "Büyük arterlerin transpozisyonu",
+        "2": "Triküspit atrezisi",
+        "3": "Trunkus arteriyozus",
+        "4": "TAPVD"
       }
     },
     {
@@ -914,6 +1033,16 @@
       ],
       "celdirici_dugum": {
         "1": "r1c3"
+      },
+      "kazanim": "k16",
+      "kalip": "ilk_adim",
+      "zorluk": 2,
+      "secenek_aile": {
+        "0": "Prostaglandin E₁",
+        "1": "İndometasin / ibuprofen",
+        "2": "Digoksin",
+        "3": "Propranolol",
+        "4": "Furosemid"
       }
     },
     {
@@ -939,6 +1068,16 @@
       "celdirici_dugum": {
         "1": "r0c1",
         "3": "r1c1"
+      },
+      "kazanim": "k13",
+      "kalip": "patognomonik",
+      "zorluk": 1,
+      "secenek_aile": {
+        "0": "TAPVD",
+        "1": "Fallot tetralojisi",
+        "2": "Triküspit atrezisi",
+        "3": "Büyük arterlerin transpozisyonu",
+        "4": "Aort koarktasyonu"
       }
     },
     {
@@ -963,6 +1102,16 @@
       ],
       "celdirici_dugum": {
         "2": "r2c3"
+      },
+      "kazanim": "k15",
+      "kalip": "ilk_adim",
+      "zorluk": 2,
+      "secenek_aile": {
+        "0": "Diz-göğüs pozisyonu",
+        "1": "Digoksin",
+        "2": "Prostaglandin E₁",
+        "3": "İndometasin / ibuprofen",
+        "4": "Furosemid"
       }
     },
     {
@@ -986,7 +1135,297 @@
         "r3c1",
         "r3c3"
       ],
-      "celdirici_dugum": {}
+      "celdirici_dugum": {},
+      "kazanim": "k17",
+      "kalip": "esleme",
+      "zorluk": 2
+    }
+  ],
+  "kazanimlar": [
+    {
+      "id": "k1",
+      "metin": "Duktusa bağımlı KKH'de ilk tedavi PGE₁ infüzyonudur; önemli yan etkisi apne",
+      "kalip": "ilac",
+      "dugumler": [
+        "f10"
+      ],
+      "sorulabilirlik": 5,
+      "aile": "a3",
+      "anahtar_ipucu": "duktusa bağımlı"
+    },
+    {
+      "id": "k2",
+      "metin": "Prematürede açık duktus ibuprofen/indometasinle (COX inhibisyonu) kapatılır",
+      "kalip": "ilac",
+      "dugumler": [
+        "f12",
+        "f7"
+      ],
+      "sorulabilirlik": 4,
+      "aile": "a3",
+      "anahtar_ipucu": "prematüre + sürekli üfürüm"
+    },
+    {
+      "id": "k3",
+      "metin": "Duktus arteriyozusu doğumda artan oksijen kapatır, prostaglandin E açık tutar",
+      "kalip": "mekanizma",
+      "dugumler": [
+        "f9",
+        "f7",
+        "f10"
+      ],
+      "sorulabilirlik": 3,
+      "aile": "a2"
+    },
+    {
+      "id": "k4",
+      "metin": "Foramen ovale, sol atriyum basıncı sağı aşınca fonksiyonel olarak kapanır",
+      "kalip": "mekanizma",
+      "dugumler": [
+        "f11",
+        "f4"
+      ],
+      "sorulabilirlik": 3,
+      "aile": "a2"
+    },
+    {
+      "id": "k5",
+      "metin": "Duktus venozus umbilikal ven kanını karaciğeri atlatarak İVK'ya taşır",
+      "kalip": "esleme",
+      "dugumler": [
+        "f2"
+      ],
+      "sorulabilirlik": 3,
+      "aile": "a2"
+    },
+    {
+      "id": "k6",
+      "metin": "Fetal kalıntılar: ligamentum arteriosum, venosum, teres; fossa ovalis; medial umbilikal ligament",
+      "kalip": "esleme",
+      "dugumler": [
+        "f7",
+        "f2",
+        "f4",
+        "f8"
+      ],
+      "sorulabilirlik": 4,
+      "aile": "a2"
+    },
+    {
+      "id": "k7",
+      "metin": "Fetüste yüksek pulmoner direnç nedeniyle sağ kalp kanının çoğu akciğeri atlar",
+      "kalip": "mekanizma",
+      "dugumler": [
+        "f13",
+        "f6"
+      ],
+      "sorulabilirlik": 2,
+      "aile": "a2"
+    },
+    {
+      "id": "k8",
+      "metin": "KKH ayrımında önce siyanoza, sonra akciğer kanlanmasına bakılır",
+      "kalip": "ayirici_cift",
+      "dugumler": [
+        "a1",
+        "a2",
+        "a3"
+      ],
+      "sorulabilirlik": 3,
+      "aile": "a1"
+    },
+    {
+      "id": "k9",
+      "metin": "Siyanoz + artmış kanlanma: karışım lezyonları (BAT, trunkus, TAPVD)",
+      "kalip": "ayirici_cift",
+      "dugumler": [
+        "a7",
+        "a11"
+      ],
+      "sorulabilirlik": 4,
+      "aile": "a1",
+      "anahtar_ipucu": "siyanoz ama akciğer dolu"
+    },
+    {
+      "id": "k10",
+      "metin": "Siyanoz + azalmış kanlanma: TOF, triküspit atrezisi, pulmoner atrezi",
+      "kalip": "ayirici_cift",
+      "dugumler": [
+        "a6",
+        "a10"
+      ],
+      "sorulabilirlik": 4,
+      "aile": "a1"
+    },
+    {
+      "id": "k11",
+      "metin": "Yenidoğanda en sık siyanotik KKH BAT; yenidoğan dönemi dışında TOF",
+      "kalip": "en_sik",
+      "dugumler": [
+        "a11",
+        "a10"
+      ],
+      "sorulabilirlik": 5,
+      "aile": "a1"
+    },
+    {
+      "id": "k12",
+      "metin": "En sık KKH VSD'dir; büyük VSD kalp yetmezliği yapar",
+      "kalip": "en_sik",
+      "dugumler": [
+        "a8",
+        "a4"
+      ],
+      "sorulabilirlik": 5,
+      "aile": "a1",
+      "anahtar_ipucu": "pansistolik üfürüm"
+    },
+    {
+      "id": "k13",
+      "metin": "Grafi görünümleri: çizme (TOF), ipe asılı yumurta (BAT), kardan adam (TAPVD)",
+      "kalip": "patognomonik",
+      "dugumler": [
+        "r0c1",
+        "r1c1",
+        "r4c1"
+      ],
+      "sorulabilirlik": 4,
+      "aile": "a1"
+    },
+    {
+      "id": "k14",
+      "metin": "Siyanoz + sol aks sapması triküspit atrezisini düşündürür",
+      "kalip": "patognomonik",
+      "dugumler": [
+        "r2c2"
+      ],
+      "sorulabilirlik": 4,
+      "aile": "a1",
+      "anahtar_ipucu": "sol aks"
+    },
+    {
+      "id": "k15",
+      "metin": "Hipersiyanotik atakta diz-göğüs pozisyonu, oksijen, morfin ve sıvı verilir",
+      "kalip": "ilk_adim",
+      "dugumler": [
+        "r0c3"
+      ],
+      "sorulabilirlik": 4,
+      "aile": "a3",
+      "anahtar_ipucu": "ağlama sonrası morarma"
+    },
+    {
+      "id": "k16",
+      "metin": "BAT'ta karışımı artırmak için PGE₁, gerekirse balon septostomi; kesin tedavi arteriyel switch",
+      "kalip": "ilk_adim",
+      "dugumler": [
+        "r1c3"
+      ],
+      "sorulabilirlik": 3,
+      "aile": "a3"
+    },
+    {
+      "id": "k17",
+      "metin": "Trunkus + hipokalsemi + timus yokluğu: 22q11 delesyonu",
+      "kalip": "esleme",
+      "dugumler": [
+        "r3c1",
+        "r3c3"
+      ],
+      "sorulabilirlik": 3,
+      "aile": "a1"
+    },
+    {
+      "id": "k18",
+      "metin": "Obstrüktif TAPVD yenidoğanda cerrahi acildir; PGE₁'den yarar beklenmez",
+      "kalip": "istisna",
+      "dugumler": [
+        "r4c3"
+      ],
+      "sorulabilirlik": 2,
+      "aile": "a1"
+    },
+    {
+      "id": "k19",
+      "metin": "ASD'de S2'nin sabit geniş çiftleşmesi, PDA'da sürekli makine üfürümü tipiktir",
+      "kalip": "patognomonik",
+      "dugumler": [
+        "a8"
+      ],
+      "sorulabilirlik": 3,
+      "aile": "a1"
+    },
+    {
+      "id": "k20",
+      "metin": "Koarktasyon Turner'da, pulmoner stenoz Noonan'da tipiktir",
+      "kalip": "esleme",
+      "dugumler": [
+        "a9",
+        "a5"
+      ],
+      "sorulabilirlik": 2,
+      "aile": "a1"
+    }
+  ],
+  "aileler": [
+    {
+      "id": "a1",
+      "ad": "Konjenital kalp hastalıkları",
+      "uyeler": [
+        "Fallot tetralojisi",
+        "Büyük arterlerin transpozisyonu",
+        "Triküspit atrezisi",
+        "Trunkus arteriyozus",
+        "TAPVD",
+        "Pulmoner atrezi",
+        "VSD",
+        "ASD",
+        "PDA",
+        "AVSD",
+        "Aort koarktasyonu",
+        "Pulmoner stenoz"
+      ],
+      "ayirici": {
+        "Fallot tetralojisi|Büyük arterlerin transpozisyonu": "TOF'ta akciğer kanlanması azalmış, kalp çizme şeklinde; BAT'ta kanlanma artmış, ipe asılı yumurta, yenidoğanın en sık siyanotik KKH'si.",
+        "Fallot tetralojisi|Triküspit atrezisi": "İkisinde de kanlanma azalmıştır; EKG'de TOF sağ aks, triküspit atrezisi sol aks sapması gösterir.",
+        "Trunkus arteriyozus|TAPVD": "İkisinde de kanlanma artmıştır; trunkusta 22q11 ve sağ arkus, suprakardiyak TAPVD'de kardan adam görünümü.",
+        "Büyük arterlerin transpozisyonu|TAPVD": "BAT'ta ipe asılı yumurta, suprakardiyak TAPVD'de kardan adam görünümü vardır.",
+        "VSD|Fallot tetralojisi": "VSD'de siyanoz yoktur ve kanlanma artmıştır; TOF'ta VSD'ye pulmoner darlık eklenir, siyanoz ve azalmış kanlanma olur.",
+        "VSD|ASD": "VSD'de sol alt sternal kenarda pansistolik üfürüm; ASD'de S2'nin sabit geniş çiftleşmesi duyulur."
+      }
+    },
+    {
+      "id": "a2",
+      "ad": "Fetal yapılar ve kalıntıları",
+      "uyeler": [
+        "Duktus arteriyozus",
+        "Duktus venozus",
+        "Foramen ovale",
+        "Umbilikal ven",
+        "Umbilikal arter"
+      ],
+      "ayirici": {
+        "Duktus arteriyozus|Duktus venozus": "Duktus arteriyozus pulmoner arteri aortaya bağlar (ligamentum arteriosum); duktus venozus karaciğeri atlatır (ligamentum venosum).",
+        "Foramen ovale|Duktus arteriyozus": "Foramen ovale atriyumlar arasıdır ve basınç farkıyla kapanır; duktus oksijenle kapanır, PGE₁ ile açık tutulur."
+      }
+    },
+    {
+      "id": "a3",
+      "ad": "Acil müdahaleler ve ilaçlar",
+      "uyeler": [
+        "Prostaglandin E₁",
+        "İndometasin / ibuprofen",
+        "Oksijen",
+        "Digoksin",
+        "Furosemid",
+        "Propranolol",
+        "Diz-göğüs pozisyonu",
+        "Balon atriyal septostomi"
+      ],
+      "ayirici": {
+        "Prostaglandin E₁|İndometasin / ibuprofen": "PGE₁ duktusu açık tutar (duktusa bağımlı KKH); indometasin/ibuprofen prematürede açık duktusu kapatır.",
+        "Prostaglandin E₁|Oksijen": "Oksijen duktusun kapanmasını hızlandırır; duktusa bağımlı lezyonda öncelik PGE₁'dir."
+      }
     }
   ]
 }

@@ -21,6 +21,7 @@ targets:
           - "Schema/**"
       - path: Tools/levha-lint/Sources/LevhaSema
       - path: Tools/levha-lint/Sources/LevhaCekirdek
+      - path: Ortak
       - path: SamplePackages
         buildPhase: resources
     info:
@@ -36,6 +37,9 @@ targets:
         UIApplicationSupportsIndirectInputEvents: true
         UIFileSharingEnabled: true
         LSSupportsOpeningDocumentsInPlace: true
+        CFBundleURLTypes:
+          - CFBundleURLName: tr.kisisel.levha
+            CFBundleURLSchemes: [levha]
         NSUbiquitousContainers:
           iCloud.tr.kisisel.levha:
             NSUbiquitousContainerIsDocumentScopePublic: true
@@ -47,6 +51,7 @@ targets:
         com.apple.developer.icloud-container-identifiers: [iCloud.tr.kisisel.levha]
         com.apple.developer.icloud-services: [CloudDocuments]
         com.apple.developer.ubiquity-container-identifiers: [iCloud.tr.kisisel.levha]
+        com.apple.security.application-groups: [group.tr.kisisel.levha]
     settings:
       base:
         PRODUCT_NAME: Levha
@@ -56,4 +61,34 @@ targets:
         SUPPORTS_MACCATALYST: NO
         CODE_SIGN_STYLE: Automatic
         ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+    dependencies:
+      - target: LevhaWidget
+        embed: true
     scheme: {}
+  LevhaWidget:
+    type: app-extension
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: LevhaWidget
+      - path: Ortak
+    info:
+      path: LevhaWidget/Info.plist
+      properties:
+        CFBundleDisplayName: Levha
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    entitlements:
+      path: LevhaWidget/LevhaWidget.entitlements
+      properties:
+        com.apple.security.application-groups: [group.tr.kisisel.levha]
+    settings:
+      base:
+        PRODUCT_NAME: LevhaWidget
+        PRODUCT_BUNDLE_IDENTIFIER: tr.kisisel.levha.widget
+        TARGETED_DEVICE_FAMILY: "1"
+        CODE_SIGN_STYLE: Automatic
+        SKIP_INSTALL: YES
+        LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks"

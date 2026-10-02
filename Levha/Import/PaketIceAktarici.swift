@@ -49,6 +49,20 @@ enum PaketIceAktarici {
             context.delete(eski)
         }
 
+        // Kazanımlar ve aileler her zaman yeniden yazılır.
+        for k in paket.kazanimlar { context.delete(k) }
+        for a in paket.aileler { context.delete(a) }
+        for (i, kj) in (json.kazanimlar ?? []).enumerated() {
+            let k = Kazanim(kj, sira: i)
+            context.insert(k)
+            k.paket = paket
+        }
+        for (i, aj) in (json.aileler ?? []).enumerated() {
+            let a = Aile(aj, sira: i)
+            context.insert(a)
+            a.paket = paket
+        }
+
         // Sorular her zaman yeniden yazılır.
         for s in paket.sorular { context.delete(s) }
         for (i, sj) in (json.sorular ?? []).enumerated() {
@@ -103,6 +117,8 @@ enum PaketIceAktarici {
         levha.seritIdleri = lj.seritler?.map(\.id)
         levha.seritAdlari = lj.seritler?.map(\.ad)
         levha.sabotajlar = lj.sabotajlar.flatMap { try? JSONEncoder().encode($0) }
+        levha.insa_sirasi = lj.insa_sirasi
+        levha.kaynak = lj.kaynak.flatMap { try? JSONEncoder().encode($0) }
         levha.hamJSON = ham
 
         var dugumler = dugumListesi(lj)

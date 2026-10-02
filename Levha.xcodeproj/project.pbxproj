@@ -18,9 +18,14 @@
 		3DC4D0A91A82CE27F01A716F /* Tema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59EDB97EBA134790E87609A8 /* Tema.swift */; };
 		417259EC431D95C34EA14CCD /* ped.kvs.konjenital.json in Resources */ = {isa = PBXBuildFile; fileRef = D5E494BA459238FB01D5FDC9 /* ped.kvs.konjenital.json */; };
 		57E728F0A20D087DF94A5727 /* ped.gelisim.basamaklar.json in Resources */ = {isa = PBXBuildFile; fileRef = 40998F95F591DFABF199A29F /* ped.gelisim.basamaklar.json */; };
+		6053A7CF885BF074B4085DBA /* LevhaWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 21F363D4A911AEDCC1AFD2CE /* LevhaWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		669A6DA4A6607EF00CF154DE /* MatrisCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61EC349922B1B554B91E686 /* MatrisCanvas.swift */; };
+		680D6DDB8E482071DA34A514 /* WidgetAnligi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409DE73E3CB9BED57BFC7016 /* WidgetAnligi.swift */; };
+		68C82C041DDABA30AF7556D7 /* WidgetYazici.swift in Sources */ = {isa = PBXBuildFile; fileRef = C143DB61B127476FDB5629ED /* WidgetYazici.swift */; };
+		72F0335B8818D559582DB2F4 /* WidgetAnligi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409DE73E3CB9BED57BFC7016 /* WidgetAnligi.swift */; };
 		754A3CC73267CAB15CDA89AF /* LevhaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F716D6E9B946B2EF159301A9 /* LevhaView.swift */; };
 		7B4175F839595F2EC7A7DA59 /* LevhaSekmesi.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB02A4F90DF7C1F5FF068CAE /* LevhaSekmesi.swift */; };
+		7E36CE3945EF7D2C78227028 /* Olcum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 433AD47340121EC0D6526DCD /* Olcum.swift */; };
 		83AB9BA0B29663CEBB366572 /* MutasyonMotoru.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6166F540F476431B204B3338 /* MutasyonMotoru.swift */; };
 		88C5D5C74FB9F5BFFE07F2F2 /* VucutHaritasiCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811A8EBF71FA4A0405DF0D9B /* VucutHaritasiCanvas.swift */; };
 		8A24682A56DFFCBB485D59D3 /* ped.neo.sarilik.json in Resources */ = {isa = PBXBuildFile; fileRef = 19EBA0CC81EDDC85B29BA6C3 /* ped.neo.sarilik.json */; };
@@ -28,22 +33,57 @@
 		931C01F0D9AD353FE12A7631 /* PaketKlasoru.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70CC0C0F2C9F79BC1A64D32B /* PaketKlasoru.swift */; };
 		9C50E8C00FD7D35644639805 /* AgacCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD09716B8168356C1C895CA /* AgacCanvas.swift */; };
 		A6036F87446C23A361BF73A2 /* ZamanCizelgesiCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802B9DA6F68ADAFC00D38373 /* ZamanCizelgesiCanvas.swift */; };
+		B054F71E7FDBF7C48B4E3C3B /* OlcumSekmesi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E32DDBC78C4FDBF667ECC00 /* OlcumSekmesi.swift */; };
 		BA5EB838BA319A6505B7639A /* AlgoritmaCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE64A650C4187FA0543E953 /* AlgoritmaCanvas.swift */; };
+		BFD1692131268E18DBC36BBE /* LevhaIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0038D202E41636524C234AA0 /* LevhaIntent.swift */; };
+		CDFC2ABA1DA9470FC73A495A /* SinavAyarlari.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90EFA8DA9E83BE40FEDC5C81 /* SinavAyarlari.swift */; };
 		D7F8A246FC726D3660B2ADC2 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98253F4DA2FF23305BD4055 /* RootView.swift */; };
 		DBFBBDDABF85CF59D633534A /* ped.genetik.sendromlar.json in Resources */ = {isa = PBXBuildFile; fileRef = 6F1A57C8EE4B37453C7F99D2 /* ped.genetik.sendromlar.json */; };
+		E15646FE45C798225837AF3B /* LevhaWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A4234C240560F49064E244 /* LevhaWidget.swift */; };
 		F27D94B590330EB76CCEA912 /* LevhaSayfasi.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD3A7B37CF15C73C0302EBCA /* LevhaSayfasi.swift */; };
 		F2BADEDCC7BBE8C729A6C771 /* IcerikView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E43DE18A1811513A80BEE6 /* IcerikView.swift */; };
 		F2EF42D01F36F5F25976EEFA /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = A326F20B205747EC2F1137A7 /* Models.swift */; };
+		F3D94ED479DB1F040E9A649E /* Yonlendirici.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9DE1BB4F7937E2DC72FAD00D /* Yonlendirici.swift */; };
 		F414DB3DA825B5D7C35837C9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B2A81C8A5593C98DD2586E5D /* Assets.xcassets */; };
 		F97BF840A622E1FFA96C9AAE /* PaketJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B7A6ED05001662CB8BBFF9 /* PaketJSON.swift */; };
 		FB1C1ECACE872C37FEAC17C1 /* DurumServisi.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67DD527696E80612D86A2C7 /* DurumServisi.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		24D9F6A82FE5E25C12270B83 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 98D499308CECAE04D35D505A /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5E664290B51FA0DCA834D637;
+			remoteInfo = LevhaWidget;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		2D53B669914062D5EDFFB69F /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				6053A7CF885BF074B4085DBA /* LevhaWidget.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		0038D202E41636524C234AA0 /* LevhaIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevhaIntent.swift; sourceTree = "<group>"; };
 		07E43DE18A1811513A80BEE6 /* IcerikView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IcerikView.swift; sourceTree = "<group>"; };
 		086ED309033F9C4E76B79FB7 /* LevhaLint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevhaLint.swift; sourceTree = "<group>"; };
+		137C076024A6FC661EE11417 /* LevhaWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = LevhaWidget.entitlements; sourceTree = "<group>"; };
 		19EBA0CC81EDDC85B29BA6C3 /* ped.neo.sarilik.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ped.neo.sarilik.json; sourceTree = "<group>"; };
+		1B9E095526CF4AC8087B9AEE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		21F363D4A911AEDCC1AFD2CE /* LevhaWidget.appex */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = "wrapper.app-extension"; path = LevhaWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		40998F95F591DFABF199A29F /* ped.gelisim.basamaklar.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ped.gelisim.basamaklar.json; sourceTree = "<group>"; };
+		409DE73E3CB9BED57BFC7016 /* WidgetAnligi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetAnligi.swift; sourceTree = "<group>"; };
+		433AD47340121EC0D6526DCD /* Olcum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Olcum.swift; sourceTree = "<group>"; };
 		45F4D6118D8C13D134D6152C /* BugunView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BugunView.swift; sourceTree = "<group>"; };
 		494154ADEAE87EA1EBA3F574 /* YolakCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YolakCanvas.swift; sourceTree = "<group>"; };
 		4CA47953E105A8D79B76C5E3 /* Levha.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Levha.entitlements; sourceTree = "<group>"; };
@@ -56,19 +96,24 @@
 		802B9DA6F68ADAFC00D38373 /* ZamanCizelgesiCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZamanCizelgesiCanvas.swift; sourceTree = "<group>"; };
 		811A8EBF71FA4A0405DF0D9B /* VucutHaritasiCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VucutHaritasiCanvas.swift; sourceTree = "<group>"; };
 		8D9BBD186F0B3E41894E7DED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		8E32DDBC78C4FDBF667ECC00 /* OlcumSekmesi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OlcumSekmesi.swift; sourceTree = "<group>"; };
+		90EFA8DA9E83BE40FEDC5C81 /* SinavAyarlari.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SinavAyarlari.swift; sourceTree = "<group>"; };
 		9BD09716B8168356C1C895CA /* AgacCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgacCanvas.swift; sourceTree = "<group>"; };
 		9CE64A650C4187FA0543E953 /* AlgoritmaCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlgoritmaCanvas.swift; sourceTree = "<group>"; };
+		9DE1BB4F7937E2DC72FAD00D /* Yonlendirici.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Yonlendirici.swift; sourceTree = "<group>"; };
 		A2CA3710B6CDF93370CFF39A /* LevhaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevhaApp.swift; sourceTree = "<group>"; };
 		A326F20B205747EC2F1137A7 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
 		AD3A7B37CF15C73C0302EBCA /* LevhaSayfasi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevhaSayfasi.swift; sourceTree = "<group>"; };
 		B2A81C8A5593C98DD2586E5D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		B6B7A6ED05001662CB8BBFF9 /* PaketJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaketJSON.swift; sourceTree = "<group>"; };
+		C143DB61B127476FDB5629ED /* WidgetYazici.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetYazici.swift; sourceTree = "<group>"; };
 		CB02A4F90DF7C1F5FF068CAE /* LevhaSekmesi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevhaSekmesi.swift; sourceTree = "<group>"; };
 		CC1C080CA23A06025BC7E618 /* SayiCetveliCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SayiCetveliCanvas.swift; sourceTree = "<group>"; };
 		D5E494BA459238FB01D5FDC9 /* ped.kvs.konjenital.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ped.kvs.konjenital.json; sourceTree = "<group>"; };
 		D67DD527696E80612D86A2C7 /* DurumServisi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurumServisi.swift; sourceTree = "<group>"; };
 		D98253F4DA2FF23305BD4055 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		DEFB666D6D5A13D20D7B9425 /* Levha.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Levha.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		E0A4234C240560F49064E244 /* LevhaWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevhaWidget.swift; sourceTree = "<group>"; };
 		E61EC349922B1B554B91E686 /* MatrisCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrisCanvas.swift; sourceTree = "<group>"; };
 		E7166D37488535310D59C4C4 /* PaketIceAktarici.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaketIceAktarici.swift; sourceTree = "<group>"; };
 		EF42B1F60D3AE27B7D52CF8E /* TurPlanlayici.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurPlanlayici.swift; sourceTree = "<group>"; };
@@ -80,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				DEFB666D6D5A13D20D7B9425 /* Levha.app */,
+				21F363D4A911AEDCC1AFD2CE /* LevhaWidget.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -88,6 +134,8 @@
 			isa = PBXGroup;
 			children = (
 				6CB8ED8E682818C619135220 /* Levha */,
+				56AD13575484FA1BC15D9D47 /* LevhaWidget */,
+				F4C6842CE949873777F05740 /* Ortak */,
 				8A88951CD00261A9E9D49F41 /* SamplePackages */,
 				FDE5FCD9B426B2B7AA4AC950 /* Tools */,
 				059CE33E9BAB5FF624129FC0 /* Products */,
@@ -106,6 +154,7 @@
 			isa = PBXGroup;
 			children = (
 				A326F20B205747EC2F1137A7 /* Models.swift */,
+				90EFA8DA9E83BE40FEDC5C81 /* SinavAyarlari.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -126,6 +175,7 @@
 				E7166D37488535310D59C4C4 /* PaketIceAktarici.swift */,
 				70CC0C0F2C9F79BC1A64D32B /* PaketKlasoru.swift */,
 				EF42B1F60D3AE27B7D52CF8E /* TurPlanlayici.swift */,
+				C143DB61B127476FDB5629ED /* WidgetYazici.swift */,
 			);
 			path = Import;
 			sourceTree = "<group>";
@@ -136,6 +186,16 @@
 				ABA15E3FB24279D1928FCAD7 /* Sources */,
 			);
 			path = "levha-lint";
+			sourceTree = "<group>";
+		};
+		56AD13575484FA1BC15D9D47 /* LevhaWidget */ = {
+			isa = PBXGroup;
+			children = (
+				1B9E095526CF4AC8087B9AEE /* Info.plist */,
+				137C076024A6FC661EE11417 /* LevhaWidget.entitlements */,
+				E0A4234C240560F49064E244 /* LevhaWidget.swift */,
+			);
+			path = LevhaWidget;
 			sourceTree = "<group>";
 		};
 		6CB8ED8E682818C619135220 /* Levha */ = {
@@ -195,10 +255,13 @@
 			children = (
 				45F4D6118D8C13D134D6152C /* BugunView.swift */,
 				07E43DE18A1811513A80BEE6 /* IcerikView.swift */,
+				0038D202E41636524C234AA0 /* LevhaIntent.swift */,
 				AD3A7B37CF15C73C0302EBCA /* LevhaSayfasi.swift */,
 				CB02A4F90DF7C1F5FF068CAE /* LevhaSekmesi.swift */,
+				8E32DDBC78C4FDBF667ECC00 /* OlcumSekmesi.swift */,
 				D98253F4DA2FF23305BD4055 /* RootView.swift */,
 				4F99F7E86FB66DA117A52AE2 /* SoruSekmesi.swift */,
+				9DE1BB4F7937E2DC72FAD00D /* Yonlendirici.swift */,
 			);
 			path = Screens;
 			sourceTree = "<group>";
@@ -206,9 +269,18 @@
 		D318699D81A577F2DAFC0E9A /* LevhaCekirdek */ = {
 			isa = PBXGroup;
 			children = (
+				433AD47340121EC0D6526DCD /* Olcum.swift */,
 				6B6C1FEBED789128A96986BD /* Zamanlayici.swift */,
 			);
 			path = LevhaCekirdek;
+			sourceTree = "<group>";
+		};
+		F4C6842CE949873777F05740 /* Ortak */ = {
+			isa = PBXGroup;
+			children = (
+				409DE73E3CB9BED57BFC7016 /* WidgetAnligi.swift */,
+			);
+			path = Ortak;
 			sourceTree = "<group>";
 		};
 		FDE5FCD9B426B2B7AA4AC950 /* Tools */ = {
@@ -228,10 +300,12 @@
 			buildPhases = (
 				0DDCCEF01E88A3B1975ACB61 /* Sources */,
 				A0C7A6B28F3E837C7F55D942 /* Resources */,
+				2D53B669914062D5EDFFB69F /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				479F02F9C9BCA08CB0E0B36C /* PBXTargetDependency */,
 			);
 			name = Levha;
 			packageProductDependencies = (
@@ -239,6 +313,23 @@
 			productName = Levha;
 			productReference = DEFB666D6D5A13D20D7B9425 /* Levha.app */;
 			productType = "com.apple.product-type.application";
+		};
+		5E664290B51FA0DCA834D637 /* LevhaWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 50649712446BFA15119C77BD /* Build configuration list for PBXNativeTarget "LevhaWidget" */;
+			buildPhases = (
+				0F3287734D4523A5C8478A85 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = LevhaWidget;
+			packageProductDependencies = (
+			);
+			productName = LevhaWidget;
+			productReference = 21F363D4A911AEDCC1AFD2CE /* LevhaWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -250,6 +341,9 @@
 				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					1CDA4B5DD88A1355C2BD8437 = {
+						ProvisioningStyle = Automatic;
+					};
+					5E664290B51FA0DCA834D637 = {
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -269,6 +363,7 @@
 			projectRoot = "";
 			targets = (
 				1CDA4B5DD88A1355C2BD8437 /* Levha */,
+				5E664290B51FA0DCA834D637 /* LevhaWidget */,
 			);
 		};
 /* End PBXProject section */
@@ -299,6 +394,7 @@
 				FB1C1ECACE872C37FEAC17C1 /* DurumServisi.swift in Sources */,
 				F2BADEDCC7BBE8C729A6C771 /* IcerikView.swift in Sources */,
 				34770AC66A750BF48566BF49 /* LevhaApp.swift in Sources */,
+				BFD1692131268E18DBC36BBE /* LevhaIntent.swift in Sources */,
 				09EF829A3A1676141CAA6BB8 /* LevhaLint.swift in Sources */,
 				F27D94B590330EB76CCEA912 /* LevhaSayfasi.swift in Sources */,
 				7B4175F839595F2EC7A7DA59 /* LevhaSekmesi.swift in Sources */,
@@ -306,22 +402,45 @@
 				669A6DA4A6607EF00CF154DE /* MatrisCanvas.swift in Sources */,
 				F2EF42D01F36F5F25976EEFA /* Models.swift in Sources */,
 				83AB9BA0B29663CEBB366572 /* MutasyonMotoru.swift in Sources */,
+				7E36CE3945EF7D2C78227028 /* Olcum.swift in Sources */,
+				B054F71E7FDBF7C48B4E3C3B /* OlcumSekmesi.swift in Sources */,
 				2983308B0B69A38B605458E2 /* PaketIceAktarici.swift in Sources */,
 				F97BF840A622E1FFA96C9AAE /* PaketJSON.swift in Sources */,
 				931C01F0D9AD353FE12A7631 /* PaketKlasoru.swift in Sources */,
 				D7F8A246FC726D3660B2ADC2 /* RootView.swift in Sources */,
 				352508771227D68FB0389EE9 /* SayiCetveliCanvas.swift in Sources */,
+				CDFC2ABA1DA9470FC73A495A /* SinavAyarlari.swift in Sources */,
 				2C2CFA00BC13981F0C4238E6 /* SoruSekmesi.swift in Sources */,
 				3DC4D0A91A82CE27F01A716F /* Tema.swift in Sources */,
 				0D9766ED24E340736416D43E /* TurPlanlayici.swift in Sources */,
 				88C5D5C74FB9F5BFFE07F2F2 /* VucutHaritasiCanvas.swift in Sources */,
+				72F0335B8818D559582DB2F4 /* WidgetAnligi.swift in Sources */,
+				68C82C041DDABA30AF7556D7 /* WidgetYazici.swift in Sources */,
 				8EBAC27DEAA6A7899017F24B /* YolakCanvas.swift in Sources */,
+				F3D94ED479DB1F040E9A649E /* Yonlendirici.swift in Sources */,
 				A6036F87446C23A361BF73A2 /* ZamanCizelgesiCanvas.swift in Sources */,
 				05D0E8ABA135DFE049D5526E /* Zamanlayici.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		0F3287734D4523A5C8478A85 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E15646FE45C798225837AF3B /* LevhaWidget.swift in Sources */,
+				680D6DDB8E482071DA34A514 /* WidgetAnligi.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		479F02F9C9BCA08CB0E0B36C /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5E664290B51FA0DCA834D637 /* LevhaWidget */;
+			targetProxy = 24D9F6A82FE5E25C12270B83 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		028D36AB3AD1417D750ED0A6 /* Debug */ = {
@@ -346,6 +465,22 @@
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
+		};
+		0B9371F1C100A0AC1BF0EE4C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = LevhaWidget/LevhaWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = LevhaWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = tr.kisisel.levha.widget;
+				PRODUCT_NAME = LevhaWidget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
 		};
 		31B29DA6394C1FA2FC2CCEA5 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -470,6 +605,22 @@
 			};
 			name = Release;
 		};
+		D61D93E5FE28BEFC25E19BB5 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = LevhaWidget/LevhaWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = LevhaWidget/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = tr.kisisel.levha.widget;
+				PRODUCT_NAME = LevhaWidget;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
 		EFF200F72A8AC29C4D657F7B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -496,6 +647,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		50649712446BFA15119C77BD /* Build configuration list for PBXNativeTarget "LevhaWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D61D93E5FE28BEFC25E19BB5 /* Debug */,
+				0B9371F1C100A0AC1BF0EE4C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
 		64D1D21582281A8151D54C8B /* Build configuration list for PBXNativeTarget "Levha" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

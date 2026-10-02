@@ -2,17 +2,19 @@ import SwiftUI
 import SwiftData
 
 enum Sekme: String, Hashable {
-    case bugun, levha, soru, sor, icerik
+    case bugun, levha, soru, olcum, icerik
 }
 
 struct RootView: View {
     @Environment(\.modelContext) private var context
+    @Environment(\.scenePhase) private var faz
     @StateObject private var klasor = PaketKlasoru()
-    @State private var sekme: Sekme = Sekme(rawValue: UserDefaults.standard.string(forKey: "baslangicSekme") ?? "") ?? .bugun
+    @Bindable private var yonlendirici = Yonlendirici.ortak
+    @State private var onPlandaBaslangic: Date?
 
     var body: some View {
-        TabView(selection: $sekme) {
-            BugunView(sekme: $sekme)
+        TabView(selection: $yonlendirici.sekme) {
+            BugunView(sekme: $yonlendirici.sekme)
                 .tabItem { Label("Bugün", systemImage: "sun.max") }
                 .tag(Sekme.bugun)
             LevhaSekmesi()
@@ -21,27 +23,37 @@ struct RootView: View {
             SoruSekmesi()
                 .tabItem { Label("Soru", systemImage: "questionmark.circle") }
                 .tag(Sekme.soru)
-            YerTutucu(baslik: "Sor Part 4'te", simge: "bubble.left.and.text.bubble.right",
-                      aciklama: "Levha bağlamıyla Claude'a soru sorma Part 4'te gelecek.")
-                .tabItem { Label("Sor", systemImage: "bubble.left.and.text.bubble.right") }
-                .tag(Sekme.sor)
+            OlcumSekmesi()
+                .tabItem { Label("Ölçüm", systemImage: "chart.bar.xaxis") }
+                .tag(Sekme.olcum)
             IcerikView(klasor: klasor)
                 .tabItem { Label("İçerik", systemImage: "tray.and.arrow.down") }
                 .tag(Sekme.icerik)
         }
         .tint(Tema.metin)
-        .task { await Baslangic.calistir(klasor: klasor, context: context) }
+        .task {
+            await Baslangic.calistir(klasor: klasor, context: context)
+            WidgetYazici.yaz(context)
+        }
+        .onOpenURL { url in
+            if url.host() == "levha", let id = url.pathComponents.dropFirst().first, let levha = levhaBul(id) {
+                UserDefaults.standard.set(levha.paket?.paket_id, forKey: "aktifPaketId")
+            }
+            yonlendirici.ac(url)
+        }
+        .onChange(of: faz, initial: true) { _, yeni in
+            // Ön planda geçen süre günlük kullanım kaydına yazılır.
+            if yeni == .active {
+                onPlandaBaslangic = .now
+            } else if let bas = onPlandaBaslangic {
+                DurumServisi.kullanimEkle(Date.now.timeIntervalSince(bas), context)
+                onPlandaBaslangic = nil
+                WidgetYazici.yaz(context)
+            }
+        }
     }
-}
 
-struct YerTutucu: View {
-    let baslik: String
-    let simge: String
-    let aciklama: String
-
-    var body: some View {
-        ContentUnavailableView(baslik, systemImage: simge, description: Text(aciklama))
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(Tema.arkaPlan)
+    private func levhaBul(_ id: String) -> Levha? {
+        try? context.fetch(FetchDescriptor<Levha>(predicate: #Predicate { $0.id == id })).first
     }
 }

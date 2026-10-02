@@ -149,7 +149,7 @@ struct SayiCetveliCanvas: View {
 
         ZStack(alignment: .topLeading) {
             Canvas { ctx, _ in g.eksenCiz(&ctx) }
-            Canvas { ctx, _ in g.baglantilariCiz(&ctx, gizli: durum.gizli) }
+            Canvas { ctx, _ in g.baglantilariCiz(&ctx, gizli: durum.mod == .ortme ? durum.gizli : []) }
                 .katmanda(durum.katman >= 2)
             Canvas { ctx, _ in g.tikEtiketleriniCiz(&ctx) }
             Canvas { ctx, _ in g.kutulariCiz(&ctx) }

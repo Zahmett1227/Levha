@@ -1,5 +1,5 @@
 {
-  "sema_surumu": 2,
+  "sema_surumu": 3,
   "paket_id": "ped.genetik.sendromlar",
   "ders": "Pediatri",
   "bolum": "Genetik",
@@ -140,6 +140,14 @@
           "yanlis_bolge": "deri",
           "dogrusu": "Brushfield lekeleri iristedir (göz)."
         }
+      ],
+      "insa_sirasi": [
+        "d1",
+        "d7",
+        "d8",
+        "d10",
+        "d12",
+        "d13"
       ]
     },
     {
@@ -269,6 +277,15 @@
           "yanlis_bolge": "ayak",
           "dogrusu": "Turner'da kısa olan 4. metakarptır (el)."
         }
+      ],
+      "insa_sirasi": [
+        "t2",
+        "t5",
+        "t6",
+        "t7",
+        "t9",
+        "t10",
+        "t11"
       ]
     },
     {
@@ -418,6 +435,16 @@
           ],
           "dogrusu": "Turner 45,X'tir; Noonan'da karyotip normaldir ve PTPN11 gibi RAS yolağı mutasyonu vardır."
         }
+      ],
+      "insa_sirasi": [
+        "r0c0",
+        "r1c0",
+        "r2c0",
+        "r3c0",
+        "r0c1",
+        "r1c1",
+        "r2c1",
+        "r3c1"
       ]
     }
   ],
@@ -444,7 +471,17 @@
         "d10",
         "d7"
       ],
-      "celdirici_dugum": {}
+      "celdirici_dugum": {},
+      "kazanim": "k1",
+      "kalip": "en_sik",
+      "zorluk": 1,
+      "secenek_aile": {
+        "0": "AVSD",
+        "1": "Aort koarktasyonu",
+        "2": "Supravalvüler aort darlığı",
+        "3": "Pulmoner stenoz",
+        "4": "Büyük arterlerin transpozisyonu"
+      }
     },
     {
       "id": "q2",
@@ -467,6 +504,16 @@
       ],
       "celdirici_dugum": {
         "2": "d9"
+      },
+      "kazanim": "k2",
+      "kalip": "patognomonik",
+      "zorluk": 1,
+      "secenek_aile": {
+        "0": "Duodenal atrezi",
+        "1": "Hipertrofik pilor stenozu",
+        "2": "Hirschsprung hastalığı",
+        "3": "Mekonyum ileusu",
+        "4": "Nekrotizan enterokolit"
       }
     },
     {
@@ -490,7 +537,10 @@
       ],
       "celdirici_dugum": {
         "3": "d9"
-      }
+      },
+      "kazanim": "k3",
+      "kalip": "en_olasi_tani",
+      "zorluk": 2
     },
     {
       "id": "q4",
@@ -513,6 +563,15 @@
       ],
       "celdirici_dugum": {
         "1": "d8"
+      },
+      "kazanim": "k4",
+      "kalip": "en_olasi_tani",
+      "zorluk": 2,
+      "secenek_aile": {
+        "0": "Hirschsprung hastalığı",
+        "1": "Duodenal atrezi",
+        "2": "Mekonyum ileusu",
+        "4": "Anal atrezi"
       }
     },
     {
@@ -537,7 +596,17 @@
         "t2",
         "t5"
       ],
-      "celdirici_dugum": {}
+      "celdirici_dugum": {},
+      "kazanim": "k9",
+      "kalip": "en_olasi_tani",
+      "zorluk": 1,
+      "secenek_aile": {
+        "0": "Down sendromu",
+        "1": "Turner sendromu",
+        "2": "Noonan sendromu",
+        "3": "Williams sendromu",
+        "4": "Klinefelter sendromu"
+      }
     },
     {
       "id": "q6",
@@ -558,7 +627,17 @@
       "aciklama_yolu": [
         "t5"
       ],
-      "celdirici_dugum": {}
+      "celdirici_dugum": {},
+      "kazanim": "k8",
+      "kalip": "en_sik",
+      "zorluk": 1,
+      "secenek_aile": {
+        "0": "Biküspit aort kapağı",
+        "1": "Pulmoner stenoz",
+        "2": "AVSD",
+        "3": "Supravalvüler aort darlığı",
+        "4": "Fallot tetralojisi"
+      }
     },
     {
       "id": "q7",
@@ -584,7 +663,10 @@
       "celdirici_dugum": {
         "0": "t11",
         "2": "t11"
-      }
+      },
+      "kazanim": "k10",
+      "kalip": "kesin_tani",
+      "zorluk": 2
     },
     {
       "id": "q8",
@@ -607,7 +689,10 @@
       ],
       "celdirici_dugum": {
         "1": "t7"
-      }
+      },
+      "kazanim": "k11",
+      "kalip": "ilac",
+      "zorluk": 1
     },
     {
       "id": "q9",
@@ -635,6 +720,16 @@
         "0": "r1c2",
         "2": "r0c2",
         "3": "r3c1"
+      },
+      "kazanim": "k14",
+      "kalip": "en_olasi_tani",
+      "zorluk": 2,
+      "secenek_aile": {
+        "0": "Turner sendromu",
+        "1": "Noonan sendromu",
+        "2": "Down sendromu",
+        "3": "Williams sendromu",
+        "4": "Klinefelter sendromu"
       }
     },
     {
@@ -662,6 +757,16 @@
         "1": "r2c1",
         "3": "r1c1",
         "4": "r0c1"
+      },
+      "kazanim": "k15",
+      "kalip": "en_olasi_tani",
+      "zorluk": 1,
+      "secenek_aile": {
+        "0": "Williams sendromu",
+        "1": "Noonan sendromu",
+        "2": "DiGeorge sendromu",
+        "3": "Turner sendromu",
+        "4": "Down sendromu"
       }
     },
     {
@@ -689,6 +794,16 @@
         "2": "r1c0",
         "3": "r0c0",
         "4": "r2c0"
+      },
+      "kazanim": "k16",
+      "kalip": "kesin_tani",
+      "zorluk": 2,
+      "secenek_aile": {
+        "0": "Williams sendromu",
+        "1": "DiGeorge sendromu",
+        "2": "Turner sendromu",
+        "3": "Down sendromu",
+        "4": "Noonan sendromu"
       }
     },
     {
@@ -711,7 +826,273 @@
         "r0c0",
         "r0c3"
       ],
-      "celdirici_dugum": {}
+      "celdirici_dugum": {},
+      "kazanim": "k5",
+      "kalip": "en_olasi_tani",
+      "zorluk": 2,
+      "secenek_aile": {
+        "0": "Akut lösemi",
+        "1": "İTP",
+        "2": "Aplastik anemi",
+        "3": "Demir eksikliği anemisi"
+      }
+    }
+  ],
+  "kazanimlar": [
+    {
+      "id": "k1",
+      "metin": "Down sendromunda en karakteristik KKH AVSD'dir (endokardiyal yastık defekti)",
+      "kalip": "en_sik",
+      "dugumler": [
+        "d7",
+        "r0c1"
+      ],
+      "sorulabilirlik": 5,
+      "aile": "a2",
+      "anahtar_ipucu": "Down + kalp"
+    },
+    {
+      "id": "k2",
+      "metin": "Down'da ilk saatlerde safralı kusma + çift balon: duodenal atrezi",
+      "kalip": "patognomonik",
+      "dugumler": [
+        "d8"
+      ],
+      "sorulabilirlik": 5,
+      "aile": "a3",
+      "anahtar_ipucu": "çift balon"
+    },
+    {
+      "id": "k3",
+      "metin": "Down'da boyun ağrısı, yürüme bozukluğu, hiperrefleksi: atlantoaksiyel instabiliteye bağlı kord basısı",
+      "kalip": "istisna",
+      "dugumler": [
+        "d12"
+      ],
+      "sorulabilirlik": 4,
+      "anahtar_ipucu": "C1–C2"
+    },
+    {
+      "id": "k4",
+      "metin": "Down'da Hirschsprung riski artmıştır; mekonyum gecikmesi uyarıcıdır",
+      "kalip": "en_olasi_tani",
+      "dugumler": [
+        "d9"
+      ],
+      "sorulabilirlik": 3,
+      "aile": "a3",
+      "anahtar_ipucu": "48 saat mekonyum yok"
+    },
+    {
+      "id": "k5",
+      "metin": "Down'da lösemi riski artmıştır (ALL ve AML, özellikle megakaryoblastik)",
+      "kalip": "en_sik",
+      "dugumler": [
+        "r0c3"
+      ],
+      "sorulabilirlik": 4,
+      "aile": "a3"
+    },
+    {
+      "id": "k6",
+      "metin": "Down fenotipi: çekik göz, epikantus, düz yüz, tek palmar çizgi, hipotoni",
+      "kalip": "esleme",
+      "dugumler": [
+        "d2",
+        "d3",
+        "d10",
+        "d13"
+      ],
+      "sorulabilirlik": 3,
+      "aile": "a1"
+    },
+    {
+      "id": "k7",
+      "metin": "Brushfield lekeleri iristedir; sağlıklı bebekte de görülebilir",
+      "kalip": "istisna",
+      "dugumler": [
+        "d1"
+      ],
+      "sorulabilirlik": 2,
+      "aile": "a1"
+    },
+    {
+      "id": "k8",
+      "metin": "Turner'da en sık kalp anomalisi biküspit aort, ikinci sıklıkta koarktasyon",
+      "kalip": "en_sik",
+      "dugumler": [
+        "t5",
+        "r1c1"
+      ],
+      "sorulabilirlik": 5,
+      "aile": "a2",
+      "anahtar_ipucu": "kol-bacak nabız farkı"
+    },
+    {
+      "id": "k9",
+      "metin": "Kız yenidoğanda el-ayak sırtı lenfödemi Turner için karyotip gerektirir",
+      "kalip": "ilk_adim",
+      "dugumler": [
+        "t10"
+      ],
+      "sorulabilirlik": 4,
+      "aile": "a1",
+      "anahtar_ipucu": "el-ayak ödemi"
+    },
+    {
+      "id": "k10",
+      "metin": "Kısa boy + hipergonadotropik primer amenore: kesin tanı karyotip",
+      "kalip": "kesin_tani",
+      "dugumler": [
+        "t7",
+        "t11"
+      ],
+      "sorulabilirlik": 4,
+      "anahtar_ipucu": "FSH yüksek"
+    },
+    {
+      "id": "k11",
+      "metin": "Turner'da büyüme hormonu erişkin boyunu artırır; östrojen ergenliği başlatır",
+      "kalip": "ilac",
+      "dugumler": [
+        "t11"
+      ],
+      "sorulabilirlik": 3
+    },
+    {
+      "id": "k12",
+      "metin": "Turner'da at nalı böbrek sıktır; tanıda böbrek USG yapılır",
+      "kalip": "esleme",
+      "dugumler": [
+        "t6"
+      ],
+      "sorulabilirlik": 3,
+      "aile": "a1"
+    },
+    {
+      "id": "k13",
+      "metin": "Y materyali taşıyan Turner'da gonadoblastom riski nedeniyle gonadektomi önerilir",
+      "kalip": "istisna",
+      "dugumler": [
+        "t7",
+        "r1c0"
+      ],
+      "sorulabilirlik": 2,
+      "aile": "a1"
+    },
+    {
+      "id": "k14",
+      "metin": "Noonan: Turner benzeri fenotip, iki cinsiyet, normal karyotip, pulmoner stenoz",
+      "kalip": "ayirici_cift",
+      "dugumler": [
+        "r2c1",
+        "r2c3"
+      ],
+      "sorulabilirlik": 4,
+      "aile": "a1",
+      "anahtar_ipucu": "erkek + yeleli boyun"
+    },
+    {
+      "id": "k15",
+      "metin": "Williams: supravalvüler aort darlığı, infantil hiperkalsemi, aşırı sosyal kişilik",
+      "kalip": "patognomonik",
+      "dugumler": [
+        "r3c1",
+        "r3c3"
+      ],
+      "sorulabilirlik": 4,
+      "aile": "a1",
+      "anahtar_ipucu": "kokteyl parti kişiliği"
+    },
+    {
+      "id": "k16",
+      "metin": "Williams tanısı elastin genini içeren 7q11.23 mikrodelesyonunun (FISH/mikroarray) gösterilmesiyle konur",
+      "kalip": "kesin_tani",
+      "dugumler": [
+        "r3c0"
+      ],
+      "sorulabilirlik": 3,
+      "aile": "a1"
+    },
+    {
+      "id": "k17",
+      "metin": "Turner'da zekâ genellikle normaldir",
+      "kalip": "istisna",
+      "dugumler": [
+        "r1c3"
+      ],
+      "sorulabilirlik": 2,
+      "aile": "a1"
+    },
+    {
+      "id": "k18",
+      "metin": "Down'da işitme kaybı ve hipotiroidi için düzenli tarama yapılır",
+      "kalip": "ilk_adim",
+      "dugumler": [
+        "d4",
+        "d6"
+      ],
+      "sorulabilirlik": 1,
+      "aile": "a1"
+    }
+  ],
+  "aileler": [
+    {
+      "id": "a1",
+      "ad": "Kromozomal ve genetik sendromlar",
+      "uyeler": [
+        "Down sendromu",
+        "Turner sendromu",
+        "Noonan sendromu",
+        "Williams sendromu",
+        "DiGeorge sendromu",
+        "Klinefelter sendromu"
+      ],
+      "ayirici": {
+        "Turner sendromu|Noonan sendromu": "Benzer fenotip; Turner yalnız kızlarda, 45,X, biküspit aort/koarktasyon; Noonan iki cinsiyette, karyotip normal, pulmoner stenoz.",
+        "Williams sendromu|Noonan sendromu": "Williams'ta supravalvüler aort darlığı ve hiperkalsemi, Noonan'da pulmoner stenoz.",
+        "Down sendromu|Turner sendromu": "Down'da AVSD ve hipotoni; Turner'da biküspit aort/koarktasyon, kısa boy ve lenfödem.",
+        "Williams sendromu|DiGeorge sendromu": "İkisi de mikrodelesyondur; Williams'ta hiperkalsemi ve SVAS, DiGeorge'da hipokalsemi ve konotrunkal anomali."
+      }
+    },
+    {
+      "id": "a2",
+      "ad": "Sendromlarda kalp anomalileri",
+      "uyeler": [
+        "AVSD",
+        "Aort koarktasyonu",
+        "Biküspit aort kapağı",
+        "Pulmoner stenoz",
+        "Supravalvüler aort darlığı",
+        "Büyük arterlerin transpozisyonu",
+        "Fallot tetralojisi"
+      ],
+      "ayirici": {
+        "Aort koarktasyonu|Biküspit aort kapağı": "Turner'da en sık biküspit aort, ikinci sıklıkta koarktasyon görülür.",
+        "Pulmoner stenoz|Supravalvüler aort darlığı": "Noonan'da pulmoner stenoz, Williams'ta supravalvüler aort darlığı tipiktir.",
+        "AVSD|Aort koarktasyonu": "AVSD Down'un, koarktasyon Turner'ın tipik kalp lezyonudur."
+      }
+    },
+    {
+      "id": "a3",
+      "ad": "Down'da GİS ve hematolojik tablolar",
+      "uyeler": [
+        "Duodenal atrezi",
+        "Hirschsprung hastalığı",
+        "Hipertrofik pilor stenozu",
+        "Mekonyum ileusu",
+        "Nekrotizan enterokolit",
+        "Anal atrezi",
+        "Akut lösemi",
+        "İTP",
+        "Aplastik anemi",
+        "Demir eksikliği anemisi"
+      ],
+      "ayirici": {
+        "Duodenal atrezi|Hirschsprung hastalığı": "Duodenal atrezide ilk saatlerde safralı kusma ve çift balon; Hirschsprung'da mekonyum gecikmesi ve fışkırır tarzda boşalma.",
+        "Duodenal atrezi|Hipertrofik pilor stenozu": "Pilor stenozu 2–8. haftada safrasız fışkırır kusma yapar; duodenal atrezi doğumdan sonra safralı kusma.",
+        "Akut lösemi|İTP": "İTP'de yalnız trombositopeni vardır, organomegali yoktur; lösemide birden fazla sitopeni ve hepatosplenomegali olur."
+      }
     }
   ]
 }

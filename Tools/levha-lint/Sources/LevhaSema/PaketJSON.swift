@@ -1,6 +1,6 @@
 import Foundation
 
-// Şema v2'nin Codable karşılığı (v1 paketler de okunur). Alan adları JSON anahtarlarıyla birebir aynıdır.
+// Şema v3'ün Codable karşılığı (v1–v2 paketler de okunur). Alan adları JSON anahtarlarıyla birebir aynıdır.
 // Bu dosya hem levha-lint'te hem de iOS uygulamasında derlenir.
 
 public enum LevhaTipi: String, Codable, CaseIterable {
@@ -104,6 +104,29 @@ public enum VucutBolgesi: String, Codable, CaseIterable {
     }
 }
 
+/// Soru kalıpları (sabit, 12).
+public enum KalipTipi: String, Codable, CaseIterable {
+    case en_sik, ilk_adim, en_olasi_tani, mekanizma, istisna, esik_sayi, ayirici_cift, kesin_tani, patognomonik, yas_sira, ilac, esleme
+    public init(from decoder: Decoder) throws { self = try semaEnumCoz(decoder) }
+
+    public var ad: String {
+        switch self {
+        case .en_sik: return "En sık"
+        case .ilk_adim: return "İlk adım"
+        case .en_olasi_tani: return "En olası tanı"
+        case .mekanizma: return "Mekanizma"
+        case .istisna: return "İstisna"
+        case .esik_sayi: return "Eşik / sayı"
+        case .ayirici_cift: return "Ayırıcı çift"
+        case .kesin_tani: return "Kesin tanı"
+        case .patognomonik: return "Patognomonik"
+        case .yas_sira: return "Yaş / sıra"
+        case .ilac: return "İlaç"
+        case .esleme: return "Eşleme"
+        }
+    }
+}
+
 public enum ZamanBirimi: String, CaseIterable {
     case gun, hafta, ay, yil
     public var ad: String {
@@ -132,6 +155,38 @@ public struct PaketJSON: Codable {
     public var alt_konu: String
     public var levhalar: [LevhaJSON]
     public var sorular: [SoruJSON]?
+    // v3
+    public var kazanimlar: [KazanimJSON]?
+    public var aileler: [AileJSON]?
+}
+
+public struct KazanimJSON: Codable {
+    public var id: String
+    public var metin: String
+    /// Ham metin: tanımsız kalıp lint'te hata olarak raporlanır, decode'u bozmaz.
+    public var kalip: String
+    public var dugumler: [String]?
+    /// 1–5: TUS'ta sorulma olasılığı.
+    public var sorulabilirlik: Int
+    public var aile: String?
+    public var anahtar_ipucu: String?
+}
+
+public struct AileJSON: Codable {
+    public var id: String
+    public var ad: String
+    public var uyeler: [String]
+    /// "Üye A|Üye B" → ayırıcı ipucu.
+    public var ayirici: [String: String]?
+
+    public func ayiriciIpucu(_ a: String, _ b: String) -> String? {
+        ayirici?["\(a)|\(b)"] ?? ayirici?["\(b)|\(a)"]
+    }
+}
+
+public struct KaynakJSON: Codable {
+    public var kitap: String
+    public var sayfa: [Int]?
 }
 
 public struct DuzenJSON: Codable {
@@ -250,6 +305,9 @@ public struct LevhaJSON: Codable {
     public var olaylar: [OlayJSON]?
     // vucut_haritasi
     public var bolgeler: [BolgeJSON]?
+    // v3
+    public var insa_sirasi: [String]?
+    public var kaynak: KaynakJSON?
 }
 
 public struct SoruJSON: Codable {
@@ -262,6 +320,13 @@ public struct SoruJSON: Codable {
     public var aciklama: String
     public var aciklama_yolu: [String]?
     public var celdirici_dugum: [String: String]?
+    // v3
+    public var kazanim: String?
+    public var kalip: String?
+    /// 1–3
+    public var zorluk: Int?
+    /// Şık indeksi → aile üyesi (doğru şık dahil).
+    public var secenek_aile: [String: String]?
 }
 
 /// Levhaların ham hâlini saklamak için.

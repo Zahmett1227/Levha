@@ -1,17 +1,5 @@
 import SwiftUI
 
-extension Color {
-    init(hex: UInt32) {
-        self.init(
-            .sRGB,
-            red: Double((hex >> 16) & 0xFF) / 255,
-            green: Double((hex >> 8) & 0xFF) / 255,
-            blue: Double(hex & 0xFF) / 255,
-            opacity: 1
-        )
-    }
-}
-
 /// Sabit tasarım dili. Renk anlam taşır; tüm derslerde aynıdır.
 enum Tema {
     static let arkaPlan = Color(hex: 0xF4F6F8)
@@ -28,11 +16,23 @@ struct RenkSeti {
     let zemin: Color
     let yazi: Color
 
-    static let kirmizi = RenkSeti(kenar: Color(hex: 0xC8372D), zemin: Color(hex: 0xFBEAE8), yazi: Color(hex: 0xA12A22))
-    static let mavi = RenkSeti(kenar: Color(hex: 0x2F6FB3), zemin: Color(hex: 0xE8F0FA), yazi: Color(hex: 0x24578F))
-    static let yesil = RenkSeti(kenar: Color(hex: 0x2E8B57), zemin: Color(hex: 0xE6F4EC), yazi: Color(hex: 0x1E6B42))
-    static let sari = RenkSeti(kenar: Color(hex: 0xC98F0A), zemin: Color(hex: 0xFCF3DC), yazi: Color(hex: 0x8A6106))
-    static let gri = RenkSeti(kenar: Color(hex: 0x9AA5B1), zemin: Color(hex: 0xF1F3F5), yazi: Color(hex: 0x4A5664))
+    // Hex değerleri Ortak/WidgetAnligi.swift'teki RenkPaleti'nde (widget da kullanır).
+    static let kirmizi = RenkSeti(paletten: "kirmizi")
+    static let mavi = RenkSeti(paletten: "mavi")
+    static let yesil = RenkSeti(paletten: "yesil")
+    static let sari = RenkSeti(paletten: "sari")
+    static let gri = RenkSeti(paletten: "gri")
+
+    init(kenar: Color, zemin: Color, yazi: Color) {
+        self.kenar = kenar
+        self.zemin = zemin
+        self.yazi = yazi
+    }
+
+    private init(paletten ad: String) {
+        let h = RenkPaleti.hex(ad)
+        self.init(kenar: Color(hex: h.kenar), zemin: Color(hex: h.zemin), yazi: Color(hex: h.yazi))
+    }
 
     static func ad(_ ad: String) -> RenkSeti {
         switch RenkAdi(rawValue: ad) {

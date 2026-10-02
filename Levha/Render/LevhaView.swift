@@ -1,7 +1,7 @@
 import SwiftUI
 
 enum LevhaModu: String, CaseIterable, Identifiable {
-    case kesif, ortme, sabotaj
+    case kesif, ortme, sabotaj, insa
     var id: String { rawValue }
 
     var ad: String {
@@ -9,8 +9,16 @@ enum LevhaModu: String, CaseIterable, Identifiable {
         case .kesif: return "Keşif"
         case .ortme: return "Örtme"
         case .sabotaj: return "Sabotaj"
+        case .insa: return "İnşa"
         }
     }
+}
+
+enum MaskeStili: Equatable {
+    /// Örtme: kesikli kutu + "?"
+    case soru
+    /// İnşa: boş kesikli kutu (+ isteğe bağlı ipucu: değer, zaman)
+    case bos
 }
 
 enum HalkaTuru: Equatable {
@@ -37,6 +45,12 @@ struct LevhaGorunumDurumu: Equatable {
     var kalinBaglantilar: Set<String> = []
     /// Düğüm butonları dokunuş alır mı (Keşif'te katman 4, Sabotaj'da arama sürerken).
     var dokunulabilir: Bool = false
+    var maskeStili: MaskeStili = .soru
+    /// İnşa'da boş kutunun içinde kalan ipucu (cetvelde değer, zaman çizelgesinde ay).
+    var maskeIpuclari: [String: String] = [:]
+    /// Yanlış yerleştirilen kutu: kırmızı yanıp sallanır.
+    var hataliMaske: String?
+    var sallama: Int = 0
 
     static let katmanSayisi = 4
 }
@@ -179,15 +193,18 @@ struct DugumUstKatmani: View {
     var body: some View {
         ZStack(alignment: .topLeading) {
             ForEach(alanlar.filter { durum.gizli.contains($0.id) }) { a in
+                let hatali = durum.hataliMaske == a.id
                 Button { dokun(a.id) } label: {
-                    OrtmeMaskesi(kose: a.kose)
+                    OrtmeMaskesi(kose: a.kose, stil: durum.maskeStili, ipucu: durum.maskeIpuclari[a.id], hatali: hatali)
                 }
                 .buttonStyle(.plain)
                 .frame(width: a.cerceve.width + 4, height: a.cerceve.height + 4)
+                .modifier(Sallanma(adim: hatali ? CGFloat(durum.sallama) : 0))
                 .position(x: a.cerceve.midX, y: a.cerceve.midY)
                 .transition(.opacity.combined(with: .scale(scale: 1.06)))
-                .accessibilityLabel("Gizli düğüm")
-                .accessibilityHint("Açmak için dokun")
+                .accessibilityLabel(durum.maskeStili == .bos ? "Boş kutu" : "Gizli düğüm")
+                .accessibilityValue(durum.maskeIpuclari[a.id] ?? "")
+                .accessibilityHint(durum.maskeStili == .bos ? "Seçili çipi buraya yerleştir" : "Açmak için dokun")
             }
             ForEach(halkalar, id: \.alan.id) { h in
                 RoundedRectangle(cornerRadius: h.alan.kose + 4, style: .continuous)
@@ -207,21 +224,47 @@ struct DugumUstKatmani: View {
 
 struct OrtmeMaskesi: View {
     let kose: CGFloat
+    var stil: MaskeStili = .soru
+    var ipucu: String?
+    var hatali = false
 
     var body: some View {
+        let kenar = hatali ? RenkSeti.kirmizi.kenar : Tema.cizgi
         RoundedRectangle(cornerRadius: kose, style: .continuous)
-            .fill(Tema.maskeZemin)
+            .fill(hatali ? RenkSeti.kirmizi.zemin : (stil == .bos ? Color(hex: 0xF9FAFB) : Tema.maskeZemin))
             .overlay(
                 RoundedRectangle(cornerRadius: kose, style: .continuous)
-                    .strokeBorder(Tema.cizgi, style: StrokeStyle(lineWidth: 1.5, dash: [5, 4]))
+                    .strokeBorder(kenar, style: StrokeStyle(lineWidth: hatali ? 2 : 1.5, dash: [5, 4]))
             )
-            .overlay(
-                Text("?")
-                    .font(.system(size: 20, weight: .bold, design: .rounded))
-                    .foregroundStyle(Tema.cizgi)
-                    .minimumScaleFactor(0.5)
-            )
+            .overlay {
+                if stil == .soru {
+                    Text("?")
+                        .font(.system(size: 20, weight: .bold, design: .rounded))
+                        .foregroundStyle(Tema.cizgi)
+                        .minimumScaleFactor(0.5)
+                } else if let ipucu {
+                    Text(ipucu)
+                        .font(.system(size: 10.5, weight: .bold).monospacedDigit())
+                        .foregroundStyle(Tema.ikincil)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+                        .padding(.horizontal, 4)
+                }
+            }
             .contentShape(Rectangle())
+    }
+}
+
+/// Yatay sallanma: `adim` bir artınca üç kez gidip gelir.
+struct Sallanma: GeometryEffect {
+    var adim: CGFloat
+    var animatableData: CGFloat {
+        get { adim }
+        set { adim = newValue }
+    }
+
+    func effectValue(size: CGSize) -> ProjectionTransform {
+        ProjectionTransform(CGAffineTransform(translationX: 6 * sin(adim * .pi * 6), y: 0))
     }
 }
 

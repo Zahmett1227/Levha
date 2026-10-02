@@ -68,12 +68,15 @@ final class ZamanlayiciTests: XCTestCase {
 
     func testSaglamlikFormulu() {
         XCTAssertEqual(Zamanlayici.saglamlik(ortmeOranlari: [], soruSonuclari: [], sabotajSonuclari: []), 0)
-        // 0,5·100 + 0,3·50 + 0,2·0 = 65
-        XCTAssertEqual(Zamanlayici.saglamlik(ortmeOranlari: [1, 1], soruSonuclari: [true, false], sabotajSonuclari: [false]), 65)
+        // (0,45·100 + 0,3·50 + 0,15·0) / 0,9 = 66,7
+        XCTAssertEqual(Zamanlayici.saglamlik(ortmeOranlari: [1, 1], soruSonuclari: [true, false], sabotajSonuclari: [false]), 66.7)
+        // Dört bileşen: 0,45·100 + 0,3·50 + 0,15·0 + 0,1·50 = 65
+        XCTAssertEqual(Zamanlayici.saglamlik(ortmeOranlari: [1], soruSonuclari: [true, false], sabotajSonuclari: [false],
+                                             insaOranlari: [0.5]), 65)
         // Yalnız örtme: ağırlık örtmeye kalır; son 3 oturum (ilk 0 dışarıda kalır).
         XCTAssertEqual(Zamanlayici.saglamlik(ortmeOranlari: [0, 1, 1, 1], soruSonuclari: [], sabotajSonuclari: []), 100)
-        // Örtme yok: (0,3·100 + 0,2·0) / 0,5 = 60
-        XCTAssertEqual(Zamanlayici.saglamlik(ortmeOranlari: [], soruSonuclari: [true], sabotajSonuclari: [false]), 60)
+        // Örtme yok: (0,3·100 + 0,15·0) / 0,45 = 66,7
+        XCTAssertEqual(Zamanlayici.saglamlik(ortmeOranlari: [], soruSonuclari: [true], sabotajSonuclari: [false]), 66.7)
     }
 
     func testTohumluUretecTekrarlanabilir() {

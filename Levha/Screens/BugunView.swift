@@ -110,7 +110,8 @@ struct BugunView: View {
             if p.isEmpty { return ("Yanlış yok, pekiştirme gerekmedi", false) }
             return ("\(blok.modAdi) · \(p.count) levha", true)
         case .kapanis:
-            return ("\(blok.modAdi) · Part 3", false)
+            let n = k.kapanis?.count ?? 0
+            return (n == 0 ? "Uygun levha yok" : "\(blok.modAdi) · \(n) levha", n > 0)
         }
     }
 
@@ -352,7 +353,8 @@ struct TurBlokView: View {
         case .isinma: idler = k.isinma
         case .yeni: idler = k.yeni
         case .pekistirme: idler = k.pekistirme ?? []
-        case .soru, .kapanis: idler = []
+        case .kapanis: idler = k.kapanis ?? []
+        case .soru: idler = []
         }
         levhalar = TurPlanlayici.levhalar(idler, context)
         mod = blok.izinliModlar.first ?? .kesif
@@ -363,7 +365,7 @@ struct TurBlokView: View {
         switch (blok, o) {
         case (.isinma, .sabotajBitti(let id, _)):
             biten.insert(id)
-        case (.yeni, .ortmeKaydedildi(let id)), (.pekistirme, .ortmeKaydedildi(let id)):
+        case (.yeni, .ortmeKaydedildi(let id)), (.pekistirme, .ortmeKaydedildi(let id)), (.kapanis, .insaBitti(let id)):
             biten.insert(id)
         default:
             break

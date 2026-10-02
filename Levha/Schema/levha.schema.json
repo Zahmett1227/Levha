@@ -1,8 +1,8 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "levha.schema.json",
-  "title": "LEVHA paketi (şema v2)",
-  "description": "Bir paket = bir alt konu = bir .json dosyası. Yapısal kurallar (ızgara içinde/çakışmasız konum, referans bütünlüğü, etiket ≤ 28 karakter, düğüm sayıları) levha-lint ile denetlenir. Sürüm 1 paketler okunmaya devam eder.",
+  "title": "LEVHA paketi (şema v3)",
+  "description": "Bir paket = bir alt konu = bir .json dosyası. Yapısal kurallar (ızgara içinde/çakışmasız konum, referans bütünlüğü, etiket ≤ 28 karakter, düğüm sayıları) levha-lint ile denetlenir. Sürüm 1–2 paketler okunmaya devam eder.",
   "type": "object",
   "required": [
     "sema_surumu",
@@ -16,7 +16,8 @@
     "sema_surumu": {
       "enum": [
         1,
-        2
+        2,
+        3
       ]
     },
     "paket_id": {
@@ -49,6 +50,18 @@
       "type": "array",
       "items": {
         "$ref": "#/$defs/soru"
+      }
+    },
+    "kazanimlar": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/kazanim"
+      }
+    },
+    "aileler": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/aile"
       }
     }
   },
@@ -239,6 +252,31 @@
           "items": {
             "$ref": "#/$defs/bolgeIsareti"
           }
+        },
+        "insa_sirasi": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "İnşa'da boş bırakılacak düğümler (yoksa ortme_sirasi)."
+        },
+        "kaynak": {
+          "type": "object",
+          "required": [
+            "kitap"
+          ],
+          "properties": {
+            "kitap": {
+              "type": "string"
+            },
+            "sayfa": {
+              "type": "array",
+              "items": {
+                "type": "integer"
+              }
+            }
+          },
+          "description": "Part 4 kamera eşlemesi için; şimdilik yalnız saklanır."
         }
       },
       "allOf": [
@@ -538,6 +576,28 @@
           "additionalProperties": {
             "type": "string"
           }
+        },
+        "kazanim": {
+          "type": "string",
+          "description": "v3'te zorunlu."
+        },
+        "kalip": {
+          "$ref": "#/$defs/kalip"
+        },
+        "zorluk": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3
+        },
+        "secenek_aile": {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^[0-4]$"
+          },
+          "additionalProperties": {
+            "type": "string"
+          },
+          "description": "Şık indeksi → aile üyesi (doğru şık dahil); karıştırma matrisi bundan kurulur."
         }
       }
     },
@@ -822,6 +882,92 @@
           }
         }
       ]
+    },
+    "kalip": {
+      "enum": [
+        "en_sik",
+        "ilk_adim",
+        "en_olasi_tani",
+        "mekanizma",
+        "istisna",
+        "esik_sayi",
+        "ayirici_cift",
+        "kesin_tani",
+        "patognomonik",
+        "yas_sira",
+        "ilac",
+        "esleme"
+      ]
+    },
+    "kazanim": {
+      "type": "object",
+      "required": [
+        "id",
+        "metin",
+        "kalip",
+        "sorulabilirlik"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "metin": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kalip": {
+          "$ref": "#/$defs/kalip"
+        },
+        "dugumler": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Paketin herhangi bir levhasındaki düğümler."
+        },
+        "sorulabilirlik": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 5,
+          "description": "TUS'ta sorulma olasılığı; paket başına 5'ler ≤ %25 önerilir."
+        },
+        "aile": {
+          "type": "string"
+        },
+        "anahtar_ipucu": {
+          "type": "string"
+        }
+      }
+    },
+    "aile": {
+      "type": "object",
+      "required": [
+        "id",
+        "ad",
+        "uyeler"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "ad": {
+          "type": "string"
+        },
+        "uyeler": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 2
+        },
+        "ayirici": {
+          "type": "object",
+          "description": "\"Üye A|Üye B\" → ayırıcı ipucu",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      }
     }
   }
 }

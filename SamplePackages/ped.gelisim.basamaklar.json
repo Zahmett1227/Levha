@@ -1,5 +1,5 @@
 {
-  "sema_surumu": 2,
+  "sema_surumu": 3,
   "paket_id": "ped.gelisim.basamaklar",
   "ders": "Pediatri",
   "bolum": "Büyüme ve gelişme",
@@ -213,6 +213,16 @@
           "yanlis_deger": 4,
           "dogrusu": "Pens kavrama 9–10. ayda başlar; 4. ayda eller orta hatta birleşir."
         }
+      ],
+      "insa_sirasi": [
+        "e1",
+        "e2",
+        "e3",
+        "e8",
+        "e9",
+        "e12",
+        "e13",
+        "e15"
       ]
     },
     {
@@ -341,6 +351,13 @@
           "yanlis_deger": 3,
           "dogrusu": "Paraşüt refleksi 8–9. ayda ortaya çıkar ve ömür boyu kalır."
         }
+      ],
+      "insa_sirasi": [
+        "r1",
+        "r5",
+        "r6",
+        "r7",
+        "r8"
       ]
     },
     {
@@ -433,6 +450,13 @@
           "yanlis_deger": 36,
           "dogrusu": "Doğum boyu 4 yaşında (48. ay) iki katına çıkar."
         }
+      ],
+      "insa_sirasi": [
+        "m2",
+        "m3",
+        "m5",
+        "m6",
+        "m7"
       ]
     }
   ],
@@ -463,6 +487,16 @@
       "celdirici_dugum": {
         "1": "e6",
         "3": "e12"
+      },
+      "kazanim": "k1",
+      "kalip": "yas_sira",
+      "zorluk": 2,
+      "secenek_aile": {
+        "0": "2. ay",
+        "1": "4. ay",
+        "2": "6. ay",
+        "3": "12. ay",
+        "4": "18. ay"
       }
     },
     {
@@ -490,6 +524,15 @@
         "0": "e10",
         "1": "e11",
         "3": "e14"
+      },
+      "kazanim": "k5",
+      "kalip": "yas_sira",
+      "zorluk": 1,
+      "secenek_aile": {
+        "0": "2. ay",
+        "1": "6. ay",
+        "2": "2 yaş",
+        "3": "4 yaş"
       }
     },
     {
@@ -515,7 +558,10 @@
       "celdirici_dugum": {
         "0": "e3",
         "4": "e3"
-      }
+      },
+      "kazanim": "k2",
+      "kalip": "ilk_adim",
+      "zorluk": 1
     },
     {
       "id": "q4",
@@ -539,7 +585,10 @@
       "celdirici_dugum": {
         "0": "e9",
         "1": "e9"
-      }
+      },
+      "kazanim": "k4",
+      "kalip": "yas_sira",
+      "zorluk": 1
     },
     {
       "id": "q5",
@@ -562,6 +611,15 @@
       ],
       "celdirici_dugum": {
         "3": "e16"
+      },
+      "kazanim": "k7",
+      "kalip": "yas_sira",
+      "zorluk": 1,
+      "secenek_aile": {
+        "1": "2. ay",
+        "2": "4. ay",
+        "3": "9. ay",
+        "4": "12. ay"
       }
     },
     {
@@ -588,6 +646,16 @@
         "1": "r5",
         "2": "r6",
         "4": "r2"
+      },
+      "kazanim": "k10",
+      "kalip": "yas_sira",
+      "zorluk": 2,
+      "secenek_aile": {
+        "0": "Moro",
+        "1": "ATNR",
+        "2": "Adım atma",
+        "3": "Paraşüt",
+        "4": "Arama"
       }
     },
     {
@@ -612,7 +680,10 @@
       "celdirici_dugum": {
         "1": "r1",
         "2": "r1"
-      }
+      },
+      "kazanim": "k12",
+      "kalip": "en_olasi_tani",
+      "zorluk": 2
     },
     {
       "id": "q8",
@@ -636,7 +707,10 @@
       "celdirici_dugum": {
         "0": "r5",
         "2": "r1"
-      }
+      },
+      "kazanim": "k11",
+      "kalip": "en_olasi_tani",
+      "zorluk": 3
     },
     {
       "id": "q9",
@@ -661,6 +735,16 @@
         "0": "r1",
         "2": "r8",
         "3": "r5"
+      },
+      "kazanim": "k13",
+      "kalip": "esleme",
+      "zorluk": 2,
+      "secenek_aile": {
+        "0": "Moro",
+        "1": "Landau",
+        "2": "Paraşüt",
+        "3": "ATNR",
+        "4": "Galant"
       }
     },
     {
@@ -686,7 +770,10 @@
       "celdirici_dugum": {
         "0": "m2",
         "3": "m4"
-      }
+      },
+      "kazanim": "k16",
+      "kalip": "esik_sayi",
+      "zorluk": 1
     },
     {
       "id": "q11",
@@ -710,7 +797,10 @@
       ],
       "celdirici_dugum": {
         "0": "m5"
-      }
+      },
+      "kazanim": "k18",
+      "kalip": "esik_sayi",
+      "zorluk": 1
     },
     {
       "id": "q12",
@@ -733,7 +823,10 @@
       ],
       "celdirici_dugum": {
         "3": "m2"
-      }
+      },
+      "kazanim": "k19",
+      "kalip": "esik_sayi",
+      "zorluk": 2
     },
     {
       "id": "q13",
@@ -756,7 +849,10 @@
       ],
       "celdirici_dugum": {
         "3": "m3"
-      }
+      },
+      "kazanim": "k17",
+      "kalip": "esik_sayi",
+      "zorluk": 1
     },
     {
       "id": "q14",
@@ -779,6 +875,289 @@
       ],
       "celdirici_dugum": {
         "0": "m7"
+      },
+      "kazanim": "k20",
+      "kalip": "esik_sayi",
+      "zorluk": 2
+    }
+  ],
+  "kazanimlar": [
+    {
+      "id": "k1",
+      "metin": "6. ay: desteksiz oturma, elden ele geçirme ve hece tekrarı",
+      "kalip": "yas_sira",
+      "dugumler": [
+        "e2",
+        "e7",
+        "e11"
+      ],
+      "sorulabilirlik": 5,
+      "aile": "a1",
+      "anahtar_ipucu": "oturur + transfer"
+    },
+    {
+      "id": "k2",
+      "metin": "Bağımsız yürüme ~12. ayda; 18. ayda yürümemek kırmızı bayraktır",
+      "kalip": "yas_sira",
+      "dugumler": [
+        "e3"
+      ],
+      "sorulabilirlik": 4,
+      "aile": "a1",
+      "anahtar_ipucu": "18 ay yürümüyor"
+    },
+    {
+      "id": "k3",
+      "metin": "Pens kavrama 9–10. ayda başlar; 4. ayda eller yalnızca orta hatta birleşir",
+      "kalip": "istisna",
+      "dugumler": [
+        "e8",
+        "e6"
+      ],
+      "sorulabilirlik": 4,
+      "aile": "a1"
+    },
+    {
+      "id": "k4",
+      "metin": "Şekil kopyalama: daire 3, kare 4, üçgen 5 yaş",
+      "kalip": "yas_sira",
+      "dugumler": [
+        "e9"
+      ],
+      "sorulabilirlik": 4,
+      "aile": "a1"
+    },
+    {
+      "id": "k5",
+      "metin": "Dil: ilk anlamlı kelime 12. ay, iki kelimelik cümle 2 yaş, üç kelimelik cümle 3 yaş",
+      "kalip": "yas_sira",
+      "dugumler": [
+        "e12",
+        "e13",
+        "e14"
+      ],
+      "sorulabilirlik": 5,
+      "aile": "a1",
+      "anahtar_ipucu": "iki kelime = 2 yaş"
+    },
+    {
+      "id": "k6",
+      "metin": "2 yaşında iki kelimeyi birleştiremeyen çocukta önce işitme değerlendirilir",
+      "kalip": "ilk_adim",
+      "dugumler": [
+        "e13"
+      ],
+      "sorulabilirlik": 3,
+      "aile": "a1"
+    },
+    {
+      "id": "k7",
+      "metin": "Sosyal gülümseme 6–8. haftada; yabancı kaygısı 6–9. ayda normaldir",
+      "kalip": "yas_sira",
+      "dugumler": [
+        "e15",
+        "e16"
+      ],
+      "sorulabilirlik": 3,
+      "aile": "a1"
+    },
+    {
+      "id": "k8",
+      "metin": "Baş kontrolü 4. ayda tamdır; sonrasında baş gecikmesi hipotoniyi düşündürür",
+      "kalip": "yas_sira",
+      "dugumler": [
+        "e1"
+      ],
+      "sorulabilirlik": 2,
+      "aile": "a1"
+    },
+    {
+      "id": "k9",
+      "metin": "Paralel oyun 2 yaşında, işbirlikli oyun 3–4 yaşında belirginleşir",
+      "kalip": "yas_sira",
+      "dugumler": [
+        "e17"
+      ],
+      "sorulabilirlik": 2,
+      "aile": "a1"
+    },
+    {
+      "id": "k10",
+      "metin": "Paraşüt refleksi 8–9. ayda çıkar ve ömür boyu kalır",
+      "kalip": "yas_sira",
+      "dugumler": [
+        "r8"
+      ],
+      "sorulabilirlik": 4,
+      "aile": "a2"
+    },
+    {
+      "id": "k11",
+      "metin": "Moro ve ATNR 4–6. ayda kaybolur; zorunlu ve kalıcı ATNR serebral palsiyi düşündürür",
+      "kalip": "istisna",
+      "dugumler": [
+        "r1",
+        "r5"
+      ],
+      "sorulabilirlik": 4,
+      "aile": "a2",
+      "anahtar_ipucu": "8. ayda eskrimci duruşu"
+    },
+    {
+      "id": "k12",
+      "metin": "Tek taraflı Moro yokluğu: brakiyal pleksus hasarı (Erb) ya da klavikula kırığı",
+      "kalip": "ayirici_cift",
+      "dugumler": [
+        "r1"
+      ],
+      "sorulabilirlik": 4,
+      "aile": "a2",
+      "anahtar_ipucu": "garson bahşişi"
+    },
+    {
+      "id": "k13",
+      "metin": "Landau 3. ayda çıkar (yüzüstü havada ekstansiyon); paraşütle karıştırılmamalı",
+      "kalip": "esleme",
+      "dugumler": [
+        "r7"
+      ],
+      "sorulabilirlik": 3,
+      "aile": "a2"
+    },
+    {
+      "id": "k14",
+      "metin": "Avuç içi yakalama 3–4. ayda, plantar yakalama 9–12. ayda kaybolur",
+      "kalip": "yas_sira",
+      "dugumler": [
+        "r3",
+        "r4"
+      ],
+      "sorulabilirlik": 2,
+      "aile": "a2"
+    },
+    {
+      "id": "k15",
+      "metin": "Adım atma refleksi ~2. ayda kaybolur",
+      "kalip": "yas_sira",
+      "dugumler": [
+        "r6"
+      ],
+      "sorulabilirlik": 1,
+      "aile": "a2"
+    },
+    {
+      "id": "k16",
+      "metin": "Doğum ağırlığı 1 yaşında üç katına çıkar",
+      "kalip": "esik_sayi",
+      "dugumler": [
+        "m3"
+      ],
+      "sorulabilirlik": 5,
+      "aile": "a3",
+      "anahtar_ipucu": "1 yaş ×3"
+    },
+    {
+      "id": "k17",
+      "metin": "Doğum ağırlığı 4–6. ayda (ortalama 5. ay) iki katına çıkar",
+      "kalip": "esik_sayi",
+      "dugumler": [
+        "m2"
+      ],
+      "sorulabilirlik": 3,
+      "aile": "a3"
+    },
+    {
+      "id": "k18",
+      "metin": "Doğum boyu 1 yaşında ×1,5 (~75 cm), 4 yaşında ×2 (~100 cm)",
+      "kalip": "esik_sayi",
+      "dugumler": [
+        "m5",
+        "m7"
+      ],
+      "sorulabilirlik": 4,
+      "aile": "a3"
+    },
+    {
+      "id": "k19",
+      "metin": "Term bebek %10'a kadar kilo kaybedebilir, 10–14. günde doğum ağırlığına döner",
+      "kalip": "esik_sayi",
+      "dugumler": [
+        "m1"
+      ],
+      "sorulabilirlik": 3,
+      "aile": "a3"
+    },
+    {
+      "id": "k20",
+      "metin": "2 yaş boyunun iki katı erişkin boyu kabaca tahmin eder",
+      "kalip": "esik_sayi",
+      "dugumler": [
+        "m6"
+      ],
+      "sorulabilirlik": 2,
+      "aile": "a3"
+    }
+  ],
+  "aileler": [
+    {
+      "id": "a1",
+      "ad": "Gelişim yaşları",
+      "uyeler": [
+        "2. ay",
+        "4. ay",
+        "6. ay",
+        "9. ay",
+        "12. ay",
+        "18. ay",
+        "2 yaş",
+        "3 yaş",
+        "4 yaş",
+        "5 yaş"
+      ],
+      "ayirici": {
+        "2. ay|4. ay": "2. ay sosyal gülümseme ve agulama; 4. ay baş kontrolü tam ve eller orta hatta.",
+        "4. ay|6. ay": "4. ay baş kontrolü ve elleri orta hatta birleştirme; 6. ay desteksiz oturma, elden ele geçirme, hece tekrarı.",
+        "6. ay|9. ay": "9. ayda pens kavrama ve yabancı kaygısı belirginleşir; 6. ayda transfer ve oturma.",
+        "12. ay|18. ay": "12. ay bağımsız yürüme ve ilk kelime; 18. ay koşma. 18. ayda yürümemek kırmızı bayraktır.",
+        "2 yaş|3 yaş": "2 yaş iki kelimelik cümle ve paralel oyun; 3 yaş üç kelimelik cümle, daire ve üç tekerlekli bisiklet.",
+        "3 yaş|4 yaş": "Daire 3, kare 4, üçgen 5 yaşında kopyalanır."
+      }
+    },
+    {
+      "id": "a2",
+      "ad": "İlkel ve postural refleksler",
+      "uyeler": [
+        "Moro",
+        "Arama",
+        "Avuç içi yakalama",
+        "Plantar yakalama",
+        "ATNR",
+        "Adım atma",
+        "Landau",
+        "Paraşüt",
+        "Galant"
+      ],
+      "ayirici": {
+        "Landau|Paraşüt": "Landau 3. ayda çıkar, yüzüstü havada gövde ekstansiyonudur; paraşüt 8–9. ayda çıkar, öne düşerken kollar uzanır ve ömür boyu kalır.",
+        "Moro|ATNR": "Moro ani baş düşmesinde kolların açılıp kapanmasıdır; ATNR baş çevrilince 'eskrimci' duruşudur. İkisi de 4–6. ayda kaybolur.",
+        "Avuç içi yakalama|Plantar yakalama": "Avuç içi yakalama 3–4. ayda, plantar yakalama 9–12. ayda kaybolur."
+      }
+    },
+    {
+      "id": "a3",
+      "ad": "Büyüme kilometre taşları",
+      "uyeler": [
+        "Doğum ağırlığına dönüş",
+        "Kilo ×2",
+        "Kilo ×3",
+        "Boy ×1,5",
+        "Boy: erişkinin yarısı",
+        "Boy ×2"
+      ],
+      "ayirici": {
+        "Kilo ×2|Kilo ×3": "Kilo 4–6. ayda iki, 1 yaşında üç katına çıkar.",
+        "Kilo ×3|Boy ×1,5": "1 yaşında kilo üç, boy bir buçuk katına çıkar.",
+        "Boy: erişkinin yarısı|Boy ×2": "2 yaş boyu erişkin boyunun yarısıdır; doğum boyu 4 yaşında iki katına çıkar."
       }
     }
   ]

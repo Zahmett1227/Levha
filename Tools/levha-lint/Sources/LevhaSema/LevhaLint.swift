@@ -27,7 +27,7 @@ public struct LintSonucu {
 }
 
 public enum LevhaLint {
-    public static let desteklenenSurumler = 1...2
+    public static let desteklenenSurumler = 1...3
     public static let etiketSiniri = 28
     public static let dugumAraligi = 6...20
     public static let hucreAraligi = 6...24
@@ -64,7 +64,7 @@ public enum LevhaLint {
     public static func denetle(_ p: PaketJSON) -> [LintBulgusu] {
         var b: [LintBulgusu] = []
         if !desteklenenSurumler.contains(p.sema_surumu) {
-            b.append(.init("sema_surumu", "desteklenmeyen sürüm \(p.sema_surumu) (beklenen 1 ya da 2)"))
+            b.append(.init("sema_surumu", "desteklenmeyen sürüm \(p.sema_surumu) (beklenen 1–3)"))
         }
         for (ad, deger) in [("paket_id", p.paket_id), ("ders", p.ders), ("bolum", p.bolum), ("alt_konu", p.alt_konu)] where bos(deger) {
             b.append(.init(ad, "boş olamaz"))
@@ -79,6 +79,40 @@ public enum LevhaLint {
             levhaDugumleri[l.id] = Set(dugumKimlikleri(l))
         }
 
+        let v3 = p.sema_surumu >= 3
+        // Aileler ve kazanımlar (v3)
+        var aileler: [String: AileJSON] = [:]
+        for a in p.aileler ?? [] {
+            let yer = "aile «\(a.id)»"
+            if aileler[a.id] != nil { b.append(.init(yer, "aile id tekrar ediyor")) }
+            aileler[a.id] = a
+            if a.uyeler.count < 2 { b.append(.init(yer + " › uyeler", "en az 2 üye olmalı", engelleyici: false)) }
+            for anahtar in (a.ayirici ?? [:]).keys.sorted() {
+                let parca = anahtar.split(separator: "|").map(String.init)
+                if parca.count != 2 || !parca.allSatisfy(a.uyeler.contains) {
+                    b.append(.init(yer + " › ayirici", "\"\(anahtar)\" iki aile üyesini \"A|B\" biçiminde vermeli", engelleyici: false))
+                }
+            }
+        }
+        let tumDugumler = levhaDugumleri.values.reduce(into: Set<String>()) { $0.formUnion($1) }
+        var kazanimlar: [String: KazanimJSON] = [:]
+        for k in p.kazanimlar ?? [] {
+            let yer = "kazanım «\(k.id)»"
+            if kazanimlar[k.id] != nil { b.append(.init(yer, "kazanım id tekrar ediyor")) }
+            kazanimlar[k.id] = k
+            if bos(k.metin) { b.append(.init(yer + " › metin", "boş olamaz")) }
+            if KalipTipi(rawValue: k.kalip) == nil { b.append(.init(yer + " › kalip", "tanımsız kalıp \"\(k.kalip)\"")) }
+            if !(1...5).contains(k.sorulabilirlik) { b.append(.init(yer + " › sorulabilirlik", "1–5 olmalı (\(k.sorulabilirlik))")) }
+            if let a = k.aile, aileler[a] == nil { b.append(.init(yer + " › aile", "bilinmeyen aile \"\(a)\"")) }
+            for d in k.dugumler ?? [] where !tumDugumler.contains(d) {
+                b.append(.init(yer + " › dugumler", "paketin hiçbir levhasında yok: \"\(d)\""))
+            }
+        }
+        let soruluKazanimlar = Set((p.sorular ?? []).compactMap(\.kazanim))
+        for k in p.kazanimlar ?? [] where !soruluKazanimlar.contains(k.id) {
+            b.append(.init("kazanım «\(k.id)»", "sorusuz kazanım", uyari: true))
+        }
+
         var soruIdleri = Set<String>()
         for s in p.sorular ?? [] {
             let yer = "soru «\(s.id)»"
@@ -87,6 +121,7 @@ public enum LevhaLint {
             if bos(s.aciklama) { b.append(.init(yer + " › aciklama", "boş olamaz", engelleyici: false)) }
             if s.secenekler.count != 5 { b.append(.init(yer + " › secenekler", "5 seçenek olmalı (\(s.secenekler.count) var)")) }
             if !(0...4).contains(s.dogru) { b.append(.init(yer + " › dogru", "0–4 arasında olmalı (\(s.dogru))")) }
+            b += soruV3Denetle(s, yer: yer, v3: v3, kazanimlar: kazanimlar, aileler: aileler)
             guard let idler = levhaDugumleri[s.levha] else {
                 b.append(.init(yer + " › levha", "bilinmeyen levha \"\(s.levha)\""))
                 continue
@@ -108,6 +143,40 @@ public enum LevhaLint {
                 if !idler.contains(dugum) {
                     b.append(.init(yer + " › celdirici_dugum", "bilinmeyen düğüm \"\(dugum)\""))
                 }
+            }
+        }
+        return b
+    }
+
+    static func soruV3Denetle(_ s: SoruJSON, yer: String, v3: Bool, kazanimlar: [String: KazanimJSON],
+                              aileler: [String: AileJSON]) -> [LintBulgusu] {
+        var b: [LintBulgusu] = []
+        if let kalip = s.kalip, KalipTipi(rawValue: kalip) == nil {
+            b.append(.init(yer + " › kalip", "tanımsız kalıp \"\(kalip)\""))
+        }
+        if let z = s.zorluk, !(1...3).contains(z) { b.append(.init(yer + " › zorluk", "1–3 olmalı (\(z))")) }
+        var kazanim: KazanimJSON?
+        if let kid = s.kazanim {
+            kazanim = kazanimlar[kid]
+            if kazanim == nil { b.append(.init(yer + " › kazanim", "tanımsız kazanım \"\(kid)\"")) }
+        } else if v3 {
+            b.append(.init(yer + " › kazanim", "v3 pakette her sorunun kazanımı olmalı"))
+        }
+        if let sa = s.secenek_aile, !sa.isEmpty {
+            // Kazanımın ailesi varsa ona, yoksa paketin tüm ailelerine bakılır.
+            let uyeler: Set<String> = kazanim?.aile.flatMap { aileler[$0] }.map { Set($0.uyeler) }
+                ?? aileler.values.reduce(into: Set<String>()) { $0.formUnion($1.uyeler) }
+            var celdiriciSayisi = 0
+            for (anahtar, uye) in sa.sorted(by: { $0.key < $1.key }) {
+                guard let i = Int(anahtar), (0...4).contains(i) else {
+                    b.append(.init(yer + " › secenek_aile", "geçersiz şık anahtarı \"\(anahtar)\" (0–4 olmalı)"))
+                    continue
+                }
+                if !uyeler.contains(uye) { b.append(.init(yer + " › secenek_aile", "\"\(uye)\" ailede yok")) }
+                if i != s.dogru { celdiriciSayisi += 1 }
+            }
+            if celdiriciSayisi < 3 {
+                b.append(.init(yer + " › secenek_aile", "4 çeldiricinin yalnız \(celdiriciSayisi) tanesi aileden", uyari: true))
             }
         }
         return b
@@ -199,6 +268,13 @@ public enum LevhaLint {
         }
         if gorulen.count < 3 {
             b.append(.init(yer + " › ortme_sirasi", "en az 3 düğüm olmalı", engelleyici: false))
+        }
+
+        for id in l.insa_sirasi ?? [] where !idler.contains(id) {
+            b.append(.init(yer + " › insa_sirasi", "bilinmeyen düğüm \"\(id)\""))
+        }
+        if surum >= 3 && (l.insa_sirasi ?? []).isEmpty {
+            b.append(.init(yer + " › insa_sirasi", "yok (İnşa ortme_sirasi ile idare eder)", uyari: true))
         }
 
         let sabotajlar = l.sabotajlar ?? []

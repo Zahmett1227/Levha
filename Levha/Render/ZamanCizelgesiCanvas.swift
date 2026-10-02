@@ -264,14 +264,18 @@ struct ZamanCizelgesiCanvas: View {
                     .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
-                .katmanda(durum.katman >= 2)
+                // İnşa'da boş olayın çubuk dışındaki etiketi de gizlenir (yoksa cevabı ele verir).
+                .katmanda(durum.katman >= 2 && !(durum.mod == .insa && durum.gizli.contains(o.dugum.id)))
                 .allowsHitTesting(durum.dokunulabilir)
                 .position(x: o.cerceve.midX, y: o.cerceve.midY)
                 .accessibilityLabel(o.dugum.etiket)
                 .accessibilityValue(g.degerMetni(o.dugum))
             }
 
-            DugumUstKatmani(alanlar: g.ogeler.map { DugumAlani(id: $0.dugum.id, cerceve: $0.cerceve, kose: g.kose) },
+            // İnşa'da boş kutu yalnız çubuk kadardır (aralığın uzunluğu ipucudur); diğer modlarda etiket dahil.
+            DugumUstKatmani(alanlar: g.ogeler.map { DugumAlani(id: $0.dugum.id,
+                                                              cerceve: durum.mod == .insa ? ($0.cubuk ?? $0.cerceve) : $0.cerceve,
+                                                              kose: g.kose) },
                             durum: durum, boyut: boyut, dokun: dokun)
         }
         .frame(width: boyut.width, height: boyut.height, alignment: .topLeading)

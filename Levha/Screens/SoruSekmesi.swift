@@ -115,6 +115,8 @@ struct SoruOturumuView: View {
     @State private var bitti = false
     @State private var gosterim: LevhaGosterimi?
     @State private var yuklendi = false
+    /// 1 Eminim · 2 Sanırım · 3 Tahmin; seçilmezse Sanırım.
+    @State private var guven = 2
 
     var body: some View {
         Group {
@@ -191,6 +193,10 @@ struct SoruOturumuView: View {
                         .padding(14)
                         .levhaKarti()
 
+                    GuvenSecici(guven: $guven)
+                        .disabled(secilen != nil)
+                        .opacity(secilen == nil ? 1 : 0.5)
+
                     ForEach(s.secenekler.indices, id: \.self) { i in
                         SecenekSatiri(harf: harf(i), metin: s.secenekler[i], durum: secenekDurumu(i, s))
                             .onTapGesture { cevapla(i, s) }
@@ -222,7 +228,7 @@ struct SoruOturumuView: View {
         let sure = Date.now.timeIntervalSince(baslangic)
         withAnimation(.easeOut(duration: 0.25)) { secilen = i }
         if i == s.dogru { dogruSayisi += 1 }
-        DurumServisi.soruKaydet(soru: s, secilen: i, sure: sure, context)
+        DurumServisi.soruKaydet(soru: s, secilen: i, guven: guven, sure: sure, context)
     }
 
     private func sonraki() {
@@ -230,6 +236,7 @@ struct SoruOturumuView: View {
             withAnimation(.easeOut(duration: 0.2)) {
                 indeks += 1
                 secilen = nil
+                guven = 2
             }
             baslangic = .now
         } else {
@@ -299,6 +306,37 @@ struct SoruOturumuView: View {
                 .frame(maxWidth: 220)
         }
         .padding(24)
+    }
+}
+
+/// Şıktan önce: Eminim · Sanırım · Tahmin.
+struct GuvenSecici: View {
+    @Binding var guven: Int
+    static let adlar = [1: "Eminim", 2: "Sanırım", 3: "Tahmin"]
+
+    var body: some View {
+        HStack(spacing: 6) {
+            Text("Güven")
+                .font(.system(size: 11, weight: .heavy))
+                .tracking(0.5)
+                .foregroundStyle(Tema.ikincil)
+            ForEach([1, 2, 3], id: \.self) { g in
+                Button {
+                    guven = g
+                } label: {
+                    Text(Self.adlar[g] ?? "")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundStyle(guven == g ? Color.white : Tema.metin)
+                        .padding(.horizontal, 12)
+                        .frame(minHeight: 32)
+                        .background(guven == g ? Tema.metin : Color.white, in: Capsule())
+                        .overlay(Capsule().strokeBorder(Tema.kartKenar, lineWidth: guven == g ? 0 : 1))
+                }
+                .buttonStyle(.plain)
+                .accessibilityAddTraits(guven == g ? .isSelected : [])
+            }
+            Spacer(minLength: 0)
+        }
     }
 }
 

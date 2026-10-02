@@ -8,10 +8,15 @@ Kişisel TUS çalışma uygulaması (iOS 17+, SwiftUI + SwiftData, yalnız iPhon
 2. *Signing & Capabilities* → Team: kendi Apple ID'n. Bundle id gerekirse değiştir (`tr.kisisel.levha`).
 3. iPhone'u bağla, **Run**.
 
-**iCloud:** Proje iCloud Drive (iCloud Documents) yetkisiyle gelir; bu, ücretli geliştirici hesabı ister.
-Ücretsiz Apple ID ile kuruyorsan *Signing & Capabilities*'ten **iCloud**'u kaldır. Uygulama
-o zaman yerel klasöre düşer; başka bir şey değişmez.
-Bundle id'yi değiştirirsen `project.yml`'deki `iCloud.tr.kisisel.levha` geçen iki yeri de güncelle.
+**iCloud ve App Group:** Proje iCloud Drive (iCloud Documents) ve App Group (`group.tr.kisisel.levha`,
+widget için) yetkileriyle gelir; ikisi de ücretli geliştirici hesabı ister. Ücretsiz Apple ID ile kuruyorsan
+*Signing & Capabilities*'ten **iCloud** ve **App Groups**'u (uygulama ve LevhaWidget hedeflerinde) kaldır.
+Uygulama o zaman yerel klasöre ve yerel depoya düşer; widget boş görünür, başka bir şey değişmez.
+Bundle id'yi değiştirirsen `project.yml`'deki `iCloud.tr.kisisel.levha` ve `group.tr.kisisel.levha` geçen
+yerleri ve `Ortak/WidgetAnligi.swift`'teki grup adını da güncelle.
+
+**Widget:** Ana ekranda uzun bas › + › "Levha": orta boy (maskeli levha, dokununca Örtme'de açar) ve
+küçük boy (bugünün turu). Kısayollar uygulamasında "Levha turu" eylemi uygulamayı Bugün'de açar.
 
 Projeye dosya eklersen: `xcodegen generate` (proje `project.yml`'den üretilir).
 
@@ -24,7 +29,8 @@ Uygulamada **İçerik** sekmesi klasördeki tüm `.json` dosyalarını listeler 
 levha/hangi alan olduğu yazar). **Hepsini içe aktar** ya da **Dosya seç…**. `SamplePackages/` içindeki örnek
 paketler uygulamayla gelir; yeni ya da değişmiş olanlar açılışta otomatik yüklenir.
 
-Şema sürümü 2'dir (`Levha/Schema/levha.schema.json`); sürüm 1 paketler okunmaya devam eder.
+Şema sürümü 3'tür (`Levha/Schema/levha.schema.json`); sürüm 1–2 paketler okunmaya devam eder.
+Ders ağırlıkları ve yanlış cezası paketten değil, Ölçüm › ⚙︎ Ayarlar'dan gelir.
 
 Aynı `id`'li levha yeniden içe aktarılınca **düzen korunur** (konumlar değişmez); etiket, not ve sorular güncellenir.
 Düzeni sıfırlamak için paketi İçerik'te sola kaydırıp sil, sonra yeniden içe aktar.
@@ -37,5 +43,5 @@ swift run levha-lint SamplePackages/ped.neo.sarilik.json
 
 Birden fazla dosya verilebilir (`swift run levha-lint SamplePackages/*.json`). Çıktı satır satır hata,
 sonda `OK` ya da `N hata`; yazılmış sabotajı olmayan levhalar "uyarı" olarak listelenir ama hata sayılmaz.
-Lint ve zamanlayıcı testleri: `cd Tools/levha-lint && swift test`.
+Lint, zamanlayıcı, öncelik ve tahmini net testleri: `cd Tools/levha-lint && swift test`.
 Şema: `Levha/Schema/levha.schema.json`.

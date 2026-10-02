@@ -55,17 +55,20 @@ public enum Zamanlayici {
         return sonraki <= calismaGunu(simdi, takvim: takvim)
     }
 
-    /// Sağlamlık = 0,5·Örtme (son 3 oturum) + 0,3·Soru (son 10) + 0,2·Sabotaj bulma oranı (son 10).
+    /// Sağlamlık = 0,45·Örtme (son 3 oturum) + 0,3·Soru (son 10) + 0,15·Sabotaj bulma (son 10) + 0,1·İnşa (son 3).
     /// Verisi olmayan bileşenin ağırlığı diğerlerine dağıtılır; hiç veri yoksa 0.
-    /// Dizilerde en yeni öğe sondadır.
-    public static func saglamlik(ortmeOranlari: [Double], soruSonuclari: [Bool], sabotajSonuclari: [Bool]) -> Double {
+    /// Oranlar 0–1; dizilerde en yeni öğe sondadır.
+    public static func saglamlik(ortmeOranlari: [Double], soruSonuclari: [Bool], sabotajSonuclari: [Bool],
+                                 insaOranlari: [Double] = []) -> Double {
         var bilesenler: [(agirlik: Double, deger: Double)] = []
         let ortme = ortmeOranlari.suffix(3)
-        if !ortme.isEmpty { bilesenler.append((0.5, ortme.reduce(0, +) / Double(ortme.count) * 100)) }
+        if !ortme.isEmpty { bilesenler.append((0.45, ortme.reduce(0, +) / Double(ortme.count) * 100)) }
         let soru = soruSonuclari.suffix(10)
         if !soru.isEmpty { bilesenler.append((0.3, Double(soru.filter { $0 }.count) / Double(soru.count) * 100)) }
         let sabotaj = sabotajSonuclari.suffix(10)
-        if !sabotaj.isEmpty { bilesenler.append((0.2, Double(sabotaj.filter { $0 }.count) / Double(sabotaj.count) * 100)) }
+        if !sabotaj.isEmpty { bilesenler.append((0.15, Double(sabotaj.filter { $0 }.count) / Double(sabotaj.count) * 100)) }
+        let insa = insaOranlari.suffix(3)
+        if !insa.isEmpty { bilesenler.append((0.1, insa.reduce(0, +) / Double(insa.count) * 100)) }
         let toplamAgirlik = bilesenler.reduce(0) { $0 + $1.agirlik }
         guard toplamAgirlik > 0 else { return 0 }
         let deger = bilesenler.reduce(0) { $0 + $1.agirlik * $1.deger } / toplamAgirlik

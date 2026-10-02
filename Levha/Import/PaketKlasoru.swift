@@ -111,7 +111,7 @@ enum Baslangic {
             guard let veri = try? Data(contentsOf: url) else { continue }
             let ad = url.lastPathComponent
             let ozet = ozet(veri)
-            guard yuklenen[ad] != ozet else { continue }
+            guard yuklenen[ad] != ozet || depodaEski(veri, context) else { continue }
             _ = try? klasor.yaz(veri, ad: ad)
             _ = PaketIceAktarici.iceAktar(veri: veri, dosyaAdi: ad, context: context)
             yuklenen[ad] = ozet
@@ -121,6 +121,14 @@ enum Baslangic {
             UserDefaults.standard.set(yuklenen, forKey: anahtar)
             klasor.tara()
         }
+    }
+
+    /// Paket depoda yoksa ya da depodaki şema sürümü dosyadakinden eskiyse (ör. depo yeni yere taşındı) true.
+    private static func depodaEski(_ veri: Data, _ context: ModelContext) -> Bool {
+        guard let p = try? JSONDecoder().decode(PaketJSON.self, from: veri) else { return false }
+        let pid = p.paket_id
+        guard let mevcut = try? context.fetch(FetchDescriptor<Paket>(predicate: #Predicate { $0.paket_id == pid })).first else { return true }
+        return mevcut.sema_surumu < p.sema_surumu
     }
 
     private static func ozet(_ veri: Data) -> String {

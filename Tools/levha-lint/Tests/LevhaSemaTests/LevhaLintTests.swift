@@ -25,7 +25,7 @@ final class LevhaLintTests: XCTestCase {
     func testOrnekPaketTemiz() throws {
         let sonuc = LevhaLint.denetle(veri: try ornekVeri())
         XCTAssertNotNil(sonuc.paket)
-        XCTAssertEqual(sonuc.bulgular, [])
+        XCTAssertEqual(sonuc.hatalar, [])
     }
 
     func testIzgaraDisiVeCakisanKonum() throws {
@@ -135,7 +135,10 @@ final class LevhaLintV2Tests: XCTestCase {
 
     func testTumOrnekPaketlerTemiz() throws {
         for ad in ["ped.neo.sarilik", "ped.gelisim.basamaklar", "ped.kvs.konjenital", "ped.genetik.sendromlar"] {
-            XCTAssertEqual(try denetle(paket(ad)).bulgular, [], ad)
+            let s = try denetle(paket(ad))
+            XCTAssertEqual(s.hatalar, [], ad)
+            // Uyarılar yalnız "sorusuz kazanım" (Ölçüm'de de görünür).
+            XCTAssertTrue(s.uyarilar.allSatisfy { $0.mesaj == "sorusuz kazanım" }, ad)
         }
     }
 
@@ -156,8 +159,7 @@ final class LevhaLintV2Tests: XCTestCase {
         XCTAssertTrue(s.hatalar.contains { $0.mesaj.contains("uygulanamaz") })
         XCTAssertTrue(s.hatalar.contains { $0.mesaj.contains("yanlis_renk zorunlu") })
         XCTAssertTrue(s.hatalar.contains { $0.mesaj.contains("geçersiz tip") })
-        XCTAssertEqual(s.uyarilar.count, 1)
-        XCTAssertTrue(s.uyarilar[0].mesaj.contains("üretilmiş ile idare edilir"))
+        XCTAssertEqual(s.uyarilar.filter { $0.mesaj.contains("üretilmiş ile idare edilir") }.count, 1)
     }
 
     func testZamanOlayiEksenDisindaVeBilinmeyenSerit() throws {
@@ -193,5 +195,43 @@ final class LevhaLintV2Tests: XCTestCase {
         kl[0]["baglantilar"] = b
         k["levhalar"] = kl
         XCTAssertTrue(try denetle(k).bulgular[0].yer.contains("baglantilar[0].tip"))
+    }
+}
+
+final class LevhaLintV3Tests: XCTestCase {
+    private func paket(_ ad: String) throws -> [String: Any] {
+        let kok = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent()
+        let veri = try Data(contentsOf: kok.appendingPathComponent("SamplePackages/\(ad).json"))
+        return try JSONSerialization.jsonObject(with: veri) as! [String: Any]
+    }
+
+    func testKazanimVeAileKurallari() throws {
+        var p = try paket("ped.neo.sarilik")
+        var k = p["kazanimlar"] as! [[String: Any]]
+        k[0]["kalip"] = "uydurma_kalip"
+        k[1]["sorulabilirlik"] = 7
+        p["kazanimlar"] = k
+        var sorular = p["sorular"] as! [[String: Any]]
+        sorular[0]["kazanim"] = "k99"
+        sorular[1].removeValue(forKey: "kazanim")
+        sorular[2]["secenek_aile"] = ["0": "Biliyer atrezi", "1": "Uzaylı sarılığı", "2": "Konjenital hipotiroidi"]
+        sorular[3]["kalip"] = "baska_kalip"
+        p["sorular"] = sorular
+        var levhalar = p["levhalar"] as! [[String: Any]]
+        levhalar[0].removeValue(forKey: "insa_sirasi")
+        p["levhalar"] = levhalar
+        let s = LevhaLint.denetle(veri: try JSONSerialization.data(withJSONObject: p))
+        let h = s.hatalar.map(\.description)
+        XCTAssertTrue(h.contains { $0.contains("k1") && $0.contains("tanımsız kalıp") }, "\(h)")
+        XCTAssertTrue(h.contains { $0.contains("sorulabilirlik") && $0.contains("1–5") })
+        XCTAssertTrue(h.contains { $0.contains("tanımsız kazanım \"k99\"") })
+        XCTAssertTrue(h.contains { $0.contains("her sorunun kazanımı olmalı") })
+        XCTAssertTrue(h.contains { $0.contains("\"Uzaylı sarılığı\" ailede yok") })
+        XCTAssertTrue(h.contains { $0.contains("tanımsız kalıp \"baska_kalip\"") })
+        let u = s.uyarilar.map(\.description)
+        XCTAssertTrue(u.contains { $0.contains("insa_sirasi") }, "\(u)")
+        XCTAssertTrue(u.contains { $0.contains("çeldiricinin yalnız") }, "\(u)")
     }
 }

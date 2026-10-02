@@ -1,5 +1,5 @@
 {
-  "sema_surumu": 2,
+  "sema_surumu": 3,
   "paket_id": "ped.neo.sarilik",
   "ders": "Pediatri",
   "bolum": "Neonatoloji",
@@ -10,44 +10,216 @@
       "tip": "algoritma",
       "baslik": "Yenidoğan sarılığına yaklaşım",
       "akilda_kalan": "İlk 24 saat = her zaman patolojik",
-      "duzen": { "izgara": [3, 4], "sabit": true },
+      "duzen": {
+        "izgara": [
+          3,
+          4
+        ],
+        "sabit": true
+      },
       "dugumler": [
-        { "id": "n1", "etiket": "Sarılık ne zaman başladı?", "sekil": "karar", "renk": "mavi", "konum": [1, 0], "tus": false,
-          "not": "Sarılığın başlama zamanı ayırıcı tanıda ilk ve en güçlü ipucudur. Yenidoğanda sarılık, total bilirubin yaklaşık 5 mg/dL'yi aşınca görünür hâle gelir ve baştan ayaklara doğru ilerler. Gözle tahmin güvenilir değildir; transkutan (TcB) ya da serum (TSB) bilirubin ölçülür." },
-        { "id": "n2", "etiket": "İlk 24 saat", "sekil": "durum", "renk": "kirmizi", "konum": [0, 1], "tus": true,
-          "not": "İlk 24 saatte ortaya çıkan sarılık hiçbir zaman fizyolojik kabul edilmez. En sık neden hemolizdir (ABO veya Rh uyuşmazlığı, G6PD eksikliği, herediter sferositoz); sepsis ve konjenital enfeksiyonlar da akla gelmelidir. Bilirubin hemen ölçülür ve bebeğin saatine göre nomogramda değerlendirilir." },
-        { "id": "n3", "etiket": "2–7. gün", "sekil": "durum", "renk": "mavi", "konum": [1, 1], "tus": false,
-          "not": "Fizyolojik sarılığın görüldüğü dönemdir: term bebekte genellikle 2–3. günde fark edilir, 3–4. günde zirve yapar. Yetersiz beslenmeye bağlı emzirme sarılığı da bu dönemde sıktır. Bilirubin hızlı artıyorsa ya da direkt bilirubin yüksekse 'fizyolojik' deme." },
-        { "id": "n4", "etiket": ">2 hafta (uzamış)", "sekil": "durum", "renk": "sari", "konum": [2, 1], "tus": true,
-          "not": "Term bebekte 2 haftadan (pretermde 3 haftadan) uzun süren sarılık uzamış sarılıktır. İlk adım total ve direkt bilirubini birlikte ölçmektir; direkt hiperbilirubinemi her zaman patolojiktir. Dışkı ve idrar rengi mutlaka sorulur." },
-        { "id": "n5", "etiket": "Daima patolojik: hemoliz", "sekil": "durum", "renk": "kirmizi", "konum": [0, 2], "tus": false,
-          "not": "İlk 24 saatte başlayan sarılıkta önce hemoliz dışlanır. Anne O, bebek A veya B grubuysa ABO uyuşmazlığı; anne Rh(−), bebek Rh(+) ise Rh uyuşmazlığı düşünülür. Direkt Coombs negatif hemolizde G6PD eksikliği ve herediter sferositoz akla gelir." },
-        { "id": "n6", "etiket": "Çoğu fizyolojik: izle", "sekil": "surec", "renk": "yesil", "konum": [1, 2], "tus": false,
-          "not": "Fizyolojik sarılık 24 saatten sonra başlar, indirekt bilirubin artışıyla seyreder ve term bebekte yaklaşık 1 haftada geriler. Nedeni kısa eritrosit ömrü, glukuronil transferaz immatüritesi ve artmış enterohepatik dolaşımdır. Tedavi gerekmez; beslenme desteklenir, bilirubin nomograma göre izlenir." },
-        { "id": "n7", "etiket": "Direkt mi, indirekt mi?", "sekil": "karar", "renk": "mavi", "konum": [2, 2], "tus": true,
-          "not": "Uzamış sarılıkta ayrım direkt (konjuge) bilirubinle yapılır. Klasik ölçüt: direkt bilirubin >2 mg/dL ya da totalin %20'sinden fazlası; güncel kılavuzlar direkt bilirubin >1 mg/dL'yi de anormal kabul eder. Direkt artış kolestaz demektir ve gecikmeden değerlendirilir." },
-        { "id": "n8", "etiket": "Coombs, kan grubu, hemogram", "sekil": "surec", "renk": "mavi", "konum": [0, 3], "tus": true,
-          "not": "Hemoliz şüphesinde: anne ve bebeğin kan grubu, direkt Coombs testi, hemogram, retikülosit ve periferik yayma. Direkt Coombs pozitifliği immün hemolizi (Rh, ABO) gösterir. ABO uyuşmazlığında Coombs zayıf pozitif ya da negatif olabilir; yaymada mikrosferositler görülebilir." },
-        { "id": "n9", "etiket": "Kolestaz: biliyer atrezi?", "sekil": "durum", "renk": "kirmizi", "konum": [2, 3], "tus": true,
-          "not": "Direkt hiperbilirubinemi her zaman patolojiktir ve kolestazı gösterir. Akolik (kil renkli) dışkı ve koyu idrar varsa biliyer atrezi dışlanana kadar acil kabul edilir; Kasai portoenterostomisi erken (ideal olarak ilk 2 ayda) yapılırsa başarı belirgin artar. İlk görüntüleme batın ultrasonografisidir." },
-        { "id": "n10", "etiket": "Anne sütü, hipotiroidi", "sekil": "durum", "renk": "sari", "konum": [1, 3], "tus": false,
-          "not": "Uzamış indirekt hiperbilirubinemide en sık neden anne sütü sarılığıdır: iyi beslenen, kilo alan, sağlıklı görünen bebekte görülür ve emzirme kesilmez. Konjenital hipotiroidi mutlaka dışlanır (tarama sonucu, TSH ve sT4). Hemoliz, Gilbert ve Crigler-Najjar sendromları da ayırıcı tanıdadır." }
+        {
+          "id": "n1",
+          "etiket": "Sarılık ne zaman başladı?",
+          "sekil": "karar",
+          "renk": "mavi",
+          "konum": [
+            1,
+            0
+          ],
+          "tus": false,
+          "not": "Sarılığın başlama zamanı ayırıcı tanıda ilk ve en güçlü ipucudur. Yenidoğanda sarılık, total bilirubin yaklaşık 5 mg/dL'yi aşınca görünür hâle gelir ve baştan ayaklara doğru ilerler. Gözle tahmin güvenilir değildir; transkutan (TcB) ya da serum (TSB) bilirubin ölçülür."
+        },
+        {
+          "id": "n2",
+          "etiket": "İlk 24 saat",
+          "sekil": "durum",
+          "renk": "kirmizi",
+          "konum": [
+            0,
+            1
+          ],
+          "tus": true,
+          "not": "İlk 24 saatte ortaya çıkan sarılık hiçbir zaman fizyolojik kabul edilmez. En sık neden hemolizdir (ABO veya Rh uyuşmazlığı, G6PD eksikliği, herediter sferositoz); sepsis ve konjenital enfeksiyonlar da akla gelmelidir. Bilirubin hemen ölçülür ve bebeğin saatine göre nomogramda değerlendirilir."
+        },
+        {
+          "id": "n3",
+          "etiket": "2–7. gün",
+          "sekil": "durum",
+          "renk": "mavi",
+          "konum": [
+            1,
+            1
+          ],
+          "tus": false,
+          "not": "Fizyolojik sarılığın görüldüğü dönemdir: term bebekte genellikle 2–3. günde fark edilir, 3–4. günde zirve yapar. Yetersiz beslenmeye bağlı emzirme sarılığı da bu dönemde sıktır. Bilirubin hızlı artıyorsa ya da direkt bilirubin yüksekse 'fizyolojik' deme."
+        },
+        {
+          "id": "n4",
+          "etiket": ">2 hafta (uzamış)",
+          "sekil": "durum",
+          "renk": "sari",
+          "konum": [
+            2,
+            1
+          ],
+          "tus": true,
+          "not": "Term bebekte 2 haftadan (pretermde 3 haftadan) uzun süren sarılık uzamış sarılıktır. İlk adım total ve direkt bilirubini birlikte ölçmektir; direkt hiperbilirubinemi her zaman patolojiktir. Dışkı ve idrar rengi mutlaka sorulur."
+        },
+        {
+          "id": "n5",
+          "etiket": "Daima patolojik: hemoliz",
+          "sekil": "durum",
+          "renk": "kirmizi",
+          "konum": [
+            0,
+            2
+          ],
+          "tus": false,
+          "not": "İlk 24 saatte başlayan sarılıkta önce hemoliz dışlanır. Anne O, bebek A veya B grubuysa ABO uyuşmazlığı; anne Rh(−), bebek Rh(+) ise Rh uyuşmazlığı düşünülür. Direkt Coombs negatif hemolizde G6PD eksikliği ve herediter sferositoz akla gelir."
+        },
+        {
+          "id": "n6",
+          "etiket": "Çoğu fizyolojik: izle",
+          "sekil": "surec",
+          "renk": "yesil",
+          "konum": [
+            1,
+            2
+          ],
+          "tus": false,
+          "not": "Fizyolojik sarılık 24 saatten sonra başlar, indirekt bilirubin artışıyla seyreder ve term bebekte yaklaşık 1 haftada geriler. Nedeni kısa eritrosit ömrü, glukuronil transferaz immatüritesi ve artmış enterohepatik dolaşımdır. Tedavi gerekmez; beslenme desteklenir, bilirubin nomograma göre izlenir."
+        },
+        {
+          "id": "n7",
+          "etiket": "Direkt mi, indirekt mi?",
+          "sekil": "karar",
+          "renk": "mavi",
+          "konum": [
+            2,
+            2
+          ],
+          "tus": true,
+          "not": "Uzamış sarılıkta ayrım direkt (konjuge) bilirubinle yapılır. Klasik ölçüt: direkt bilirubin >2 mg/dL ya da totalin %20'sinden fazlası; güncel kılavuzlar direkt bilirubin >1 mg/dL'yi de anormal kabul eder. Direkt artış kolestaz demektir ve gecikmeden değerlendirilir."
+        },
+        {
+          "id": "n8",
+          "etiket": "Coombs, kan grubu, hemogram",
+          "sekil": "surec",
+          "renk": "mavi",
+          "konum": [
+            0,
+            3
+          ],
+          "tus": true,
+          "not": "Hemoliz şüphesinde: anne ve bebeğin kan grubu, direkt Coombs testi, hemogram, retikülosit ve periferik yayma. Direkt Coombs pozitifliği immün hemolizi (Rh, ABO) gösterir. ABO uyuşmazlığında Coombs zayıf pozitif ya da negatif olabilir; yaymada mikrosferositler görülebilir."
+        },
+        {
+          "id": "n9",
+          "etiket": "Kolestaz: biliyer atrezi?",
+          "sekil": "durum",
+          "renk": "kirmizi",
+          "konum": [
+            2,
+            3
+          ],
+          "tus": true,
+          "not": "Direkt hiperbilirubinemi her zaman patolojiktir ve kolestazı gösterir. Akolik (kil renkli) dışkı ve koyu idrar varsa biliyer atrezi dışlanana kadar acil kabul edilir; Kasai portoenterostomisi erken (ideal olarak ilk 2 ayda) yapılırsa başarı belirgin artar. İlk görüntüleme batın ultrasonografisidir."
+        },
+        {
+          "id": "n10",
+          "etiket": "Anne sütü, hipotiroidi",
+          "sekil": "durum",
+          "renk": "sari",
+          "konum": [
+            1,
+            3
+          ],
+          "tus": false,
+          "not": "Uzamış indirekt hiperbilirubinemide en sık neden anne sütü sarılığıdır: iyi beslenen, kilo alan, sağlıklı görünen bebekte görülür ve emzirme kesilmez. Konjenital hipotiroidi mutlaka dışlanır (tarama sonucu, TSH ve sT4). Hemoliz, Gilbert ve Crigler-Najjar sendromları da ayırıcı tanıdadır."
+        }
       ],
       "baglantilar": [
-        { "from": "n1", "to": "n2", "etiket": "" },
-        { "from": "n1", "to": "n3", "etiket": "" },
-        { "from": "n1", "to": "n4", "etiket": "" },
-        { "from": "n2", "to": "n5", "etiket": "" },
-        { "from": "n3", "to": "n6", "etiket": "" },
-        { "from": "n4", "to": "n7", "etiket": "" },
-        { "from": "n5", "to": "n8", "etiket": "" },
-        { "from": "n7", "to": "n9", "etiket": "Direkt↑" },
-        { "from": "n7", "to": "n10", "etiket": "İndirekt↑" }
+        {
+          "from": "n1",
+          "to": "n2",
+          "etiket": ""
+        },
+        {
+          "from": "n1",
+          "to": "n3",
+          "etiket": ""
+        },
+        {
+          "from": "n1",
+          "to": "n4",
+          "etiket": ""
+        },
+        {
+          "from": "n2",
+          "to": "n5",
+          "etiket": ""
+        },
+        {
+          "from": "n3",
+          "to": "n6",
+          "etiket": ""
+        },
+        {
+          "from": "n4",
+          "to": "n7",
+          "etiket": ""
+        },
+        {
+          "from": "n5",
+          "to": "n8",
+          "etiket": ""
+        },
+        {
+          "from": "n7",
+          "to": "n9",
+          "etiket": "Direkt↑"
+        },
+        {
+          "from": "n7",
+          "to": "n10",
+          "etiket": "İndirekt↑"
+        }
       ],
-      "ortme_sirasi": ["n2", "n9", "n8", "n10", "n5"],
+      "ortme_sirasi": [
+        "n2",
+        "n9",
+        "n8",
+        "n10",
+        "n5"
+      ],
       "sabotajlar": [
-        { "tip": "etiket_takas", "hedef": ["n9", "n10"], "dogrusu": "Direkt artış kolestaz demektir; uzamış indirekt artışta anne sütü sarılığı ve hipotiroidi düşünülür." },
-        { "tip": "etiket_takas", "hedef": ["n2", "n4"], "dogrusu": "Her zaman patolojik olan, ilk 24 saatte başlayan sarılıktır." }
+        {
+          "tip": "etiket_takas",
+          "hedef": [
+            "n9",
+            "n10"
+          ],
+          "dogrusu": "Direkt artış kolestaz demektir; uzamış indirekt artışta anne sütü sarılığı ve hipotiroidi düşünülür."
+        },
+        {
+          "tip": "etiket_takas",
+          "hedef": [
+            "n2",
+            "n4"
+          ],
+          "dogrusu": "Her zaman patolojik olan, ilk 24 saatte başlayan sarılıktır."
+        }
+      ],
+      "insa_sirasi": [
+        "n2",
+        "n4",
+        "n5",
+        "n6",
+        "n7",
+        "n8",
+        "n9",
+        "n10"
       ]
     },
     {
@@ -56,44 +228,131 @@
       "baslik": "Fizyolojik vs patolojik sarılık",
       "akilda_kalan": "İlk 24 saat, hızlı artış, direkt artış, uzama → araştır",
       "dugumler": [],
-      "satirlar": ["Fizyolojik", "Hemolitik", "Kolestatik"],
-      "sutunlar": ["Başlangıç", "Zirve", "Baskın bilirubin", "İlk tetkik"],
+      "satirlar": [
+        "Fizyolojik",
+        "Hemolitik",
+        "Kolestatik"
+      ],
+      "sutunlar": [
+        "Başlangıç",
+        "Zirve",
+        "Baskın bilirubin",
+        "İlk tetkik"
+      ],
       "hucreler": [
         [
-          { "metin": "24 saatten sonra", "renk": "yesil", "tus": true,
-            "not": "Fizyolojik sarılık asla ilk 24 saatte başlamaz; term bebekte genellikle 2–3. günde görünür hâle gelir. İlk 24 saatte görülen her sarılık patolojik kabul edilip araştırılır." },
-          { "metin": "Term: 3–4. gün", "renk": "yesil", "tus": false,
-            "not": "Term bebekte bilirubin 3–4. günde zirve yapar ve yaklaşık 1 haftada geriler. Pretermde zirve daha geç ve daha yüksektir, sarılık 2 haftaya kadar sürebilir. Klasik ölçüte göre term bebekte total bilirubinin 12,9 mg/dL'yi aşması patolojik kabul edilir." },
-          { "metin": "İndirekt", "renk": "yesil", "tus": false,
-            "not": "Fizyolojik sarılıkta artan bilirubin indirekt (konjuge olmamış) bilirubindir. Nedeni artmış bilirubin yükü (kısa eritrosit ömrü), glukuronil transferaz immatüritesi ve artmış enterohepatik dolaşımdır." },
-          { "metin": "TcB/TSB + nomogram", "renk": "yesil", "tus": false,
-            "not": "Sarılığı olan her yenidoğanda bilirubin transkutan (TcB) ya da serumda (TSB) ölçülür. Değer bebeğin saat cinsinden yaşına göre nomogramda yorumlanır; gözle tahmin güvenilir değildir." }
+          {
+            "metin": "24 saatten sonra",
+            "renk": "yesil",
+            "tus": true,
+            "not": "Fizyolojik sarılık asla ilk 24 saatte başlamaz; term bebekte genellikle 2–3. günde görünür hâle gelir. İlk 24 saatte görülen her sarılık patolojik kabul edilip araştırılır."
+          },
+          {
+            "metin": "Term: 3–4. gün",
+            "renk": "yesil",
+            "tus": false,
+            "not": "Term bebekte bilirubin 3–4. günde zirve yapar ve yaklaşık 1 haftada geriler. Pretermde zirve daha geç ve daha yüksektir, sarılık 2 haftaya kadar sürebilir. Klasik ölçüte göre term bebekte total bilirubinin 12,9 mg/dL'yi aşması patolojik kabul edilir."
+          },
+          {
+            "metin": "İndirekt",
+            "renk": "yesil",
+            "tus": false,
+            "not": "Fizyolojik sarılıkta artan bilirubin indirekt (konjuge olmamış) bilirubindir. Nedeni artmış bilirubin yükü (kısa eritrosit ömrü), glukuronil transferaz immatüritesi ve artmış enterohepatik dolaşımdır."
+          },
+          {
+            "metin": "TcB/TSB + nomogram",
+            "renk": "yesil",
+            "tus": false,
+            "not": "Sarılığı olan her yenidoğanda bilirubin transkutan (TcB) ya da serumda (TSB) ölçülür. Değer bebeğin saat cinsinden yaşına göre nomogramda yorumlanır; gözle tahmin güvenilir değildir."
+          }
         ],
         [
-          { "metin": "İlk 24 saat", "renk": "kirmizi", "tus": true,
-            "not": "Hemolitik sarılık tipik olarak ilk 24 saatte başlar. Rh uyuşmazlığı genellikle ABO uyuşmazlığından daha ağır seyreder ve hidrops fetalise kadar gidebilir." },
-          { "metin": "Hızlı artış >5 mg/dL/gün", "renk": "kirmizi", "tus": true,
-            "not": "Bilirubinin günde 5 mg/dL'den (saatte yaklaşık 0,2 mg/dL'den) hızlı artması patolojik sarılık ölçütüdür ve hemolizi düşündürür. Hızlı artışta bilirubin kısa aralıklarla tekrar ölçülür." },
-          { "metin": "İndirekt", "renk": "mavi", "tus": false,
-            "not": "Hemolizde artan bilirubin indirekttir; eritrosit yıkımı karaciğerin konjugasyon kapasitesini aşar. Anemi, retikülositoz ve hepatosplenomegali eşlik edebilir." },
-          { "metin": "Direkt Coombs, kan grubu", "renk": "mavi", "tus": true,
-            "not": "Anne ve bebeğin kan grubu ile direkt Coombs testi immün hemolizi gösterir. Hemogram, retikülosit ve periferik yayma eklenir; Coombs negatif hemolizde G6PD eksikliği ve herediter sferositoz araştırılır." }
+          {
+            "metin": "İlk 24 saat",
+            "renk": "kirmizi",
+            "tus": true,
+            "not": "Hemolitik sarılık tipik olarak ilk 24 saatte başlar. Rh uyuşmazlığı genellikle ABO uyuşmazlığından daha ağır seyreder ve hidrops fetalise kadar gidebilir."
+          },
+          {
+            "metin": "Hızlı artış >5 mg/dL/gün",
+            "renk": "kirmizi",
+            "tus": true,
+            "not": "Bilirubinin günde 5 mg/dL'den (saatte yaklaşık 0,2 mg/dL'den) hızlı artması patolojik sarılık ölçütüdür ve hemolizi düşündürür. Hızlı artışta bilirubin kısa aralıklarla tekrar ölçülür."
+          },
+          {
+            "metin": "İndirekt",
+            "renk": "mavi",
+            "tus": false,
+            "not": "Hemolizde artan bilirubin indirekttir; eritrosit yıkımı karaciğerin konjugasyon kapasitesini aşar. Anemi, retikülositoz ve hepatosplenomegali eşlik edebilir."
+          },
+          {
+            "metin": "Direkt Coombs, kan grubu",
+            "renk": "mavi",
+            "tus": true,
+            "not": "Anne ve bebeğin kan grubu ile direkt Coombs testi immün hemolizi gösterir. Hemogram, retikülosit ve periferik yayma eklenir; Coombs negatif hemolizde G6PD eksikliği ve herediter sferositoz araştırılır."
+          }
         ],
         [
-          { "metin": "Uzamış: >2 hafta", "renk": "sari", "tus": true,
-            "not": "Kolestaz çoğu zaman uzamış sarılık olarak fark edilir: term bebekte 2 haftadan uzun süren her sarılıkta direkt bilirubin ölçülür. Bebek iyi görünse bile kolestaz olabilir; 'anne sütü sarılığı' demeden önce direkt bilirubine bak." },
-          { "metin": "Gerilemez, sürer", "renk": "kirmizi", "tus": false,
-            "not": "Kolestazda sarılık fizyolojik sarılık gibi kendiliğinden gerilemez; direkt bilirubin yüksek kalır ya da artar. Akolik dışkı, koyu idrar ve hepatomegali eşlik edebilir." },
-          { "metin": "Direkt (konjuge)", "renk": "kirmizi", "tus": true,
-            "not": "Klasik ölçüt: direkt bilirubin >2 mg/dL ya da totalin %20'sinden fazlası. Güncel kılavuzlar direkt (konjuge) bilirubin >1 mg/dL'yi anormal kabul eder. Direkt hiperbilirubinemi her zaman patolojiktir." },
-          { "metin": "Direkt bilirubin → USG", "renk": "mavi", "tus": true,
-            "not": "Önce total ve direkt bilirubin birlikte ölçülür; direkt artış varsa ilk görüntüleme batın ultrasonografisidir. Biliyer atrezi şüphesinde hepatobiliyer sintigrafi ve karaciğer biyopsisiyle hızla ilerlenir; kesin tanı intraoperatif kolanjiyografiyle konur." }
+          {
+            "metin": "Uzamış: >2 hafta",
+            "renk": "sari",
+            "tus": true,
+            "not": "Kolestaz çoğu zaman uzamış sarılık olarak fark edilir: term bebekte 2 haftadan uzun süren her sarılıkta direkt bilirubin ölçülür. Bebek iyi görünse bile kolestaz olabilir; 'anne sütü sarılığı' demeden önce direkt bilirubine bak."
+          },
+          {
+            "metin": "Gerilemez, sürer",
+            "renk": "kirmizi",
+            "tus": false,
+            "not": "Kolestazda sarılık fizyolojik sarılık gibi kendiliğinden gerilemez; direkt bilirubin yüksek kalır ya da artar. Akolik dışkı, koyu idrar ve hepatomegali eşlik edebilir."
+          },
+          {
+            "metin": "Direkt (konjuge)",
+            "renk": "kirmizi",
+            "tus": true,
+            "not": "Klasik ölçüt: direkt bilirubin >2 mg/dL ya da totalin %20'sinden fazlası. Güncel kılavuzlar direkt (konjuge) bilirubin >1 mg/dL'yi anormal kabul eder. Direkt hiperbilirubinemi her zaman patolojiktir."
+          },
+          {
+            "metin": "Direkt bilirubin → USG",
+            "renk": "mavi",
+            "tus": true,
+            "not": "Önce total ve direkt bilirubin birlikte ölçülür; direkt artış varsa ilk görüntüleme batın ultrasonografisidir. Biliyer atrezi şüphesinde hepatobiliyer sintigrafi ve karaciğer biyopsisiyle hızla ilerlenir; kesin tanı intraoperatif kolanjiyografiyle konur."
+          }
         ]
       ],
-      "ortme_sirasi": ["r1c0", "r2c2", "r1c3", "r0c0", "r2c3"],
+      "ortme_sirasi": [
+        "r1c0",
+        "r2c2",
+        "r1c3",
+        "r0c0",
+        "r2c3"
+      ],
       "sabotajlar": [
-        { "tip": "hucre_takas", "hedef": ["r0c0", "r1c0"], "dogrusu": "Fizyolojik sarılık 24 saatten sonra, hemolitik sarılık ilk 24 saatte başlar." },
-        { "tip": "hucre_takas", "hedef": ["r0c2", "r2c2"], "dogrusu": "Fizyolojik sarılıkta indirekt, kolestazda direkt bilirubin artar." }
+        {
+          "tip": "hucre_takas",
+          "hedef": [
+            "r0c0",
+            "r1c0"
+          ],
+          "dogrusu": "Fizyolojik sarılık 24 saatten sonra, hemolitik sarılık ilk 24 saatte başlar."
+        },
+        {
+          "tip": "hucre_takas",
+          "hedef": [
+            "r0c2",
+            "r2c2"
+          ],
+          "dogrusu": "Fizyolojik sarılıkta indirekt, kolestazda direkt bilirubin artar."
+        }
+      ],
+      "insa_sirasi": [
+        "r0c0",
+        "r0c2",
+        "r1c0",
+        "r1c1",
+        "r1c3",
+        "r2c0",
+        "r2c2",
+        "r2c3"
       ]
     },
     {
@@ -101,25 +360,89 @@
       "tip": "sayi_cetveli",
       "baslik": "Term bebekte bilirubin eşikleri",
       "akilda_kalan": "Fototerapi ve kan değişimi eşiği sabit sayı değil → nomogram",
-      "eksen": { "min": 0, "max": 20, "birim": "mg/dL" },
+      "eksen": {
+        "min": 0,
+        "max": 20,
+        "birim": "mg/dL"
+      },
       "isaretler": [
-        { "id": "m1", "deger": 2, "etiket": "Direkt >2: kolestaz", "renk": "kirmizi", "tus": true,
-          "not": "Direkt (konjuge) bilirubinin 2 mg/dL'yi ya da totalin %20'sini aşması klasik kolestaz ölçütüdür; güncel kılavuzlar >1 mg/dL'yi de anormal sayar. Bu cetveldeki diğer işaretler total bilirubin içindir; direkt bilirubin ayrı yorumlanır." },
-        { "id": "m2", "deger": 5, "etiket": "Görünür sarılık", "renk": "gri", "tus": false,
-          "not": "Yenidoğanda sarılık total bilirubin yaklaşık 5 mg/dL'yi aşınca gözle görülür (erişkinde yaklaşık 2 mg/dL). Sarılık yüzden başlayıp aşağı doğru yayılır; ancak yayılım düzeyine bakarak bilirubin tahmini güvenilir değildir." },
-        { "id": "m3", "deger": 7, "etiket": "Fizyolojik zirve ~6–8", "renk": "yesil", "tus": false,
-          "not": "Term bebekte fizyolojik sarılıkta indirekt bilirubin ortalama 6–8 mg/dL düzeyinde, 3–4. günde zirve yapar. Bu bir ortalamadır; bebekler arasında belirgin farklılık görülür." },
-        { "id": "m4", "deger": 12.9, "etiket": "Fizyolojik üst sınır (term)", "renk": "sari", "tus": true,
-          "not": "Klasik ölçüte göre term bebekte total bilirubinin 12,9 mg/dL'yi aşması patolojik sarılık lehinedir; pretermde bu sınır yaklaşık 15 mg/dL'dir. Tedavi kararı ise bu sabit sınıra göre değil, saate göre nomogramla verilir." },
-        { "id": "m5", "etiket": "Fototerapi eşiği", "renk": "yesil", "tus": true,
-          "not": "Fototerapi eşiği sabit bir sayı değildir: bebeğin saat cinsinden yaşına, gebelik haftasına ve nörotoksisite risk faktörlerine (izoimmün hemoliz, G6PD eksikliği, sepsis, albümin <3 g/dL, klinik instabilite) göre değişir. Eşik için nomograma bak." },
-        { "id": "m6", "etiket": "Kan değişimi eşiği", "renk": "kirmizi", "tus": true,
-          "not": "Kan değişimi eşiği de saat, gebelik haftası ve risk faktörlerine göre nomogramdan okunur; eşik için nomograma bak. Akut bilirubin ensefalopatisi bulguları (hipertoni, opistotonus, tiz ağlama) varsa bilirubin düzeyinden bağımsız olarak acil kan değişimi yapılır." }
+        {
+          "id": "m1",
+          "deger": 2,
+          "etiket": "Direkt >2: kolestaz",
+          "renk": "kirmizi",
+          "tus": true,
+          "not": "Direkt (konjuge) bilirubinin 2 mg/dL'yi ya da totalin %20'sini aşması klasik kolestaz ölçütüdür; güncel kılavuzlar >1 mg/dL'yi de anormal sayar. Bu cetveldeki diğer işaretler total bilirubin içindir; direkt bilirubin ayrı yorumlanır."
+        },
+        {
+          "id": "m2",
+          "deger": 5,
+          "etiket": "Görünür sarılık",
+          "renk": "gri",
+          "tus": false,
+          "not": "Yenidoğanda sarılık total bilirubin yaklaşık 5 mg/dL'yi aşınca gözle görülür (erişkinde yaklaşık 2 mg/dL). Sarılık yüzden başlayıp aşağı doğru yayılır; ancak yayılım düzeyine bakarak bilirubin tahmini güvenilir değildir."
+        },
+        {
+          "id": "m3",
+          "deger": 7,
+          "etiket": "Fizyolojik zirve ~6–8",
+          "renk": "yesil",
+          "tus": false,
+          "not": "Term bebekte fizyolojik sarılıkta indirekt bilirubin ortalama 6–8 mg/dL düzeyinde, 3–4. günde zirve yapar. Bu bir ortalamadır; bebekler arasında belirgin farklılık görülür."
+        },
+        {
+          "id": "m4",
+          "deger": 12.9,
+          "etiket": "Fizyolojik üst sınır (term)",
+          "renk": "sari",
+          "tus": true,
+          "not": "Klasik ölçüte göre term bebekte total bilirubinin 12,9 mg/dL'yi aşması patolojik sarılık lehinedir; pretermde bu sınır yaklaşık 15 mg/dL'dir. Tedavi kararı ise bu sabit sınıra göre değil, saate göre nomogramla verilir."
+        },
+        {
+          "id": "m5",
+          "etiket": "Fototerapi eşiği",
+          "renk": "yesil",
+          "tus": true,
+          "not": "Fototerapi eşiği sabit bir sayı değildir: bebeğin saat cinsinden yaşına, gebelik haftasına ve nörotoksisite risk faktörlerine (izoimmün hemoliz, G6PD eksikliği, sepsis, albümin <3 g/dL, klinik instabilite) göre değişir. Eşik için nomograma bak."
+        },
+        {
+          "id": "m6",
+          "etiket": "Kan değişimi eşiği",
+          "renk": "kirmizi",
+          "tus": true,
+          "not": "Kan değişimi eşiği de saat, gebelik haftası ve risk faktörlerine göre nomogramdan okunur; eşik için nomograma bak. Akut bilirubin ensefalopatisi bulguları (hipertoni, opistotonus, tiz ağlama) varsa bilirubin düzeyinden bağımsız olarak acil kan değişimi yapılır."
+        }
       ],
-      "ortme_sirasi": ["m4", "m2", "m6", "m1", "m5"],
+      "ortme_sirasi": [
+        "m4",
+        "m2",
+        "m6",
+        "m1",
+        "m5"
+      ],
       "sabotajlar": [
-        { "tip": "deger_kaydir", "hedef": ["m2"], "yanlis_deger": 2, "dogrusu": "Yenidoğanda sarılık yaklaşık 5 mg/dL'de görünür; 2 mg/dL erişkin değeridir." },
-        { "tip": "deger_kaydir", "hedef": ["m4"], "yanlis_deger": 15, "dogrusu": "Term bebekte klasik fizyolojik üst sınır 12,9 mg/dL'dir; 15 mg/dL pretermler içindir." }
+        {
+          "tip": "deger_kaydir",
+          "hedef": [
+            "m2"
+          ],
+          "yanlis_deger": 2,
+          "dogrusu": "Yenidoğanda sarılık yaklaşık 5 mg/dL'de görünür; 2 mg/dL erişkin değeridir."
+        },
+        {
+          "tip": "deger_kaydir",
+          "hedef": [
+            "m4"
+          ],
+          "yanlis_deger": 15,
+          "dogrusu": "Term bebekte klasik fizyolojik üst sınır 12,9 mg/dL'dir; 15 mg/dL pretermler içindir."
+        }
+      ],
+      "insa_sirasi": [
+        "m1",
+        "m2",
+        "m3",
+        "m4"
       ]
     }
   ],
@@ -127,156 +450,790 @@
     {
       "id": "q1",
       "levha": "ped.neo.sarilik.algoritma",
-      "dugumler": ["n2", "n8"],
+      "dugumler": [
+        "n2",
+        "n8"
+      ],
       "kok": "Doğumdan 12 saat sonra sarılık fark edilen, annesi O Rh(+) olan term bebekte ilk istenmesi gereken tetkik aşağıdakilerden hangisidir?",
-      "secenekler": ["Karaciğer fonksiyon testleri", "Direkt Coombs testi", "Kan kültürü", "Tiroid fonksiyon testleri", "Batın ultrasonografisi"],
+      "secenekler": [
+        "Karaciğer fonksiyon testleri",
+        "Direkt Coombs testi",
+        "Kan kültürü",
+        "Tiroid fonksiyon testleri",
+        "Batın ultrasonografisi"
+      ],
       "dogru": 1,
       "aciklama": "İlk 24 saatte başlayan sarılık daima patolojiktir ve en sık neden hemolizdir. Anne O grubu olduğunda ABO uyuşmazlığı öncelikle düşünülür; immün hemolizi göstermek için direkt Coombs testi istenir.",
-      "aciklama_yolu": ["n1", "n2", "n5", "n8"],
-      "celdirici_dugum": { "0": "n9", "2": "n2", "3": "n10", "4": "n9" }
+      "aciklama_yolu": [
+        "n1",
+        "n2",
+        "n5",
+        "n8"
+      ],
+      "celdirici_dugum": {
+        "0": "n9",
+        "2": "n2",
+        "3": "n10",
+        "4": "n9"
+      },
+      "kazanim": "k2",
+      "kalip": "ilk_adim",
+      "zorluk": 1,
+      "secenek_aile": {
+        "0": "Neonatal hepatit",
+        "1": "ABO uyuşmazlığı",
+        "2": "Sepsis",
+        "3": "Konjenital hipotiroidi",
+        "4": "Biliyer atrezi"
+      }
     },
     {
       "id": "q2",
       "levha": "ped.neo.sarilik.algoritma",
-      "dugumler": ["n9"],
+      "dugumler": [
+        "n9"
+      ],
       "kok": "Doğumdan beri sarılığı olan 5 haftalık bebek, açık renkli dışkı ve koyu idrar nedeniyle getiriliyor. Karaciğer kot kavsini 3 cm geçiyor. Total bilirubin 9 mg/dL, direkt bilirubin 6 mg/dL bulunuyor. Bu hastada öncelikle dışlanması gereken tanı aşağıdakilerden hangisidir?",
-      "secenekler": ["Anne sütü sarılığı", "Gilbert sendromu", "Biliyer atrezi", "Crigler-Najjar sendromu tip 2", "Fizyolojik sarılık"],
+      "secenekler": [
+        "Anne sütü sarılığı",
+        "Gilbert sendromu",
+        "Biliyer atrezi",
+        "Crigler-Najjar sendromu tip 2",
+        "Fizyolojik sarılık"
+      ],
       "dogru": 2,
       "aciklama": "İki haftadan uzun süren sarılıkta direkt bilirubinin yüksek olması kolestaz demektir. Akolik dışkı ve koyu idrarla birlikte biliyer atrezi acil olarak dışlanmalıdır; diğer seçeneklerin tümü indirekt hiperbilirubinemi yapar.",
-      "aciklama_yolu": ["n1", "n4", "n7", "n9"],
-      "celdirici_dugum": { "0": "n10", "1": "n10", "3": "n10", "4": "n6" }
+      "aciklama_yolu": [
+        "n1",
+        "n4",
+        "n7",
+        "n9"
+      ],
+      "celdirici_dugum": {
+        "0": "n10",
+        "1": "n10",
+        "3": "n10",
+        "4": "n6"
+      },
+      "kazanim": "k4",
+      "kalip": "en_olasi_tani",
+      "zorluk": 1,
+      "secenek_aile": {
+        "0": "Anne sütü sarılığı",
+        "1": "Gilbert sendromu",
+        "2": "Biliyer atrezi",
+        "3": "Crigler-Najjar sendromu",
+        "4": "Fizyolojik sarılık"
+      }
     },
     {
       "id": "q3",
       "levha": "ped.neo.sarilik.algoritma",
-      "dugumler": ["n10"],
+      "dugumler": [
+        "n10"
+      ],
       "kok": "Term doğan, yalnızca anne sütüyle beslenen 3 haftalık bebek sarılık nedeniyle getiriliyor. Kilo alımı iyi, dışkısı sarı, idrarı açık renkli; fizik muayenesi sarılık dışında normal. Total bilirubin 14 mg/dL, direkt bilirubin 0,4 mg/dL; yenidoğan tarama sonuçları normal. En olası tanı aşağıdakilerden hangisidir?",
-      "secenekler": ["Biliyer atrezi", "Anne sütü sarılığı", "Konjenital hipotiroidi", "Neonatal hepatit", "Rh uyuşmazlığı"],
+      "secenekler": [
+        "Biliyer atrezi",
+        "Anne sütü sarılığı",
+        "Konjenital hipotiroidi",
+        "Neonatal hepatit",
+        "Rh uyuşmazlığı"
+      ],
       "dogru": 1,
       "aciklama": "Uzamış sarılıkta direkt bilirubin normalse indirekt hiperbilirubinemi vardır. İyi beslenen, kilo alan, sağlıklı bebekte en olası neden anne sütü sarılığıdır; tarama normal olduğundan hipotiroidi daha az olasıdır ve emzirme kesilmez.",
-      "aciklama_yolu": ["n1", "n4", "n7", "n10"],
-      "celdirici_dugum": { "0": "n9", "2": "n10", "3": "n9", "4": "n5" }
+      "aciklama_yolu": [
+        "n1",
+        "n4",
+        "n7",
+        "n10"
+      ],
+      "celdirici_dugum": {
+        "0": "n9",
+        "2": "n10",
+        "3": "n9",
+        "4": "n5"
+      },
+      "kazanim": "k5",
+      "kalip": "en_olasi_tani",
+      "zorluk": 2,
+      "secenek_aile": {
+        "0": "Biliyer atrezi",
+        "1": "Anne sütü sarılığı",
+        "2": "Konjenital hipotiroidi",
+        "3": "Neonatal hepatit",
+        "4": "Rh uyuşmazlığı"
+      }
     },
     {
       "id": "q4",
       "levha": "ped.neo.sarilik.algoritma",
-      "dugumler": ["n6"],
+      "dugumler": [
+        "n6"
+      ],
       "kok": "Term doğan, sağlıklı görünen bebekte 3. günde sarılık fark ediliyor. Emmesi iyi, idrar ve dışkı rengi normal. Total bilirubin 9 mg/dL, direkt bilirubin 0,5 mg/dL; anne ve bebeğin kan grupları uyumlu. Bu bebekte en uygun yaklaşım aşağıdakilerden hangisidir?",
-      "secenekler": ["Acil kan değişimi", "Emzirmeyi kesip mama başlamak", "Beslenmeyi desteklemek ve bilirubini nomograma göre izlemek", "Batın ultrasonografisi istemek", "Fenobarbital başlamak"],
+      "secenekler": [
+        "Acil kan değişimi",
+        "Emzirmeyi kesip mama başlamak",
+        "Beslenmeyi desteklemek ve bilirubini nomograma göre izlemek",
+        "Batın ultrasonografisi istemek",
+        "Fenobarbital başlamak"
+      ],
       "dogru": 2,
       "aciklama": "24 saatten sonra başlayan, indirekt ağırlıklı, düşük düzeyli sarılık fizyolojik sarılıkla uyumludur. Tedavi gerekmez; beslenme desteklenir ve bilirubin bebeğin saatine göre nomogramda izlenir.",
-      "aciklama_yolu": ["n1", "n3", "n6"],
-      "celdirici_dugum": { "1": "n10", "3": "n9" }
+      "aciklama_yolu": [
+        "n1",
+        "n3",
+        "n6"
+      ],
+      "celdirici_dugum": {
+        "1": "n10",
+        "3": "n9"
+      },
+      "kazanim": "k16",
+      "kalip": "ilk_adim",
+      "zorluk": 1,
+      "secenek_aile": {
+        "0": "Acil kan değişimi",
+        "1": "Emzirmeye ara verme",
+        "2": "İzlem ve beslenme desteği",
+        "4": "Fenobarbital"
+      }
     },
     {
       "id": "q5",
       "levha": "ped.neo.sarilik.algoritma",
-      "dugumler": ["n5", "n8"],
+      "dugumler": [
+        "n5",
+        "n8"
+      ],
       "kok": "Doğumdan 20 saat sonra sarılık gelişen term bebekte hemoglobin düşük, retikülosit yüksek bulunuyor. Anne ve bebeğin kan grubu A Rh(+), direkt Coombs testi negatif. Periferik yaymada sferositler görülüyor; babasına gençlikte splenektomi yapıldığı öğreniliyor. En olası tanı aşağıdakilerden hangisidir?",
-      "secenekler": ["ABO uyuşmazlığı", "Herediter sferositoz", "Rh uyuşmazlığı", "Gilbert sendromu", "Fizyolojik sarılık"],
+      "secenekler": [
+        "ABO uyuşmazlığı",
+        "Herediter sferositoz",
+        "Rh uyuşmazlığı",
+        "Gilbert sendromu",
+        "Fizyolojik sarılık"
+      ],
       "dogru": 1,
       "aciklama": "İlk 24 saatte başlayan sarılık hemolizi düşündürür. Kan grupları uyumlu ve direkt Coombs negatif olduğundan immün hemoliz dışlanır; sferositler ve babada splenektomi öyküsü otozomal dominant geçişli herediter sferositozu düşündürür.",
-      "aciklama_yolu": ["n1", "n2", "n5", "n8"],
-      "celdirici_dugum": { "0": "n8", "2": "n8", "3": "n10", "4": "n6" }
+      "aciklama_yolu": [
+        "n1",
+        "n2",
+        "n5",
+        "n8"
+      ],
+      "celdirici_dugum": {
+        "0": "n8",
+        "2": "n8",
+        "3": "n10",
+        "4": "n6"
+      },
+      "kazanim": "k8",
+      "kalip": "ayirici_cift",
+      "zorluk": 2,
+      "secenek_aile": {
+        "0": "ABO uyuşmazlığı",
+        "1": "Herediter sferositoz",
+        "2": "Rh uyuşmazlığı",
+        "3": "Gilbert sendromu",
+        "4": "Fizyolojik sarılık"
+      }
     },
     {
       "id": "q6",
       "levha": "ped.neo.sarilik.matris",
-      "dugumler": ["r0c0", "r0c2"],
+      "dugumler": [
+        "r0c0",
+        "r0c2"
+      ],
       "kok": "Term doğan 4 günlük bebek sarılık nedeniyle getiriliyor. Sarılık 3. gün fark edilmiş; bebek iyi emiyor, idrar ve dışkı rengi normal. Total bilirubin 11 mg/dL, direkt bilirubin 0,6 mg/dL. Bu sarılığın fizyolojik olduğunu en çok destekleyen özellik aşağıdakilerden hangisidir?",
-      "secenekler": ["Total bilirubinin 10 mg/dL'nin üzerinde olması", "24 saatten sonra başlaması ve indirekt ağırlıklı olması", "Bebeğin dördüncü gününde olması", "Bebeğin term doğmuş olması", "Direkt bilirubinin ölçülebilir düzeyde olması"],
+      "secenekler": [
+        "Total bilirubinin 10 mg/dL'nin üzerinde olması",
+        "24 saatten sonra başlaması ve indirekt ağırlıklı olması",
+        "Bebeğin dördüncü gününde olması",
+        "Bebeğin term doğmuş olması",
+        "Direkt bilirubinin ölçülebilir düzeyde olması"
+      ],
       "dogru": 1,
       "aciklama": "Fizyolojik sarılık 24 saatten sonra başlar, indirekt bilirubin artışıyla seyreder, term bebekte 3–4. günde zirve yapar ve yaklaşık 1 haftada geriler. Başlama zamanı ve bilirubin tipi fizyolojik–patolojik ayrımının temelidir.",
-      "aciklama_yolu": ["r0c0", "r0c1", "r0c2"],
-      "celdirici_dugum": { "4": "r2c2" }
+      "aciklama_yolu": [
+        "r0c0",
+        "r0c1",
+        "r0c2"
+      ],
+      "celdirici_dugum": {
+        "4": "r2c2"
+      },
+      "kazanim": "k6",
+      "kalip": "ayirici_cift",
+      "zorluk": 1
     },
     {
       "id": "q7",
       "levha": "ped.neo.sarilik.matris",
-      "dugumler": ["r1c0", "r1c1"],
+      "dugumler": [
+        "r1c0",
+        "r1c1"
+      ],
       "kok": "Doğumdan 18 saat sonra sarılık fark edilen term bebeğin total bilirubini 8 mg/dL; 6 saat sonraki kontrolde 10 mg/dL bulunuyor. Anne O Rh(+), bebek A Rh(+). Bu tabloyu en iyi açıklayan durum aşağıdakilerden hangisidir?",
-      "secenekler": ["Fizyolojik sarılık", "Emzirme (yetersiz beslenme) sarılığı", "ABO uyuşmazlığına bağlı hemoliz", "Biliyer atrezi", "Konjenital hipotiroidi"],
+      "secenekler": [
+        "Fizyolojik sarılık",
+        "Emzirme (yetersiz beslenme) sarılığı",
+        "ABO uyuşmazlığına bağlı hemoliz",
+        "Biliyer atrezi",
+        "Konjenital hipotiroidi"
+      ],
       "dogru": 2,
       "aciklama": "İlk 24 saatte başlayan ve saatte yaklaşık 0,3 mg/dL hızla yükselen sarılık hemolizi düşündürür. Anne O, bebek A grubu olduğundan ABO uyuşmazlığı en olası nedendir; tanı için direkt Coombs testi istenir.",
-      "aciklama_yolu": ["r1c0", "r1c1", "r1c3"],
-      "celdirici_dugum": { "0": "r0c0", "1": "r0c1", "3": "r2c2", "4": "r2c0" }
+      "aciklama_yolu": [
+        "r1c0",
+        "r1c1",
+        "r1c3"
+      ],
+      "celdirici_dugum": {
+        "0": "r0c0",
+        "1": "r0c1",
+        "3": "r2c2",
+        "4": "r2c0"
+      },
+      "kazanim": "k9",
+      "kalip": "en_olasi_tani",
+      "zorluk": 2,
+      "secenek_aile": {
+        "0": "Fizyolojik sarılık",
+        "1": "Emzirme sarılığı",
+        "2": "ABO uyuşmazlığı",
+        "3": "Biliyer atrezi",
+        "4": "Konjenital hipotiroidi"
+      }
     },
     {
       "id": "q8",
       "levha": "ped.neo.sarilik.matris",
-      "dugumler": ["r2c2", "r2c3"],
+      "dugumler": [
+        "r2c2",
+        "r2c3"
+      ],
       "kok": "Altı haftalık, anne sütüyle beslenen bebek doğumdan beri süren sarılık nedeniyle getiriliyor. Annesi dışkının son haftalarda açık renkli olduğunu, idrarın bezde koyu sarı iz bıraktığını söylüyor. Bu bebekte ilk istenmesi gereken laboratuvar tetkiki aşağıdakilerden hangisidir?",
-      "secenekler": ["Direkt Coombs testi", "Total ve direkt bilirubin", "Tiroid fonksiyon testleri", "G6PD düzeyi", "Retikülosit sayımı"],
+      "secenekler": [
+        "Direkt Coombs testi",
+        "Total ve direkt bilirubin",
+        "Tiroid fonksiyon testleri",
+        "G6PD düzeyi",
+        "Retikülosit sayımı"
+      ],
       "dogru": 1,
       "aciklama": "Uzamış sarılıkta ilk adım total ve direkt bilirubini birlikte ölçmektir. Soluk dışkı ve koyu idrar kolestazı düşündürür; direkt hiperbilirubinemi saptanırsa biliyer atrezi açısından vakit kaybetmeden batın ultrasonografisiyle ilerlenir.",
-      "aciklama_yolu": ["r2c0", "r2c2", "r2c3"],
-      "celdirici_dugum": { "0": "r1c3", "2": "r2c0", "3": "r1c3", "4": "r1c3" }
+      "aciklama_yolu": [
+        "r2c0",
+        "r2c2",
+        "r2c3"
+      ],
+      "celdirici_dugum": {
+        "0": "r1c3",
+        "2": "r2c0",
+        "3": "r1c3",
+        "4": "r1c3"
+      },
+      "kazanim": "k3",
+      "kalip": "ilk_adim",
+      "zorluk": 1,
+      "secenek_aile": {
+        "0": "ABO uyuşmazlığı",
+        "1": "Biliyer atrezi",
+        "2": "Konjenital hipotiroidi",
+        "3": "G6PD eksikliği",
+        "4": "Herediter sferositoz"
+      }
     },
     {
       "id": "q9",
       "levha": "ped.neo.sarilik.matris",
-      "dugumler": ["r0c1"],
+      "dugumler": [
+        "r0c1"
+      ],
       "kok": "Term doğan ve sağlıklı olarak taburcu edilen bebeğin annesi, kontrolde bebeğindeki hafif sarılığın en yüksek düzeye ne zaman ulaşacağını soruyor. Fizyolojik sarılıkta zirvenin beklenen zamanı aşağıdakilerden hangisidir?",
-      "secenekler": ["İlk 12 saat", "İlk 24 saat", "3–4. gün", "10–14. gün", "3–4. hafta"],
+      "secenekler": [
+        "İlk 12 saat",
+        "İlk 24 saat",
+        "3–4. gün",
+        "10–14. gün",
+        "3–4. hafta"
+      ],
       "dogru": 2,
       "aciklama": "Term bebekte fizyolojik sarılık 2–3. günde görünür hâle gelir, 3–4. günde zirve yapar ve yaklaşık 1 haftada geriler. İlk 24 saatte görülen ya da 2 haftadan uzun süren sarılık fizyolojik değildir.",
-      "aciklama_yolu": ["r0c0", "r0c1"],
-      "celdirici_dugum": { "0": "r1c0", "1": "r1c0", "4": "r2c0" }
+      "aciklama_yolu": [
+        "r0c0",
+        "r0c1"
+      ],
+      "celdirici_dugum": {
+        "0": "r1c0",
+        "1": "r1c0",
+        "4": "r2c0"
+      },
+      "kazanim": "k6",
+      "kalip": "yas_sira",
+      "zorluk": 1
     },
     {
       "id": "q10",
       "levha": "ped.neo.sarilik.matris",
-      "dugumler": ["r1c0", "r1c3"],
+      "dugumler": [
+        "r1c0",
+        "r1c3"
+      ],
       "kok": "Annesi A Rh(−) olan ve önceki gebeliğinden sonra anti-D immünoglobulin yapılmadığı öğrenilen Rh(+) term bebekte doğumdan 6 saat sonra sarılık ve solukluk saptanıyor. Karaciğer ve dalak ele geliyor. Tanıyı doğrulamak için istenmesi gereken test aşağıdakilerden hangisidir?",
-      "secenekler": ["Direkt Coombs testi", "Batın ultrasonografisi", "TSH ve serbest T4", "Direkt bilirubin", "Kan kültürü"],
+      "secenekler": [
+        "Direkt Coombs testi",
+        "Batın ultrasonografisi",
+        "TSH ve serbest T4",
+        "Direkt bilirubin",
+        "Kan kültürü"
+      ],
       "dogru": 0,
       "aciklama": "Rh(−) annenin önceki gebelikte duyarlanması sonraki Rh(+) bebekte immün hemolize yol açar. İlk saatlerde başlayan sarılık, anemi ve hepatosplenomegali Rh uyuşmazlığını düşündürür; bebek eritrositlerine bağlı antikor direkt Coombs testiyle gösterilir.",
-      "aciklama_yolu": ["r1c0", "r1c3"],
-      "celdirici_dugum": { "1": "r2c3", "2": "r2c0", "3": "r2c2" }
+      "aciklama_yolu": [
+        "r1c0",
+        "r1c3"
+      ],
+      "celdirici_dugum": {
+        "1": "r2c3",
+        "2": "r2c0",
+        "3": "r2c2"
+      },
+      "kazanim": "k10",
+      "kalip": "ilk_adim",
+      "zorluk": 1,
+      "secenek_aile": {
+        "0": "Rh uyuşmazlığı",
+        "1": "Biliyer atrezi",
+        "2": "Konjenital hipotiroidi",
+        "3": "Neonatal hepatit",
+        "4": "Sepsis"
+      }
     },
     {
       "id": "q11",
       "levha": "ped.neo.sarilik.cetvel",
-      "dugumler": ["m2"],
+      "dugumler": [
+        "m2"
+      ],
       "kok": "Doğum servisinde yeni çalışmaya başlayan bir hemşire, yenidoğanlarda sarılığın gözle hangi düzeyde fark edilmeye başladığını soruyor. Yenidoğanda sarılığın gözle görülür hâle geldiği yaklaşık total bilirubin düzeyi aşağıdakilerden hangisidir?",
-      "secenekler": ["1 mg/dL", "2 mg/dL", "5 mg/dL", "12 mg/dL", "20 mg/dL"],
+      "secenekler": [
+        "1 mg/dL",
+        "2 mg/dL",
+        "5 mg/dL",
+        "12 mg/dL",
+        "20 mg/dL"
+      ],
       "dogru": 2,
       "aciklama": "Erişkinde sarılık yaklaşık 2 mg/dL'de görünürken yenidoğanda yaklaşık 5 mg/dL'yi aşınca fark edilir. Gözle değerlendirme bilirubin düzeyini tahmin etmede güvenilir olmadığından TcB ya da TSB ölçülür.",
-      "aciklama_yolu": ["m2"],
-      "celdirici_dugum": { "1": "m1", "3": "m4" }
+      "aciklama_yolu": [
+        "m2"
+      ],
+      "celdirici_dugum": {
+        "1": "m1",
+        "3": "m4"
+      },
+      "kazanim": "k11",
+      "kalip": "esik_sayi",
+      "zorluk": 1,
+      "secenek_aile": {
+        "0": "Direkt bilirubin sınırı",
+        "1": "Erişkinde görünür sarılık",
+        "2": "Yenidoğanda görünür sarılık",
+        "3": "Fizyolojik üst sınır"
+      }
     },
     {
       "id": "q12",
       "levha": "ped.neo.sarilik.cetvel",
-      "dugumler": ["m4", "m5"],
+      "dugumler": [
+        "m4",
+        "m5"
+      ],
       "kok": "Term doğan 5 günlük bebekte total bilirubin 15 mg/dL, direkt bilirubin 0,8 mg/dL ölçülüyor. Bebek iyi besleniyor ve genel durumu iyi. Bu bebekle ilgili aşağıdaki ifadelerden hangisi doğrudur?",
-      "secenekler": ["Değer fizyolojik sınırlar içindedir, izlem yeterlidir", "Direkt bilirubin yüksek olduğundan kolestaz vardır", "Değer klasik fizyolojik üst sınırı aşmıştır; tedavi gereği nomograma göre belirlenir", "Bilirubin 20 mg/dL'yi geçmeden araştırma gerekmez", "Genel durumu iyi olduğundan bilirubin düzeyinin önemi yoktur"],
+      "secenekler": [
+        "Değer fizyolojik sınırlar içindedir, izlem yeterlidir",
+        "Direkt bilirubin yüksek olduğundan kolestaz vardır",
+        "Değer klasik fizyolojik üst sınırı aşmıştır; tedavi gereği nomograma göre belirlenir",
+        "Bilirubin 20 mg/dL'yi geçmeden araştırma gerekmez",
+        "Genel durumu iyi olduğundan bilirubin düzeyinin önemi yoktur"
+      ],
       "dogru": 2,
       "aciklama": "Klasik ölçüte göre term bebekte total bilirubinin 12,9 mg/dL'yi aşması patolojik sarılık lehinedir ve nedeni araştırılır. Fototerapi kararı ise sabit bir sayıya değil, bebeğin saat cinsinden yaşı ve risk faktörlerine göre nomograma dayanır.",
-      "aciklama_yolu": ["m3", "m4", "m5"],
-      "celdirici_dugum": { "0": "m3", "1": "m1" }
+      "aciklama_yolu": [
+        "m3",
+        "m4",
+        "m5"
+      ],
+      "celdirici_dugum": {
+        "0": "m3",
+        "1": "m1"
+      },
+      "kazanim": "k12",
+      "kalip": "esik_sayi",
+      "zorluk": 2,
+      "secenek_aile": {
+        "0": "Fizyolojik zirve",
+        "1": "Direkt bilirubin sınırı",
+        "2": "Fizyolojik üst sınır",
+        "3": "Fototerapi eşiği"
+      }
     },
     {
       "id": "q13",
       "levha": "ped.neo.sarilik.cetvel",
-      "dugumler": ["m6"],
+      "dugumler": [
+        "m6"
+      ],
       "kok": "Doğumdan sonraki 4. günde sarılık nedeniyle getirilen term bebekte letarji, emmede azalma, boyun ve gövdede geriye doğru kasılma (opistotonus) ve tiz ağlama saptanıyor. Total bilirubin yüksek bulunuyor. Bu bebekte en uygun yaklaşım aşağıdakilerden hangisidir?",
-      "secenekler": ["Fototerapi başlayıp bilirubini 24 saat sonra tekrar ölçmek", "Emzirmeyi 48 saat kesmek", "Acil kan değişimi", "Fenobarbital başlamak", "Taburcu edip ertesi gün kontrole çağırmak"],
+      "secenekler": [
+        "Fototerapi başlayıp bilirubini 24 saat sonra tekrar ölçmek",
+        "Emzirmeyi 48 saat kesmek",
+        "Acil kan değişimi",
+        "Fenobarbital başlamak",
+        "Taburcu edip ertesi gün kontrole çağırmak"
+      ],
       "dogru": 2,
       "aciklama": "Hipertoni, opistotonus ve tiz ağlama orta–ileri evre akut bilirubin ensefalopatisini gösterir. Bu bulgular varsa bilirubin düzeyinden bağımsız olarak acil kan değişimi yapılır; hazırlık süresince yoğun fototerapi verilir.",
-      "aciklama_yolu": ["m6"],
-      "celdirici_dugum": { "0": "m5", "1": "m3" }
+      "aciklama_yolu": [
+        "m6"
+      ],
+      "celdirici_dugum": {
+        "0": "m5",
+        "1": "m3"
+      },
+      "kazanim": "k14",
+      "kalip": "ilk_adim",
+      "zorluk": 2,
+      "secenek_aile": {
+        "0": "Fototerapi",
+        "1": "Emzirmeye ara verme",
+        "2": "Acil kan değişimi",
+        "3": "Fenobarbital",
+        "4": "İzlem ve beslenme desteği"
+      }
     },
     {
       "id": "q14",
       "levha": "ped.neo.sarilik.cetvel",
-      "dugumler": ["m5"],
+      "dugumler": [
+        "m5"
+      ],
       "kok": "Term doğan, 36 saatlik bir bebekte total bilirubin 11 mg/dL ölçülüyor. Bebeğin fototerapi gerektirip gerektirmediğine karar verirken aşağıdakilerden hangisi kullanılır?",
-      "secenekler": ["Sabit 12,9 mg/dL sınırı", "Saat cinsinden yaş, gebelik haftası ve risk faktörlerine göre nomogram", "Sarılığın vücutta yayıldığı düzey", "Yalnızca direkt bilirubin değeri", "Annenin kan grubu"],
+      "secenekler": [
+        "Sabit 12,9 mg/dL sınırı",
+        "Saat cinsinden yaş, gebelik haftası ve risk faktörlerine göre nomogram",
+        "Sarılığın vücutta yayıldığı düzey",
+        "Yalnızca direkt bilirubin değeri",
+        "Annenin kan grubu"
+      ],
       "dogru": 1,
       "aciklama": "Fototerapi ve kan değişimi eşikleri bebeğin saat cinsinden yaşına, gebelik haftasına ve nörotoksisite risk faktörlerine göre değişir; karar nomograma göre verilir. 12,9 mg/dL fizyolojik–patolojik ayrımı için klasik bir sınırdır, tedavi eşiği değildir.",
-      "aciklama_yolu": ["m4", "m5"],
-      "celdirici_dugum": { "0": "m4", "2": "m2", "3": "m1" }
+      "aciklama_yolu": [
+        "m4",
+        "m5"
+      ],
+      "celdirici_dugum": {
+        "0": "m4",
+        "2": "m2",
+        "3": "m1"
+      },
+      "kazanim": "k13",
+      "kalip": "esik_sayi",
+      "zorluk": 2,
+      "secenek_aile": {
+        "0": "Fizyolojik üst sınır",
+        "1": "Fototerapi eşiği",
+        "2": "Yenidoğanda görünür sarılık",
+        "3": "Direkt bilirubin sınırı"
+      }
+    }
+  ],
+  "kazanimlar": [
+    {
+      "id": "k1",
+      "metin": "İlk 24 saatte başlayan sarılık her zaman patolojiktir; önce hemoliz düşünülür",
+      "kalip": "istisna",
+      "dugumler": [
+        "n2",
+        "n5",
+        "r1c0"
+      ],
+      "sorulabilirlik": 5,
+      "aile": "a1",
+      "anahtar_ipucu": "sarılık < 24 saat"
+    },
+    {
+      "id": "k2",
+      "metin": "Erken sarılıkta hemoliz için ilk tetkik direkt Coombs ve kan grubudur",
+      "kalip": "ilk_adim",
+      "dugumler": [
+        "n8",
+        "r1c3"
+      ],
+      "sorulabilirlik": 5,
+      "aile": "a1",
+      "anahtar_ipucu": "anne O ya da Rh(−)"
+    },
+    {
+      "id": "k3",
+      "metin": "Uzamış sarılıkta ilk adım total ve direkt bilirubini birlikte ölçmektir",
+      "kalip": "ilk_adim",
+      "dugumler": [
+        "n4",
+        "n7",
+        "r2c3"
+      ],
+      "sorulabilirlik": 4,
+      "aile": "a1",
+      "anahtar_ipucu": "> 2 hafta"
+    },
+    {
+      "id": "k4",
+      "metin": "Direkt bilirubin artışı ve akolik dışkı varsa biliyer atrezi acilen dışlanır",
+      "kalip": "en_olasi_tani",
+      "dugumler": [
+        "n9",
+        "r2c2"
+      ],
+      "sorulabilirlik": 5,
+      "aile": "a1",
+      "anahtar_ipucu": "kil renkli dışkı"
+    },
+    {
+      "id": "k5",
+      "metin": "Uzamış indirekt sarılık, iyi beslenen bebek: anne sütü sarılığı; emzirme kesilmez",
+      "kalip": "en_olasi_tani",
+      "dugumler": [
+        "n10"
+      ],
+      "sorulabilirlik": 4,
+      "aile": "a1",
+      "anahtar_ipucu": "kilo alımı iyi, direkt normal"
+    },
+    {
+      "id": "k6",
+      "metin": "Fizyolojik sarılık 24 saatten sonra başlar, 3–4. günde zirve yapar, ~1 haftada geriler",
+      "kalip": "yas_sira",
+      "dugumler": [
+        "n6",
+        "r0c0",
+        "r0c1"
+      ],
+      "sorulabilirlik": 4,
+      "aile": "a1",
+      "anahtar_ipucu": "3. gün"
+    },
+    {
+      "id": "k7",
+      "metin": "Fizyolojik sarılık: kısa eritrosit ömrü, UGT immatüritesi, artmış enterohepatik dolaşım",
+      "kalip": "mekanizma",
+      "dugumler": [
+        "n6",
+        "r0c2"
+      ],
+      "sorulabilirlik": 3,
+      "aile": "a1"
+    },
+    {
+      "id": "k8",
+      "metin": "Coombs negatif hemoliz + sferosit + aile öyküsü → herediter sferositoz",
+      "kalip": "ayirici_cift",
+      "dugumler": [
+        "n5",
+        "n8"
+      ],
+      "sorulabilirlik": 3,
+      "aile": "a1",
+      "anahtar_ipucu": "babada splenektomi"
+    },
+    {
+      "id": "k9",
+      "metin": "Bilirubinin günde >5 mg/dL (≈0,2 mg/dL/saat) artması hemolizi düşündürür",
+      "kalip": "esik_sayi",
+      "dugumler": [
+        "r1c1"
+      ],
+      "sorulabilirlik": 3,
+      "aile": "a1",
+      "anahtar_ipucu": "hızlı artış"
+    },
+    {
+      "id": "k10",
+      "metin": "Rh uyuşmazlığı ABO'dan ağırdır; önceki gebelikte anti-D yapılmaması ipucudur",
+      "kalip": "ayirici_cift",
+      "dugumler": [
+        "r1c0",
+        "r1c3"
+      ],
+      "sorulabilirlik": 3,
+      "aile": "a1",
+      "anahtar_ipucu": "anti-D yapılmamış"
+    },
+    {
+      "id": "k11",
+      "metin": "Yenidoğanda sarılık ~5 mg/dL'de görünür (erişkinde ~2 mg/dL)",
+      "kalip": "esik_sayi",
+      "dugumler": [
+        "m2"
+      ],
+      "sorulabilirlik": 3,
+      "aile": "a2"
+    },
+    {
+      "id": "k12",
+      "metin": "Klasik ölçüt: term bebekte total bilirubin >12,9 mg/dL patolojiktir (pretermde ~15)",
+      "kalip": "esik_sayi",
+      "dugumler": [
+        "m4"
+      ],
+      "sorulabilirlik": 3,
+      "aile": "a2"
+    },
+    {
+      "id": "k13",
+      "metin": "Fototerapi ve kan değişimi eşiği saat, gebelik haftası ve riske göre nomogramdan okunur",
+      "kalip": "esik_sayi",
+      "dugumler": [
+        "m5",
+        "m6"
+      ],
+      "sorulabilirlik": 4,
+      "aile": "a2",
+      "anahtar_ipucu": "saat cinsinden yaş"
+    },
+    {
+      "id": "k14",
+      "metin": "Akut bilirubin ensefalopatisi bulgusu varsa düzeyden bağımsız acil kan değişimi",
+      "kalip": "ilk_adim",
+      "dugumler": [
+        "m6"
+      ],
+      "sorulabilirlik": 4,
+      "aile": "a3",
+      "anahtar_ipucu": "opistotonus, tiz ağlama"
+    },
+    {
+      "id": "k15",
+      "metin": "Direkt bilirubin >2 mg/dL ya da totalin >%20'si kolestazdır (güncel ölçüt >1 mg/dL)",
+      "kalip": "esik_sayi",
+      "dugumler": [
+        "m1",
+        "n7",
+        "r2c2"
+      ],
+      "sorulabilirlik": 4,
+      "aile": "a2"
+    },
+    {
+      "id": "k16",
+      "metin": "Fizyolojik sarılıkta tedavi gerekmez: beslenme desteklenir, bilirubin nomogramla izlenir",
+      "kalip": "ilk_adim",
+      "dugumler": [
+        "n6",
+        "r0c3"
+      ],
+      "sorulabilirlik": 2,
+      "aile": "a3"
+    },
+    {
+      "id": "k17",
+      "metin": "Konjenital hipotiroidi uzamış indirekt sarılığın nedenlerindendir; tarama sonucuna bakılır",
+      "kalip": "istisna",
+      "dugumler": [
+        "n10"
+      ],
+      "sorulabilirlik": 2,
+      "aile": "a1"
+    },
+    {
+      "id": "k18",
+      "metin": "Biliyer atrezide Kasai ameliyatı erken (ideal olarak ilk 2 ayda) yapılırsa başarı artar",
+      "kalip": "yas_sira",
+      "dugumler": [
+        "n9"
+      ],
+      "sorulabilirlik": 3,
+      "aile": "a3",
+      "anahtar_ipucu": "ilk 2 ay"
+    },
+    {
+      "id": "k19",
+      "metin": "Kolestazda ilk görüntüleme batın USG; biliyer atrezide kesin tanı intraoperatif kolanjiyografi",
+      "kalip": "kesin_tani",
+      "dugumler": [
+        "r2c3"
+      ],
+      "sorulabilirlik": 2,
+      "aile": "a1"
+    }
+  ],
+  "aileler": [
+    {
+      "id": "a1",
+      "ad": "Yenidoğan sarılığı nedenleri",
+      "uyeler": [
+        "Fizyolojik sarılık",
+        "Emzirme sarılığı",
+        "Anne sütü sarılığı",
+        "ABO uyuşmazlığı",
+        "Rh uyuşmazlığı",
+        "Herediter sferositoz",
+        "G6PD eksikliği",
+        "Sepsis",
+        "Biliyer atrezi",
+        "Neonatal hepatit",
+        "Konjenital hipotiroidi",
+        "Gilbert sendromu",
+        "Crigler-Najjar sendromu"
+      ],
+      "ayirici": {
+        "ABO uyuşmazlığı|Rh uyuşmazlığı": "ABO ilk gebelikte de görülür ve genelde hafiftir; Rh duyarlanma gerektirir ve daha ağırdır.",
+        "Fizyolojik sarılık|Anne sütü sarılığı": "Fizyolojik sarılık 3–4. günde zirve yapıp ~1 haftada geriler; anne sütü sarılığı ikinci haftada sürer ve zirve yapar.",
+        "Emzirme sarılığı|Anne sütü sarılığı": "Emzirme sarılığı ilk haftada yetersiz alımla (kilo kaybıyla) olur; anne sütü sarılığı iyi beslenen bebekte birinci haftadan sonra.",
+        "Biliyer atrezi|Anne sütü sarılığı": "Biliyer atrezide direkt bilirubin yüksek, dışkı akoliktir; anne sütü sarılığı indirekttir, dışkı sarıdır.",
+        "Herediter sferositoz|ABO uyuşmazlığı": "İkisinde de sferosit görülebilir; ABO'da anne O, bebek A/B'dir; sferositozda kan grupları uyumlu ve aile öyküsü vardır.",
+        "Biliyer atrezi|Neonatal hepatit": "İkisi de direkt hiperbilirubinemi yapar; biliyer atrezide akolik dışkı kalıcıdır ve sintigrafide barsağa atılım görülmez.",
+        "Gilbert sendromu|Crigler-Najjar sendromu": "İkisi de indirekt hiperbilirubinemidir; Crigler-Najjar ağırdır (tip 1'de enzim yok), Gilbert hafiftir ve stresle artar.",
+        "Sepsis|ABO uyuşmazlığı": "Sepsiste genel durum bozuktur, beslenme güçlüğü ve ısı dengesizliği olur; ABO'da bebek genelde iyi görünür."
+      }
+    },
+    {
+      "id": "a2",
+      "ad": "Bilirubin eşikleri",
+      "uyeler": [
+        "Erişkinde görünür sarılık",
+        "Yenidoğanda görünür sarılık",
+        "Fizyolojik zirve",
+        "Fizyolojik üst sınır",
+        "Direkt bilirubin sınırı",
+        "Fototerapi eşiği",
+        "Kan değişimi eşiği"
+      ],
+      "ayirici": {
+        "Erişkinde görünür sarılık|Yenidoğanda görünür sarılık": "Erişkinde sarılık ~2, yenidoğanda ~5 mg/dL'de görünür.",
+        "Fizyolojik üst sınır|Fototerapi eşiği": "12,9 mg/dL fizyolojik–patolojik ayrımıdır; fototerapi kararı saate göre nomogramla verilir.",
+        "Fototerapi eşiği|Kan değişimi eşiği": "İkisi de nomogramdan okunur; ensefalopati bulgusu varsa düzeyden bağımsız kan değişimi yapılır."
+      }
+    },
+    {
+      "id": "a3",
+      "ad": "Yönetim seçenekleri",
+      "uyeler": [
+        "İzlem ve beslenme desteği",
+        "Fototerapi",
+        "Acil kan değişimi",
+        "Emzirmeye ara verme",
+        "Fenobarbital",
+        "Kasai portoenterostomisi"
+      ],
+      "ayirici": {
+        "Fototerapi|Acil kan değişimi": "Akut bilirubin ensefalopatisi bulgusu varsa kan değişimi; yoksa nomogram eşiğine göre fototerapi.",
+        "İzlem ve beslenme desteği|Emzirmeye ara verme": "Fizyolojik ve anne sütü sarılığında emzirme kesilmez; beslenme desteklenir."
+      }
     }
   ]
 }
