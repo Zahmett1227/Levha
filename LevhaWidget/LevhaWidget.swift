@@ -107,6 +107,7 @@ struct LevhaOrtmeGorunumu: View {
             VStack(spacing: 6) {
                 Image(systemName: "checkmark.seal.fill").font(.system(size: 26)).foregroundStyle(Color(hex: 0x2E8B57))
                 Text("Vadesi gelen levha yok").font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(Color(hex: 0x15202B))
             }
             .widgetURL(URL(string: "levha://bugun"))
         }
@@ -117,6 +118,7 @@ struct LevhaOrtmeWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: "LevhaOrtme", provider: LevhaSaglayici()) { girdi in
             LevhaOrtmeGorunumu(girdi: girdi)
+                .environment(\.colorScheme, .light)
                 .containerBackground(Color(hex: 0xF4F6F8), for: .widget)
         }
         .configurationDisplayName("Levha örtme")
@@ -168,6 +170,7 @@ struct BugunWidget: Widget {
     var body: some WidgetConfiguration {
         StaticConfiguration(kind: "LevhaBugun", provider: LevhaSaglayici()) { girdi in
             BugunGorunumu(girdi: girdi)
+                .environment(\.colorScheme, .light)
                 .containerBackground(Color.white, for: .widget)
         }
         .configurationDisplayName("Bugünün turu")

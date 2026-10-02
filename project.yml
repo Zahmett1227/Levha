@@ -33,6 +33,8 @@ targets:
         CFBundleDevelopmentRegion: tr
         CFBundleLocalizations: [tr]
         UILaunchScreen: {}
+        # Tasarım dili sabit ve açık renkli (#F4F6F8 zemin, beyaz kart, koyu metin): karanlık mod kapalı.
+        UIUserInterfaceStyle: Light
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
         UIApplicationSupportsIndirectInputEvents: true
         UIFileSharingEnabled: true
