@@ -1,0 +1,717 @@
+{
+  "sema_surumu": 2,
+  "paket_id": "ped.genetik.sendromlar",
+  "ders": "Pediatri",
+  "bolum": "Genetik",
+  "alt_konu": "Kromozomal ve genetik sendromlar",
+  "levhalar": [
+    {
+      "id": "ped.genetik.sendromlar.down",
+      "tip": "vucut_haritasi",
+      "baslik": "Down sendromu bulgu haritası",
+      "akilda_kalan": "Down: kalpte AVSD, barsakta duodenal atrezi, boyunda C1–C2",
+      "bolgeler": [
+        {
+          "id": "d1",
+          "bolge": "goz",
+          "etiket": "Brushfield lekeleri",
+          "renk": "mavi",
+          "tus": true,
+          "not": "İris çevresinde beyaz-gri benekler. Down sendromunda sıktır ancak sağlıklı bebeklerde de görülebilir; tek başına tanı koydurmaz."
+        },
+        {
+          "id": "d2",
+          "bolge": "goz",
+          "etiket": "Yukarı çekik göz, epikantus",
+          "renk": "mavi",
+          "tus": false,
+          "not": "Palpebral aralıklar yukarı-dışa çekiktir, iç kantusta epikantal katlantı vardır. Göz muayenesinde katarakt ve kırma kusurları da aranır."
+        },
+        {
+          "id": "d3",
+          "bolge": "yuz",
+          "etiket": "Düz yüz profili",
+          "renk": "mavi",
+          "tus": false,
+          "not": "Orta yüz hipoplazisi ve basık burun kökü düz bir yüz profili oluşturur. Bu bulgu tek başına özgül değildir."
+        },
+        {
+          "id": "d4",
+          "bolge": "kulak",
+          "etiket": "Küçük kulak",
+          "renk": "mavi",
+          "tus": false,
+          "not": "Kulaklar küçük ve yuvarlaktır. İletim tipi işitme kaybı ve seröz otit sık olduğundan düzenli işitme taraması yapılır."
+        },
+        {
+          "id": "d5",
+          "bolge": "agiz",
+          "etiket": "Dil dışarıda",
+          "renk": "mavi",
+          "tus": false,
+          "not": "Ağız boşluğu küçük ve hipotoni olduğundan dil dışarı taşar (göreceli makroglossi). Beslenme güçlüğüne katkıda bulunabilir."
+        },
+        {
+          "id": "d6",
+          "bolge": "boyun",
+          "etiket": "Ense derisi kalın",
+          "renk": "mavi",
+          "tus": false,
+          "not": "Ensede fazla deri vardır; prenatal ultrasonda ense saydamlığı artışı olarak saptanabilir. Hipotiroidi riski nedeniyle düzenli tiroid taraması da yapılır."
+        },
+        {
+          "id": "d7",
+          "bolge": "kalp",
+          "etiket": "AVSD (endokardiyal yastık)",
+          "renk": "kirmizi",
+          "tus": true,
+          "not": "Down sendromlu bebeklerin yaklaşık yarısında KKH vardır; en karakteristik olanı atriyoventriküler septal defekttir (endokardiyal yastık defekti). Tanı anında tüm bebeklere ekokardiyografi yapılır."
+        },
+        {
+          "id": "d13",
+          "bolge": "kol",
+          "etiket": "Hipotoni, eklem gevşekliği",
+          "renk": "mavi",
+          "tus": true,
+          "not": "Yenidoğanda belirgin hipotoni en sık bulgulardandır; Moro yanıtı zayıf olabilir. Eklem hipermobilitesi eşlik eder."
+        },
+        {
+          "id": "d8",
+          "bolge": "karin",
+          "etiket": "Duodenal atrezi (çift balon)",
+          "renk": "kirmizi",
+          "tus": true,
+          "not": "Doğumdan sonra safralı kusma ve grafide 'çift balon' görünümü tipiktir. Duodenal atrezili bebeklerin önemli bir kısmında Down sendromu vardır."
+        },
+        {
+          "id": "d9",
+          "bolge": "karin",
+          "etiket": "Hirschsprung hastalığı",
+          "renk": "sari",
+          "tus": false,
+          "not": "Down sendromunda Hirschsprung riski artmıştır. Mekonyum çıkışının 48 saati geçmesi uyarıcıdır."
+        },
+        {
+          "id": "d10",
+          "bolge": "el",
+          "etiket": "Simian çizgi, klinodaktili",
+          "renk": "mavi",
+          "tus": true,
+          "not": "Avuçta tek transvers palmar çizgi ve 5. parmakta klinodaktili sıktır. İkisi de normal popülasyonda da görülebilir."
+        },
+        {
+          "id": "d12",
+          "bolge": "eklem",
+          "etiket": "Atlantoaksiyel instabilite",
+          "renk": "sari",
+          "tus": true,
+          "not": "Ligament gevşekliğine bağlı C1–C2 instabilitesi olabilir. Boyun ağrısı, yürüme bozukluğu ve idrar kontrolünde değişiklik spinal kord basısını düşündürür, acil değerlendirme gerektirir."
+        },
+        {
+          "id": "d11",
+          "bolge": "ayak",
+          "etiket": "Sandal gap (1-2. parmak)",
+          "renk": "mavi",
+          "tus": false,
+          "not": "Ayakta 1. ve 2. parmaklar arasında geniş aralık (sandal gap) görülür. Diğer bulgularla birlikte değerlendirilir."
+        }
+      ],
+      "ortme_sirasi": [
+        "d7",
+        "d8",
+        "d12",
+        "d1",
+        "d10"
+      ],
+      "sabotajlar": [
+        {
+          "tip": "bolge_kaydir",
+          "hedef": [
+            "d10"
+          ],
+          "yanlis_bolge": "ayak",
+          "dogrusu": "Tek palmar çizgi avuç içindedir; ayakta 1-2. parmak arası açıklık görülür."
+        },
+        {
+          "tip": "bolge_kaydir",
+          "hedef": [
+            "d1"
+          ],
+          "yanlis_bolge": "deri",
+          "dogrusu": "Brushfield lekeleri iristedir (göz)."
+        }
+      ]
+    },
+    {
+      "id": "ped.genetik.sendromlar.turner",
+      "tip": "vucut_haritasi",
+      "baslik": "Turner sendromu bulgu haritası",
+      "akilda_kalan": "Kısa boylu kız + primer amenore → karyotip (45,X)",
+      "bolgeler": [
+        {
+          "id": "t1",
+          "bolge": "kulak",
+          "etiket": "İşitme kaybı, otit",
+          "renk": "mavi",
+          "tus": false,
+          "not": "Tekrarlayan orta kulak iltihabı ve ilerleyici sensörinöral işitme kaybı sıktır. Düzenli odyolojik izlem yapılır."
+        },
+        {
+          "id": "t2",
+          "bolge": "boyun",
+          "etiket": "Yeleli boyun (pterygium)",
+          "renk": "mavi",
+          "tus": true,
+          "not": "Fetal lenfatik obstrüksiyonun kalıntısı olarak boyunda kanat benzeri deri katlantısı oluşur. Noonan sendromunda da görülür."
+        },
+        {
+          "id": "t3",
+          "bolge": "boyun",
+          "etiket": "Düşük ense saç çizgisi",
+          "renk": "mavi",
+          "tus": false,
+          "not": "Ense saç çizgisi aşağıdadır. Yeleli boyunla birlikte sık görülür."
+        },
+        {
+          "id": "t4",
+          "bolge": "gogus",
+          "etiket": "Kalkan göğüs",
+          "renk": "mavi",
+          "tus": false,
+          "not": "Göğüs geniş ve düzdür; meme başları arası mesafe artmış görünür."
+        },
+        {
+          "id": "t5",
+          "bolge": "kalp",
+          "etiket": "Biküspit aort, koarktasyon",
+          "renk": "kirmizi",
+          "tus": true,
+          "not": "En sık kalp anomalisi biküspit aort kapağı, ikinci sıklıkta aort koarktasyonudur. Aort dilatasyonu ve diseksiyonu riski nedeniyle ömür boyu kardiyolojik izlem gerekir."
+        },
+        {
+          "id": "t8",
+          "bolge": "kol",
+          "etiket": "Kubitus valgus",
+          "renk": "mavi",
+          "tus": false,
+          "not": "Dirsekte taşıma açısı artmıştır (kubitus valgus). Kozmetik bir bulgudur, işlev genellikle normaldir."
+        },
+        {
+          "id": "t12",
+          "bolge": "deri",
+          "etiket": "Çok sayıda nevüs",
+          "renk": "gri",
+          "tus": false,
+          "not": "Çok sayıda pigmente nevüs görülür. Tanıya yardımcı küçük bir bulgudur."
+        },
+        {
+          "id": "t6",
+          "bolge": "bobrek",
+          "etiket": "At nalı böbrek",
+          "renk": "sari",
+          "tus": false,
+          "not": "At nalı böbrek ve toplayıcı sistem anomalileri sıktır. Tanı konunca böbrek ultrasonografisi yapılır."
+        },
+        {
+          "id": "t9",
+          "bolge": "el",
+          "etiket": "4. metakarp kısalığı",
+          "renk": "mavi",
+          "tus": false,
+          "not": "4. (bazen 5.) metakarp kısadır; yumruk yapınca ilgili eklem çukuru belirginleşir."
+        },
+        {
+          "id": "t7",
+          "bolge": "genital",
+          "etiket": "Çizgi gonad: primer amenore",
+          "renk": "kirmizi",
+          "tus": true,
+          "not": "Gonadal disgenezi nedeniyle overler çizgi gonada döner; ergenlikte meme gelişmez, primer amenore ve hipergonadotropik hipogonadizm görülür. Karyotipte Y materyali varsa gonadoblastom riski nedeniyle gonadektomi önerilir."
+        },
+        {
+          "id": "t11",
+          "bolge": "bacak",
+          "etiket": "Kısa boy → GH tedavisi",
+          "renk": "yesil",
+          "tus": true,
+          "not": "Kısa boy en sık bulgudur. Büyüme hormonu tedavisi erişkin boyunu artırır; ergenlik daha sonra östrojenle başlatılır."
+        },
+        {
+          "id": "t10",
+          "bolge": "ayak",
+          "etiket": "Doğumda el-ayak ödemi",
+          "renk": "mavi",
+          "tus": true,
+          "not": "Yenidoğanda el ve ayak sırtında lenfödem Turner için önemli bir ipucudur. Kız bebekte görülürse karyotip istenir."
+        }
+      ],
+      "ortme_sirasi": [
+        "t5",
+        "t10",
+        "t7",
+        "t6",
+        "t2"
+      ],
+      "sabotajlar": [
+        {
+          "tip": "bolge_kaydir",
+          "hedef": [
+            "t6"
+          ],
+          "yanlis_bolge": "karaciger",
+          "dogrusu": "At nalı böbrek, Turner'da sık görülen böbrek anomalisidir."
+        },
+        {
+          "tip": "bolge_kaydir",
+          "hedef": [
+            "t9"
+          ],
+          "yanlis_bolge": "ayak",
+          "dogrusu": "Turner'da kısa olan 4. metakarptır (el)."
+        }
+      ]
+    },
+    {
+      "id": "ped.genetik.sendromlar.matris",
+      "tip": "matris",
+      "baslik": "Down / Turner / Noonan / Williams",
+      "akilda_kalan": "Kalp ipucu: AVSD Down · koarktasyon Turner · PS Noonan · SVAS Williams",
+      "satirlar": [
+        "Down",
+        "Turner",
+        "Noonan",
+        "Williams"
+      ],
+      "sutunlar": [
+        "Genetik",
+        "Kalp",
+        "Yüz / fizik",
+        "Ayırt ettiren"
+      ],
+      "hucreler": [
+        [
+          {
+            "metin": "Trizomi 21",
+            "renk": "mavi",
+            "tus": true,
+            "not": "En sık neden mayotik ayrılmama ile serbest trizomi 21'dir; translokasyon ve mozaik formlar da vardır. Translokasyon saptanırsa ebeveyn karyotipi istenir."
+          },
+          {
+            "metin": "AVSD",
+            "renk": "kirmizi",
+            "tus": true,
+            "not": "En karakteristik KKH atriyoventriküler septal defekttir; VSD de sıktır. Tüm yenidoğanlara ekokardiyografi yapılır."
+          },
+          {
+            "metin": "Çekik göz, düz yüz, hipotoni",
+            "renk": "mavi",
+            "tus": false,
+            "not": "Yukarı çekik göz, epikantus, düz yüz profili, tek palmar çizgi ve hipotoni tipik fenotiptir."
+          },
+          {
+            "metin": "Duodenal atrezi, lösemi",
+            "renk": "sari",
+            "tus": false,
+            "not": "Duodenal atrezi ve Hirschsprung riski artmıştır. Lösemi (ALL ve AML, özellikle megakaryoblastik) riski yüksektir; yenidoğanda geçici miyeloproliferatif bozukluk görülebilir."
+          }
+        ],
+        [
+          {
+            "metin": "45,X",
+            "renk": "mavi",
+            "tus": true,
+            "not": "Klasik karyotip 45,X'tir; mozaik ve X yapısal anomalileri de görülür. Y materyali varsa gonadoblastom riski vardır."
+          },
+          {
+            "metin": "Biküspit aort, koarktasyon",
+            "renk": "kirmizi",
+            "tus": true,
+            "not": "En sık lezyon biküspit aort kapağı, ikinci sıklıkta aort koarktasyonudur. Aort dilatasyonu açısından ömür boyu izlem gerekir."
+          },
+          {
+            "metin": "Yeleli boyun, kalkan göğüs",
+            "renk": "mavi",
+            "tus": false,
+            "not": "Yeleli boyun, düşük ense saç çizgisi, kalkan göğüs ve kubitus valgus tipiktir; yenidoğanda el-ayak lenfödemi ipucudur."
+          },
+          {
+            "metin": "At nalı böbrek, çizgi gonad",
+            "renk": "sari",
+            "tus": false,
+            "not": "At nalı böbrek ve gonadal disgenezi (primer amenore) sıktır. Zekâ genellikle normaldir."
+          }
+        ],
+        [
+          {
+            "metin": "PTPN11 (RAS yolağı)",
+            "renk": "mavi",
+            "tus": true,
+            "not": "Otozomal dominant bir RASopatidir; en sık PTPN11 mutasyonu saptanır. Karyotip normaldir."
+          },
+          {
+            "metin": "Pulmoner stenoz (displastik)",
+            "renk": "kirmizi",
+            "tus": true,
+            "not": "En tipik kalp lezyonu displastik kapaklı pulmoner stenozdur; hipertrofik kardiyomiyopati de görülebilir."
+          },
+          {
+            "metin": "Yeleli boyun, hipertelorizm",
+            "renk": "mavi",
+            "tus": false,
+            "not": "Turner'a benzer şekilde yeleli boyun ve kısa boy vardır; hipertelorizm, aşağı çekik göz ve düşük yerleşimli kulaklar eşlik eder."
+          },
+          {
+            "metin": "Erkekte de görülür",
+            "renk": "sari",
+            "tus": true,
+            "not": "Turner'dan farklı olarak her iki cinsiyette görülür ve karyotip normaldir. Kanama eğilimi ve kriptorşidizm eşlik edebilir."
+          }
+        ],
+        [
+          {
+            "metin": "7q11.23 delesyonu (elastin)",
+            "renk": "mavi",
+            "tus": true,
+            "not": "Elastin genini içeren 7q11.23 mikrodelesyonu nedendir; tanı FISH ya da mikroarray ile konur."
+          },
+          {
+            "metin": "Supravalvüler aort darlığı",
+            "renk": "kirmizi",
+            "tus": true,
+            "not": "Elastin eksikliğine bağlı supravalvüler aort darlığı tipiktir; periferik pulmoner arter darlıkları da görülebilir."
+          },
+          {
+            "metin": "Elf yüzü, yıldızsı iris",
+            "renk": "mavi",
+            "tus": false,
+            "not": "Geniş alın, dolgun yanaklar ve kalın dudaklar ('elf yüzü') ile iriste yıldızsı desen tipiktir."
+          },
+          {
+            "metin": "Hiperkalsemi, sosyal kişilik",
+            "renk": "sari",
+            "tus": false,
+            "not": "İnfantil hiperkalsemi görülebilir. Aşırı sosyal, konuşkan kişilik ('kokteyl parti') ile birlikte hafif-orta zihinsel yetersizlik vardır."
+          }
+        ]
+      ],
+      "ortme_sirasi": [
+        "r2c1",
+        "r3c1",
+        "r1c1",
+        "r3c0",
+        "r2c3"
+      ],
+      "sabotajlar": [
+        {
+          "tip": "hucre_takas",
+          "hedef": [
+            "r2c1",
+            "r3c1"
+          ],
+          "dogrusu": "Noonan'da pulmoner stenoz, Williams'ta supravalvüler aort darlığı görülür."
+        },
+        {
+          "tip": "hucre_takas",
+          "hedef": [
+            "r1c0",
+            "r2c0"
+          ],
+          "dogrusu": "Turner 45,X'tir; Noonan'da karyotip normaldir ve PTPN11 gibi RAS yolağı mutasyonu vardır."
+        }
+      ]
+    }
+  ],
+  "sorular": [
+    {
+      "id": "q1",
+      "levha": "ped.genetik.sendromlar.down",
+      "dugumler": [
+        "d7"
+      ],
+      "kok": "Doğum sonrası muayenede hipotonik olan bebekte yukarı çekik göz, düz yüz profili ve tek palmar çizgi saptanıyor. Bu bebekte eşlik etmesi en olası kalp hastalığı aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "Atriyoventriküler septal defekt",
+        "Aort koarktasyonu",
+        "Supravalvüler aort darlığı",
+        "Pulmoner stenoz",
+        "Büyük arterlerin transpozisyonu"
+      ],
+      "dogru": 0,
+      "aciklama": "Bulgular Down sendromunu düşündürür; en karakteristik KKH AVSD'dir. Koarktasyon Turner, supravalvüler aort darlığı Williams, pulmoner stenoz Noonan sendromu ile ilişkilidir.",
+      "aciklama_yolu": [
+        "d2",
+        "d3",
+        "d10",
+        "d7"
+      ],
+      "celdirici_dugum": {}
+    },
+    {
+      "id": "q2",
+      "levha": "ped.genetik.sendromlar.down",
+      "dugumler": [
+        "d8"
+      ],
+      "kok": "Down sendromlu yenidoğanda doğumdan sonraki ilk saatlerde safralı kusma başlıyor; belirgin karın distansiyonu yok. Direkt grafide 'çift balon' görünümü var, distalde gaz yok. En olası tanı aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "Duodenal atrezi",
+        "Hipertrofik pilor stenozu",
+        "Hirschsprung hastalığı",
+        "Mekonyum ileusu",
+        "Nekrotizan enterokolit"
+      ],
+      "dogru": 0,
+      "aciklama": "İlk saatlerde safralı kusma, distansiyonun olmaması ve distal gazsız 'çift balon' duodenal atreziyi gösterir; Down sendromuyla güçlü ilişkilidir.",
+      "aciklama_yolu": [
+        "d8"
+      ],
+      "celdirici_dugum": {
+        "2": "d9"
+      }
+    },
+    {
+      "id": "q3",
+      "levha": "ped.genetik.sendromlar.down",
+      "dugumler": [
+        "d12"
+      ],
+      "kok": "Down sendromlu 7 yaşındaki çocuk birkaç haftadır boyun ağrısı, yürürken dengesizlik ve yeni başlayan idrar kaçırma ile getiriliyor. Derin tendon refleksleri artmış. En olası neden aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "Atlantoaksiyel instabiliteye bağlı spinal kord basısı",
+        "Hipotiroidi",
+        "Akut lösemi",
+        "Hirschsprung hastalığı",
+        "Moyamoya hastalığı"
+      ],
+      "dogru": 0,
+      "aciklama": "Boyun ağrısı, yürüme bozukluğu, idrar kontrolünde değişiklik ve hiperrefleksi üst motor nöron tutulumunu gösterir; Down sendromunda C1–C2 instabilitesine bağlı kord basısı acil değerlendirme gerektirir.",
+      "aciklama_yolu": [
+        "d12"
+      ],
+      "celdirici_dugum": {
+        "3": "d9"
+      }
+    },
+    {
+      "id": "q4",
+      "levha": "ped.genetik.sendromlar.down",
+      "dugumler": [
+        "d9"
+      ],
+      "kok": "Down sendromlu yenidoğanda mekonyum çıkışı 48 saati geçiyor; karın distansiyonu ve kusma gelişiyor. Rektal tuşede rektum dar, parmak çekilince fışkırır tarzda gaita ve gaz çıkışı oluyor. En olası tanı aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "Hirschsprung hastalığı",
+        "Duodenal atrezi",
+        "Mekonyum ileusu",
+        "Konjenital hipotiroidi",
+        "Anal atrezi"
+      ],
+      "dogru": 0,
+      "aciklama": "Gecikmiş mekonyum çıkışı ve rektal tuşe sonrası fışkırır tarzda boşalma Hirschsprung hastalığını düşündürür; Down sendromunda risk artmıştır. Tanı rektal biyopside ganglion hücresi yokluğuyla konur.",
+      "aciklama_yolu": [
+        "d9"
+      ],
+      "celdirici_dugum": {
+        "1": "d8"
+      }
+    },
+    {
+      "id": "q5",
+      "levha": "ped.genetik.sendromlar.turner",
+      "dugumler": [
+        "t10",
+        "t5"
+      ],
+      "kok": "Yenidoğan kız bebekte el ve ayak sırtlarında ödem, ensede fazla deri saptanıyor. Femoral nabızlar brakiyal nabızlara göre zayıf. En olası tanı aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "Down sendromu",
+        "Turner sendromu",
+        "Noonan sendromu",
+        "Williams sendromu",
+        "Klinefelter sendromu"
+      ],
+      "dogru": 1,
+      "aciklama": "Kız yenidoğanda el-ayak lenfödemi ve fazla ense derisi Turner'ı düşündürür; zayıf femoral nabız aort koarktasyonunu gösterir. Noonan'da da lenfödem olabilir ancak tipik kalp lezyonu pulmoner stenozdur.",
+      "aciklama_yolu": [
+        "t10",
+        "t2",
+        "t5"
+      ],
+      "celdirici_dugum": {}
+    },
+    {
+      "id": "q6",
+      "levha": "ped.genetik.sendromlar.turner",
+      "dugumler": [
+        "t5"
+      ],
+      "kok": "Karyotipi 45,X olan 6 yaşındaki kız çocuğu kardiyoloji değerlendirmesine yönlendiriliyor. Bu hastada en sık görülen kalp anomalisi aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "Biküspit aort kapağı",
+        "Pulmoner stenoz",
+        "Atriyoventriküler septal defekt",
+        "Supravalvüler aort darlığı",
+        "Fallot tetralojisi"
+      ],
+      "dogru": 0,
+      "aciklama": "Turner sendromunda en sık kalp anomalisi biküspit aort kapağı, ikinci sıklıkta aort koarktasyonudur. Pulmoner stenoz Noonan, AVSD Down, supravalvüler aort darlığı Williams sendromunda tipiktir.",
+      "aciklama_yolu": [
+        "t5"
+      ],
+      "celdirici_dugum": {}
+    },
+    {
+      "id": "q7",
+      "levha": "ped.genetik.sendromlar.turner",
+      "dugumler": [
+        "t7",
+        "t11"
+      ],
+      "kok": "On üç yaşındaki kız kısa boy ve meme gelişiminin olmaması nedeniyle getiriliyor. FSH ve LH yüksek, östradiol düşük. Tanı için ilk istenmesi gereken tetkik aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "Kemik yaşı",
+        "Karyotip analizi",
+        "Büyüme hormonu uyarı testi",
+        "Kraniyal MR",
+        "Tiroid fonksiyon testleri"
+      ],
+      "dogru": 1,
+      "aciklama": "Kısa boy ve hipergonadotropik hipogonadizm (primer over yetmezliği) Turner sendromunu düşündürür; tanı karyotiple konur. Mozaik olgular hafif seyredebilir, bu yüzden açıklanamayan kısa boylu her kızda karyotip düşünülür.",
+      "aciklama_yolu": [
+        "t11",
+        "t7"
+      ],
+      "celdirici_dugum": {
+        "0": "t11",
+        "2": "t11"
+      }
+    },
+    {
+      "id": "q8",
+      "levha": "ped.genetik.sendromlar.turner",
+      "dugumler": [
+        "t11"
+      ],
+      "kok": "Turner sendromlu 7 yaşındaki kızın boyu yaşıtlarının belirgin altında seyrediyor. Erişkin boyunu artırmak için önerilen tedavi aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "Büyüme hormonu",
+        "Östrojen",
+        "Levotiroksin",
+        "Testosteron",
+        "Hidrokortizon"
+      ],
+      "dogru": 0,
+      "aciklama": "Turner'da büyüme hormonu erişkin boyunu artırır. Östrojen ergenliği başlatmak için daha sonra verilir (yaş için kaynağa bak); erken başlanırsa epifizleri kapatarak boyu kısaltabilir.",
+      "aciklama_yolu": [
+        "t11"
+      ],
+      "celdirici_dugum": {
+        "1": "t7"
+      }
+    },
+    {
+      "id": "q9",
+      "levha": "ped.genetik.sendromlar.matris",
+      "dugumler": [
+        "r2c1",
+        "r2c3"
+      ],
+      "kok": "On yaşındaki erkek çocuk kısa boy nedeniyle getiriliyor. Yeleli boyun, hipertelorizm ve aşağı çekik gözleri var; ekokardiyografide displastik pulmoner kapak darlığı saptanıyor. Karyotip 46,XY. En olası tanı aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "Turner sendromu",
+        "Noonan sendromu",
+        "Down sendromu",
+        "Williams sendromu",
+        "Klinefelter sendromu"
+      ],
+      "dogru": 1,
+      "aciklama": "Turner benzeri fenotip, pulmoner stenoz, erkek cinsiyet ve normal karyotip Noonan sendromunu gösterir.",
+      "aciklama_yolu": [
+        "r2c2",
+        "r2c1",
+        "r2c3"
+      ],
+      "celdirici_dugum": {
+        "0": "r1c2",
+        "2": "r0c2",
+        "3": "r3c1"
+      }
+    },
+    {
+      "id": "q10",
+      "levha": "ped.genetik.sendromlar.matris",
+      "dugumler": [
+        "r3c1",
+        "r3c3"
+      ],
+      "kok": "Üç yaşındaki çocukta supravalvüler aort darlığı, bebeklikte hiperkalsemi öyküsü ve aşırı sosyal, konuşkan bir kişilik saptanıyor. En olası tanı aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "Williams sendromu",
+        "Noonan sendromu",
+        "DiGeorge sendromu",
+        "Turner sendromu",
+        "Down sendromu"
+      ],
+      "dogru": 0,
+      "aciklama": "Supravalvüler aort darlığı, infantil hiperkalsemi ve 'kokteyl parti' kişiliği Williams sendromunun klasik üçlüsüdür.",
+      "aciklama_yolu": [
+        "r3c1",
+        "r3c3"
+      ],
+      "celdirici_dugum": {
+        "1": "r2c1",
+        "3": "r1c1",
+        "4": "r0c1"
+      }
+    },
+    {
+      "id": "q11",
+      "levha": "ped.genetik.sendromlar.matris",
+      "dugumler": [
+        "r3c0"
+      ],
+      "kok": "Supravalvüler aort darlığı ve iriste yıldızsı desen saptanan çocukta tanıyı doğrulamak için aranacak genetik değişiklik aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "7q11.23 delesyonu",
+        "22q11.2 delesyonu",
+        "45,X",
+        "Trizomi 21",
+        "PTPN11 mutasyonu"
+      ],
+      "dogru": 0,
+      "aciklama": "Williams sendromu elastin genini içeren 7q11.23 mikrodelesyonundan kaynaklanır ve FISH ya da mikroarray ile gösterilir.",
+      "aciklama_yolu": [
+        "r3c1",
+        "r3c2",
+        "r3c0"
+      ],
+      "celdirici_dugum": {
+        "2": "r1c0",
+        "3": "r0c0",
+        "4": "r2c0"
+      }
+    },
+    {
+      "id": "q12",
+      "levha": "ped.genetik.sendromlar.matris",
+      "dugumler": [
+        "r0c3"
+      ],
+      "kok": "Down sendromlu 3 yaşındaki çocuk iki haftadır solukluk, ciltte peteşiler ve ateşle getiriliyor. Karaciğer ve dalak büyük; tam kan sayımında anemi ve trombositopeni var. En olası tanı aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "Akut lösemi",
+        "İmmün trombositopenik purpura",
+        "Aplastik anemi",
+        "Demir eksikliği anemisi",
+        "Hipotiroidi"
+      ],
+      "dogru": 0,
+      "aciklama": "Down sendromunda lösemi riski artmıştır. Solukluk, peteşi, ateş ve hepatosplenomegali ile birlikte iki seri sitopeni akut lösemiyi düşündürür; İTP'de organomegali beklenmez.",
+      "aciklama_yolu": [
+        "r0c0",
+        "r0c3"
+      ],
+      "celdirici_dugum": {}
+    }
+  ]
+}

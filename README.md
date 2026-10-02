@@ -21,8 +21,10 @@ Projeye dosya eklersen: `xcodegen generate` (proje `project.yml`'den üretilir).
 - iCloud kapalıysa: **Dosyalar › Bu iPhone'da › Levha › Paketler**
 
 Uygulamada **İçerik** sekmesi klasördeki tüm `.json` dosyalarını listeler (hatalı olanlar kırmızı, hangi
-levha/hangi alan olduğu yazar). **Hepsini içe aktar** ya da **Dosya seç…**. Örnek paket
-(`SamplePackages/ped.neo.sarilik.json`) ilk açılışta otomatik yüklenir.
+levha/hangi alan olduğu yazar). **Hepsini içe aktar** ya da **Dosya seç…**. `SamplePackages/` içindeki örnek
+paketler uygulamayla gelir; yeni ya da değişmiş olanlar açılışta otomatik yüklenir.
+
+Şema sürümü 2'dir (`Levha/Schema/levha.schema.json`); sürüm 1 paketler okunmaya devam eder.
 
 Aynı `id`'li levha yeniden içe aktarılınca **düzen korunur** (konumlar değişmez); etiket, not ve sorular güncellenir.
 Düzeni sıfırlamak için paketi İçerik'te sola kaydırıp sil, sonra yeniden içe aktar.
@@ -33,5 +35,7 @@ Düzeni sıfırlamak için paketi İçerik'te sola kaydırıp sil, sonra yeniden
 swift run levha-lint SamplePackages/ped.neo.sarilik.json
 ```
 
-Çıktı satır satır hata, sonda `OK` ya da `N hata`. Lint testleri: `cd Tools/levha-lint && swift test`.
+Birden fazla dosya verilebilir (`swift run levha-lint SamplePackages/*.json`). Çıktı satır satır hata,
+sonda `OK` ya da `N hata`; yazılmış sabotajı olmayan levhalar "uyarı" olarak listelenir ama hata sayılmaz.
+Lint ve zamanlayıcı testleri: `cd Tools/levha-lint && swift test`.
 Şema: `Levha/Schema/levha.schema.json`.

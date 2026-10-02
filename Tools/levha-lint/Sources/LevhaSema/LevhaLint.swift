@@ -3,13 +3,16 @@ import Foundation
 public struct LintBulgusu: Hashable, CustomStringConvertible {
     public var yer: String
     public var mesaj: String
-    /// Uygulamada içe aktarmayı durduran hata mı? (CLI hepsini hata sayar.)
+    /// Uygulamada içe aktarmayı durduran hata mı?
     public var engelleyici: Bool
+    /// Yalnız bilgi: CLI bunu hata saymaz.
+    public var uyari: Bool
 
-    public init(_ yer: String, _ mesaj: String, engelleyici: Bool = true) {
+    public init(_ yer: String, _ mesaj: String, engelleyici: Bool = true, uyari: Bool = false) {
         self.yer = yer
         self.mesaj = mesaj
-        self.engelleyici = engelleyici
+        self.engelleyici = engelleyici && !uyari
+        self.uyari = uyari
     }
 
     public var description: String { yer.isEmpty ? mesaj : "\(yer): \(mesaj)" }
@@ -19,15 +22,18 @@ public struct LintSonucu {
     public var paket: PaketJSON?
     public var bulgular: [LintBulgusu]
     public var engelleyiciVar: Bool { paket == nil || bulgular.contains { $0.engelleyici } }
+    public var hatalar: [LintBulgusu] { bulgular.filter { !$0.uyari } }
+    public var uyarilar: [LintBulgusu] { bulgular.filter(\.uyari) }
 }
 
 public enum LevhaLint {
-    public static let desteklenenSurum = 1
+    public static let desteklenenSurumler = 1...2
     public static let etiketSiniri = 28
     public static let dugumAraligi = 6...20
     public static let hucreAraligi = 6...24
     public static let sutunAraligi = 2...4
     public static let satirAraligi = 2...6
+    public static let seritSiniri = 4
 
     public static func denetle(veri: Data) -> LintSonucu {
         do {
@@ -40,7 +46,8 @@ public enum LevhaLint {
         }
     }
 
-    /// Matris hücreleri `r{satır}c{sütun}`, sayı cetveli işaretleri kendi id'leriyle düğüm sayılır.
+    /// Örtme, sabotaj ve sorular için düğüm sayılan her şey: düğümler, matris hücreleri
+    /// (`r{satır}c{sütun}`), cetvel işaretleri, zaman olayları, vücut bölgeleri.
     public static func dugumKimlikleri(_ l: LevhaJSON) -> [String] {
         var idler = (l.dugumler ?? []).map(\.id)
         if l.tip == .matris, let hucreler = l.hucreler {
@@ -49,13 +56,15 @@ public enum LevhaLint {
             }
         }
         if l.tip == .sayi_cetveli { idler += (l.isaretler ?? []).map(\.id) }
+        if l.tip == .zaman_cizelgesi { idler += (l.olaylar ?? []).map(\.id) }
+        if l.tip == .vucut_haritasi { idler += (l.bolgeler ?? []).map(\.id) }
         return idler
     }
 
     public static func denetle(_ p: PaketJSON) -> [LintBulgusu] {
         var b: [LintBulgusu] = []
-        if p.sema_surumu != desteklenenSurum {
-            b.append(.init("sema_surumu", "desteklenmeyen sürüm \(p.sema_surumu) (beklenen \(desteklenenSurum))"))
+        if !desteklenenSurumler.contains(p.sema_surumu) {
+            b.append(.init("sema_surumu", "desteklenmeyen sürüm \(p.sema_surumu) (beklenen 1 ya da 2)"))
         }
         for (ad, deger) in [("paket_id", p.paket_id), ("ders", p.ders), ("bolum", p.bolum), ("alt_konu", p.alt_konu)] where bos(deger) {
             b.append(.init(ad, "boş olamaz"))
@@ -66,7 +75,7 @@ public enum LevhaLint {
         for l in p.levhalar {
             let yer = "levha «\(l.id)»"
             if levhaDugumleri[l.id] != nil { b.append(.init(yer, "levha id tekrar ediyor")) }
-            b += levhaDenetle(l, yer: yer)
+            b += levhaDenetle(l, yer: yer, surum: p.sema_surumu)
             levhaDugumleri[l.id] = Set(dugumKimlikleri(l))
         }
 
@@ -104,7 +113,7 @@ public enum LevhaLint {
         return b
     }
 
-    static func levhaDenetle(_ l: LevhaJSON, yer: String) -> [LintBulgusu] {
+    static func levhaDenetle(_ l: LevhaJSON, yer: String, surum: Int) -> [LintBulgusu] {
         var b: [LintBulgusu] = []
         if bos(l.baslik) { b.append(.init(yer + " › baslik", "boş olamaz", engelleyici: false)) }
         if bos(l.akilda_kalan) { b.append(.init(yer + " › akilda_kalan", "boş olamaz", engelleyici: false)) }
@@ -117,32 +126,10 @@ public enum LevhaLint {
         for d in dugumler { etiketDenetle(d.etiket, yer: "\(yer) › \(d.id).etiket", &b) }
 
         switch l.tip {
-        case .algoritma:
-            guard let izgara = l.duzen?.izgara, izgara.count == 2, izgara[0] > 0, izgara[1] > 0 else {
-                b.append(.init(yer + " › duzen.izgara", "algoritma için [sütun, satır] zorunlu"))
-                break
-            }
-            let (sutun, satir) = (izgara[0], izgara[1])
-            if !sutunAraligi.contains(sutun) { b.append(.init(yer + " › duzen.izgara", "sütun sayısı 2–4 olmalı (\(sutun))", engelleyici: false)) }
-            if !satirAraligi.contains(satir) { b.append(.init(yer + " › duzen.izgara", "satır sayısı 2–6 olmalı (\(satir))", engelleyici: false)) }
-            sayiDenetle(dugumler.count, dugumAraligi, "düğüm sayısı", yer, &b)
-            var dolu: [String: String] = [:]
-            for d in dugumler {
-                guard let k = d.konum, k.count == 2 else {
-                    b.append(.init("\(yer) › \(d.id).konum", "[sütun, satır] zorunlu"))
-                    continue
-                }
-                if !(0..<sutun).contains(k[0]) || !(0..<satir).contains(k[1]) {
-                    b.append(.init("\(yer) › \(d.id).konum", "[\(k[0]), \(k[1])] ızgaranın (\(sutun)×\(satir)) dışında"))
-                }
-                let anahtar = "\(k[0]), \(k[1])"
-                if let onceki = dolu[anahtar] {
-                    b.append(.init("\(yer) › \(d.id).konum", "[\(anahtar)] konumu \(onceki) ile çakışıyor"))
-                } else {
-                    dolu[anahtar] = d.id
-                }
-            }
+        case .algoritma, .yolak, .agac:
+            izgaraDenetle(l, yer: yer, &b)
             baglantilariDenetle(l, idler, yer, &b)
+            if l.tip == .agac { agacDenetle(l, idler, yer, &b) }
 
         case .matris:
             guard let satirlar = l.satirlar, let sutunlar = l.sutunlar, let hucreler = l.hucreler else {
@@ -163,23 +150,46 @@ public enum LevhaLint {
             for (i, s) in sutunlar.enumerated() { etiketDenetle(s, yer: "\(yer) › sutunlar[\(i)]", &b) }
 
         case .sayi_cetveli:
-            guard let eksen = l.eksen else {
-                b.append(.init(yer + " › eksen", "sayı cetveli için zorunlu"))
-                break
-            }
-            if !(eksen.min < eksen.max) { b.append(.init(yer + " › eksen", "min, max'tan küçük olmalı")) }
+            guard let eksen = eksenDenetle(l, yer: yer, &b) else { break }
             let isaretler = l.isaretler ?? []
             sayiDenetle(isaretler.count, dugumAraligi, "işaret sayısı", yer, &b)
             for m in isaretler {
                 etiketDenetle(m.etiket, yer: "\(yer) › \(m.id).etiket", &b)
-                if let v = m.deger, eksen.min < eksen.max, !(eksen.min...eksen.max).contains(v) {
-                    b.append(.init("\(yer) › \(m.id).deger", "\(v) eksen aralığının (\(eksen.min)–\(eksen.max)) dışında"))
+                if let v = m.deger, !eksen.contains(v) {
+                    b.append(.init("\(yer) › \(m.id).deger", "\(sayi(v)) eksen aralığının (\(sayi(eksen.lowerBound))–\(sayi(eksen.upperBound))) dışında"))
                 }
             }
 
-        default:
-            // Part 2 tipleri: yalnız referans bütünlüğü.
-            baglantilariDenetle(l, idler, yer, &b)
+        case .zaman_cizelgesi:
+            guard let eksen = eksenDenetle(l, yer: yer, &b) else { break }
+            if let birim = l.eksen?.birim, ZamanBirimi(rawValue: birim) == nil {
+                b.append(.init(yer + " › eksen.birim", "\"\(birim)\" geçersiz (izinli: gun, hafta, ay, yil)", engelleyici: false))
+            }
+            let seritler = l.seritler ?? []
+            if seritler.isEmpty { b.append(.init(yer + " › seritler", "en az bir şerit olmalı")) }
+            if seritler.count > seritSiniri { b.append(.init(yer + " › seritler", "en fazla \(seritSiniri) şerit (\(seritler.count) var)", engelleyici: false)) }
+            var seritIdleri = Set<String>()
+            for s in seritler {
+                if !seritIdleri.insert(s.id).inserted { b.append(.init(yer + " › seritler", "şerit id tekrar ediyor: \(s.id)")) }
+                etiketDenetle(s.ad, yer: "\(yer) › \(s.id).ad", &b)
+            }
+            let olaylar = l.olaylar ?? []
+            sayiDenetle(olaylar.count, dugumAraligi, "olay sayısı", yer, &b)
+            for o in olaylar {
+                let oyer = "\(yer) › \(o.id)"
+                etiketDenetle(o.etiket, yer: oyer + ".etiket", &b)
+                if !seritIdleri.contains(o.serit) { b.append(.init(oyer + ".serit", "bilinmeyen şerit \"\(o.serit)\"")) }
+                if !eksen.contains(o.bas) { b.append(.init(oyer + ".bas", "\(sayi(o.bas)) eksen dışında")) }
+                if let bit = o.bit {
+                    if !eksen.contains(bit) { b.append(.init(oyer + ".bit", "\(sayi(bit)) eksen dışında")) }
+                    if bit < o.bas { b.append(.init(oyer + ".bit", "bit, bas'tan küçük olamaz")) }
+                }
+            }
+
+        case .vucut_haritasi:
+            let bolgeler = l.bolgeler ?? []
+            sayiDenetle(bolgeler.count, dugumAraligi, "bölge sayısı", yer, &b)
+            for g in bolgeler { etiketDenetle(g.etiket, yer: "\(yer) › \(g.id).etiket", &b) }
         }
 
         var gorulen = Set<String>()
@@ -187,20 +197,122 @@ public enum LevhaLint {
             if !idler.contains(id) { b.append(.init(yer + " › ortme_sirasi", "bilinmeyen düğüm \"\(id)\"")) }
             if !gorulen.insert(id).inserted { b.append(.init(yer + " › ortme_sirasi", "\(id) tekrar ediyor", engelleyici: false)) }
         }
-        if l.tip.cizilebilir && gorulen.count < 3 {
+        if gorulen.count < 3 {
             b.append(.init(yer + " › ortme_sirasi", "en az 3 düğüm olmalı", engelleyici: false))
         }
 
-        for (i, s) in (l.sabotajlar ?? []).enumerated() {
-            let syer = "\(yer) › sabotajlar[\(i)]"
-            if s["tip"]?.metinDegeri == nil { b.append(.init(syer, "tip zorunlu", engelleyici: false)) }
-            for h in s["hedef"]?.diziDegeri ?? [] {
-                if let hid = h.metinDegeri, !idler.contains(hid) {
-                    b.append(.init(syer + ".hedef", "bilinmeyen düğüm \"\(hid)\"", engelleyici: false))
-                }
+        let sabotajlar = l.sabotajlar ?? []
+        if sabotajlar.isEmpty {
+            b.append(.init(yer + " › sabotajlar", "yazılmış sabotaj yok (üretilmiş ile idare edilir)", uyari: true))
+        }
+        for (i, s) in sabotajlar.enumerated() {
+            for m in sabotajHatalari(s, levha: l, idler: idler, surum: surum) {
+                b.append(.init("\(yer) › sabotajlar[\(i)]", m, engelleyici: false))
             }
         }
         return b
+    }
+
+    /// v2'de tip bazlı tam denetim; v1'de yalnız tip ve hedef referansları.
+    public static func sabotajHatalari(_ s: SabotajJSON, levha l: LevhaJSON, idler: Set<String>, surum: Int) -> [String] {
+        var h: [String] = []
+        let hedefler = s.hedef ?? []
+        for hid in hedefler where !idler.contains(hid) { h.append("bilinmeyen hedef \"\(hid)\"") }
+        guard surum >= 2 else {
+            if bos(s.tip) { h.append("tip zorunlu") }
+            return h
+        }
+        guard let tip = s.sabotajTipi else {
+            return h + ["geçersiz tip \"\(s.tip)\" (izinli: \(SabotajTipi.allCases.map(\.rawValue).joined(separator: ", ")))"]
+        }
+        if !tip.uygun(l.tip) { h.append("\(tip.rawValue) \(l.tip.ad.lowercased()) levhasına uygulanamaz") }
+        if hedefler.count != tip.hedefSayisi { h.append("\(tip.rawValue) için \(tip.hedefSayisi) hedef gerekir (\(hedefler.count) var)") }
+        if bos(s.dogrusu ?? "") { h.append("dogrusu zorunlu") }
+        switch tip {
+        case .deger_kaydir:
+            if s.yanlis_deger == nil { h.append("yanlis_deger zorunlu") }
+        case .renk_degistir:
+            if RenkAdi(rawValue: s.yanlis_renk ?? "") == nil { h.append("yanlis_renk zorunlu (kirmizi, mavi, yesil, sari, gri)") }
+        case .bolge_kaydir:
+            if VucutBolgesi(rawValue: s.yanlis_bolge ?? "") == nil { h.append("yanlis_bolge zorunlu, sabit bölge listesinden") }
+        case .baglanti_ters:
+            if hedefler.count == 2 {
+                let var_ = (l.baglantilar ?? []).contains { Set([$0.from, $0.to]) == Set(hedefler) }
+                    || (l.tip == .agac && (l.dugumler ?? []).contains { Set([$0.id, $0.ebeveyn ?? ""]) == Set(hedefler) })
+                if !var_ { h.append("\(hedefler[0]) ile \(hedefler[1]) arasında bağlantı yok") }
+            }
+        case .sira_boz:
+            if hedefler.count == 2 {
+                let olaylar = (l.olaylar ?? []).filter { hedefler.contains($0.id) }
+                if Set(olaylar.map(\.serit)).count > 1 { h.append("sira_boz hedefleri aynı şeritte olmalı") }
+                if Set(olaylar.map(\.bas)).count < olaylar.count { h.append("sira_boz hedeflerinin bas değerleri farklı olmalı") }
+            }
+        case .hucre_takas:
+            if hedefler.count == 2, Set(hedefler.compactMap { $0.split(separator: "c").last }).count > 1 {
+                h.append("hucre_takas hedefleri aynı sütunda olmalı")
+            }
+        case .etiket_takas:
+            break
+        }
+        if let v = s.yanlis_deger, let e = l.eksen, !(e.min...e.max).contains(v) {
+            h.append("yanlis_deger eksen dışında")
+        }
+        return h
+    }
+
+    static func izgaraDenetle(_ l: LevhaJSON, yer: String, _ b: inout [LintBulgusu]) {
+        let dugumler = l.dugumler ?? []
+        guard let izgara = l.duzen?.izgara, izgara.count == 2, izgara[0] > 0, izgara[1] > 0 else {
+            b.append(.init(yer + " › duzen.izgara", "\(l.tip.ad.lowercased()) için [sütun, satır] zorunlu"))
+            return
+        }
+        let (sutun, satir) = (izgara[0], izgara[1])
+        if !sutunAraligi.contains(sutun) { b.append(.init(yer + " › duzen.izgara", "sütun sayısı 2–4 olmalı (\(sutun))", engelleyici: false)) }
+        if !satirAraligi.contains(satir) { b.append(.init(yer + " › duzen.izgara", "satır sayısı 2–6 olmalı (\(satir))", engelleyici: false)) }
+        sayiDenetle(dugumler.count, dugumAraligi, "düğüm sayısı", yer, &b)
+        var dolu: [String: String] = [:]
+        for d in dugumler {
+            guard let k = d.konum, k.count == 2 else {
+                b.append(.init("\(yer) › \(d.id).konum", "[sütun, satır] zorunlu"))
+                continue
+            }
+            if !(0..<sutun).contains(k[0]) || !(0..<satir).contains(k[1]) {
+                b.append(.init("\(yer) › \(d.id).konum", "[\(k[0]), \(k[1])] ızgaranın (\(sutun)×\(satir)) dışında"))
+            }
+            let anahtar = "\(k[0]), \(k[1])"
+            if let onceki = dolu[anahtar] {
+                b.append(.init("\(yer) › \(d.id).konum", "[\(anahtar)] konumu \(onceki) ile çakışıyor"))
+            } else {
+                dolu[anahtar] = d.id
+            }
+        }
+    }
+
+    static func agacDenetle(_ l: LevhaJSON, _ idler: Set<String>, _ yer: String, _ b: inout [LintBulgusu]) {
+        let dugumler = l.dugumler ?? []
+        var ebeveynli = Set((l.baglantilar ?? []).map(\.to))
+        for d in dugumler {
+            guard let e = d.ebeveyn else { continue }
+            if !idler.contains(e) { b.append(.init("\(yer) › \(d.id).ebeveyn", "bilinmeyen düğüm \"\(e)\"")) }
+            ebeveynli.insert(d.id)
+        }
+        for d in dugumler where !ebeveynli.contains(d.id) {
+            if let k = d.konum, k.count == 2, k[1] != 0 {
+                b.append(.init("\(yer) › \(d.id)", "ebeveyni yok ama satır 0'da değil (kök satır 0'da olmalı)", engelleyici: false))
+            }
+        }
+    }
+
+    static func eksenDenetle(_ l: LevhaJSON, yer: String, _ b: inout [LintBulgusu]) -> ClosedRange<Double>? {
+        guard let eksen = l.eksen else {
+            b.append(.init(yer + " › eksen", "\(l.tip.ad.lowercased()) için zorunlu"))
+            return nil
+        }
+        guard eksen.min < eksen.max else {
+            b.append(.init(yer + " › eksen", "min, max'tan küçük olmalı"))
+            return nil
+        }
+        return eksen.min...eksen.max
     }
 
     static func baglantilariDenetle(_ l: LevhaJSON, _ idler: Set<String>, _ yer: String, _ b: inout [LintBulgusu]) {
@@ -224,6 +336,10 @@ public enum LevhaLint {
         if !aralik.contains(sayi) {
             b.append(.init(yer, "\(ad) \(aralik.lowerBound)–\(aralik.upperBound) olmalı (\(sayi) var)", engelleyici: false))
         }
+    }
+
+    static func sayi(_ v: Double) -> String {
+        v == v.rounded() ? String(Int(v)) : String(v)
     }
 
     static func bos(_ s: String) -> Bool { s.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }

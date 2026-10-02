@@ -1,0 +1,992 @@
+{
+  "sema_surumu": 2,
+  "paket_id": "ped.kvs.konjenital",
+  "ders": "Pediatri",
+  "bolum": "Kardiyoloji",
+  "alt_konu": "Konjenital kalp hastalıkları",
+  "levhalar": [
+    {
+      "id": "ped.kvs.konjenital.fetal",
+      "tip": "yolak",
+      "baslik": "Fetal dolaşım ve doğumda kapanan yapılar",
+      "akilda_kalan": "O₂ ↑ duktusu kapatır, PGE₁ açık tutar",
+      "duzen": {
+        "izgara": [
+          3,
+          5
+        ],
+        "sabit": true
+      },
+      "dugumler": [
+        {
+          "id": "f1",
+          "etiket": "Plasenta",
+          "sekil": "madde",
+          "renk": "gri",
+          "konum": [
+            0,
+            0
+          ],
+          "tus": false,
+          "not": "Fetüste oksijenlenme akciğerde değil plasentada olur. Oksijenden zengin kan plasentadan umbilikal ven ile fetüse döner."
+        },
+        {
+          "id": "f2",
+          "etiket": "Duktus venozus",
+          "sekil": "madde",
+          "renk": "sari",
+          "konum": [
+            1,
+            0
+          ],
+          "tus": true,
+          "not": "Umbilikal ven kanının bir kısmını karaciğeri atlatarak doğrudan inferior vena kavaya taşır. Doğumdan sonra kapanır ve ligamentum venosum olarak kalır; umbilikal ven ise ligamentum teres olur."
+        },
+        {
+          "id": "f3",
+          "etiket": "Sağ atriyum",
+          "sekil": "madde",
+          "renk": "gri",
+          "konum": [
+            1,
+            1
+          ],
+          "tus": false,
+          "not": "İnferior vena kavadan gelen görece oksijenli kan büyük ölçüde foramen ovale yoluyla sol atriyuma yönelir. Süperior vena kava kanı ise daha çok sağ ventriküle geçer."
+        },
+        {
+          "id": "f4",
+          "etiket": "Foramen ovale",
+          "sekil": "madde",
+          "renk": "sari",
+          "konum": [
+            2,
+            1
+          ],
+          "tus": true,
+          "not": "Fetüste sağ atriyum basıncı yüksek olduğundan kan sağdan sola geçer. Doğumda sol atriyum basıncı sağı aşınca kapakçık kapanır (fonksiyonel kapanma); kalıntısı fossa ovalistir. Bir kısım insanda patent foramen ovale olarak açık kalabilir."
+        },
+        {
+          "id": "f5",
+          "etiket": "Sol kalp → çıkan aorta",
+          "sekil": "madde",
+          "renk": "gri",
+          "konum": [
+            2,
+            2
+          ],
+          "tus": false,
+          "not": "Foramen ovaleden geçen en oksijenli kan sol ventrikülden çıkan aortaya, oradan koroner arterlere ve beyne gider."
+        },
+        {
+          "id": "f6",
+          "etiket": "Pulmoner arter",
+          "sekil": "madde",
+          "renk": "gri",
+          "konum": [
+            1,
+            2
+          ],
+          "tus": false,
+          "not": "Sağ ventrikülden çıkan kanın çoğu, fetal akciğerlerin damar direnci çok yüksek olduğundan akciğerlere değil duktus arteriyozusa yönelir."
+        },
+        {
+          "id": "f7",
+          "etiket": "Duktus arteriyozus",
+          "sekil": "madde",
+          "renk": "sari",
+          "konum": [
+            1,
+            3
+          ],
+          "tus": true,
+          "not": "Pulmoner arteri inen aortaya bağlar; fetüste açıklığını dolaşımdaki prostaglandin E ve düşük oksijen sağlar. Doğumda artan oksijen ve azalan prostaglandinle önce fonksiyonel, sonra anatomik olarak kapanır (süreler için kaynağa bak). Kalıntısı ligamentum arteriosumdur."
+        },
+        {
+          "id": "f8",
+          "etiket": "İnen aorta",
+          "sekil": "madde",
+          "renk": "gri",
+          "konum": [
+            1,
+            4
+          ],
+          "tus": false,
+          "not": "Duktustan gelen, oksijeni görece az kan inen aortayla alt vücuda ve umbilikal arterler aracılığıyla plasentaya döner. Umbilikal arterlerin kalıntısı medial umbilikal ligamentlerdir."
+        },
+        {
+          "id": "f9",
+          "etiket": "O₂ ↑ (doğumda)",
+          "sekil": "surec",
+          "renk": "mavi",
+          "konum": [
+            0,
+            3
+          ],
+          "tus": true,
+          "not": "İlk solukla arteriyel oksijen basıncı artar; bu, duktus düz kasını kasarak kapanmayı başlatır ve pulmoner vasküler direnci düşürür. Prematürelerde bu yanıt zayıf olduğundan açık duktus sıktır."
+        },
+        {
+          "id": "f10",
+          "etiket": "PGE₁ (alprostadil)",
+          "sekil": "surec",
+          "renk": "yesil",
+          "konum": [
+            2,
+            3
+          ],
+          "tus": true,
+          "not": "Prostaglandin E duktusu açık tutar. Duktusa bağımlı KKH'de (pulmoner atrezi, ağır koarktasyon, hipoplastik sol kalp, BAT gibi) PGE₁ infüzyonu hayat kurtarıcıdır; önemli yan etkisi apnedir."
+        },
+        {
+          "id": "f11",
+          "etiket": "Sol atriyum basıncı ↑",
+          "sekil": "surec",
+          "renk": "mavi",
+          "konum": [
+            2,
+            0
+          ],
+          "tus": false,
+          "not": "Doğumda akciğerler açılır, pulmoner venöz dönüş artar ve sol atriyum basıncı yükselir; plasental dolaşımın kesilmesiyle sağ atriyum basıncı düşer. Bu fark foramen ovaleyi kapatır."
+        },
+        {
+          "id": "f12",
+          "etiket": "İndometasin / ibuprofen",
+          "sekil": "surec",
+          "renk": "yesil",
+          "konum": [
+            2,
+            4
+          ],
+          "tus": false,
+          "not": "Prostaglandin sentezini (siklooksijenaz) baskılayarak prematürede açık kalan duktusun kapanmasını sağlar. Böbrek fonksiyonu, kanama ve trombosit sayısı açısından izlenir."
+        },
+        {
+          "id": "f13",
+          "etiket": "Akciğer (az kan)",
+          "sekil": "madde",
+          "renk": "gri",
+          "konum": [
+            0,
+            2
+          ],
+          "tus": false,
+          "not": "Fetal akciğerler sıvıyla doludur ve damar direnci yüksektir; sağ ventrikül debisinin yalnızca küçük bir kısmı akciğerlerden geçer. Doğumda akciğerlerin havalanmasıyla direnç hızla düşer."
+        }
+      ],
+      "baglantilar": [
+        {
+          "from": "f1",
+          "to": "f2",
+          "tip": "normal"
+        },
+        {
+          "from": "f2",
+          "to": "f3",
+          "tip": "normal",
+          "etiket": "İVK"
+        },
+        {
+          "from": "f11",
+          "to": "f4",
+          "tip": "inhibe"
+        },
+        {
+          "from": "f3",
+          "to": "f4",
+          "tip": "normal"
+        },
+        {
+          "from": "f4",
+          "to": "f5",
+          "tip": "normal"
+        },
+        {
+          "from": "f3",
+          "to": "f6",
+          "tip": "normal",
+          "etiket": "SV"
+        },
+        {
+          "from": "f6",
+          "to": "f13",
+          "tip": "olasi"
+        },
+        {
+          "from": "f6",
+          "to": "f7",
+          "tip": "normal"
+        },
+        {
+          "from": "f9",
+          "to": "f7",
+          "tip": "inhibe"
+        },
+        {
+          "from": "f10",
+          "to": "f7",
+          "tip": "uyarir"
+        },
+        {
+          "from": "f7",
+          "to": "f8",
+          "tip": "normal"
+        },
+        {
+          "from": "f12",
+          "to": "f10",
+          "tip": "inhibe"
+        }
+      ],
+      "ortme_sirasi": [
+        "f7",
+        "f4",
+        "f2",
+        "f10",
+        "f9"
+      ],
+      "sabotajlar": [
+        {
+          "tip": "etiket_takas",
+          "hedef": [
+            "f2",
+            "f4"
+          ],
+          "dogrusu": "Duktus venozus karaciğeri atlatır; foramen ovale sağ atriyumdan sol atriyuma geçiştir."
+        },
+        {
+          "tip": "baglanti_ters",
+          "hedef": [
+            "f3",
+            "f4"
+          ],
+          "dogrusu": "Fetüste foramen ovaleden akım sağ atriyumdan sola doğrudur."
+        }
+      ]
+    },
+    {
+      "id": "ped.kvs.konjenital.siniflama",
+      "tip": "agac",
+      "baslik": "Konjenital kalp hastalıkları sınıflandırması",
+      "akilda_kalan": "Önce siyanoz, sonra akciğer kanlanması",
+      "duzen": {
+        "izgara": [
+          4,
+          4
+        ],
+        "sabit": true
+      },
+      "dugumler": [
+        {
+          "id": "a1",
+          "etiket": "Konjenital kalp hastalığı",
+          "sekil": "karar",
+          "renk": "gri",
+          "konum": [
+            1,
+            0
+          ],
+          "tus": false,
+          "not": "KKH önce siyanoz varlığına göre ayrılır, ardından göğüs grafisindeki akciğer kanlanmasına bakılır. Bu iki soru ayırıcı tanıyı büyük ölçüde daraltır."
+        },
+        {
+          "id": "a2",
+          "etiket": "Asiyanotik",
+          "sekil": "karar",
+          "renk": "mavi",
+          "konum": [
+            0,
+            1
+          ],
+          "tus": false,
+          "ebeveyn": "a1",
+          "not": "Asiyanotik KKH'de sistemik dolaşıma deoksijene kan karışmaz. Ya soldan sağa şant (akciğer kanlanması artmış) ya da obstrüktif lezyon (kanlanma normal) söz konusudur."
+        },
+        {
+          "id": "a3",
+          "etiket": "Siyanotik",
+          "sekil": "karar",
+          "renk": "kirmizi",
+          "konum": [
+            2,
+            1
+          ],
+          "tus": true,
+          "ebeveyn": "a1",
+          "not": "Siyanotik KKH'de deoksijene kan sistemik dolaşıma karışır (sağdan sola şant ya da paralel dolaşım). Hiperoksi testinde %100 oksijene rağmen PaO₂'nin belirgin yükselmemesi kardiyak nedeni düşündürür."
+        },
+        {
+          "id": "a4",
+          "etiket": "Artmış (soldan sağa)",
+          "renk": "mavi",
+          "konum": [
+            0,
+            2
+          ],
+          "tus": true,
+          "ebeveyn": "a2",
+          "not": "Soldan sağa şantlarda pulmoner kan akımı artar; büyük defektlerde kalp yetmezliği (takipne, beslenirken terleme, kilo alamama) gelişir. Tedavi edilmezse pulmoner vasküler hastalık ve Eisenmenger sendromu gelişebilir."
+        },
+        {
+          "id": "a5",
+          "etiket": "Normal (obstrüktif)",
+          "renk": "gri",
+          "konum": [
+            1,
+            2
+          ],
+          "tus": false,
+          "ebeveyn": "a2",
+          "not": "Obstrüktif lezyonlarda şant yoktur, akciğer kanlanması normaldir. Aort koarktasyonunda kol-bacak nabız ve basınç farkı, aort ve pulmoner darlıkta ejeksiyon üfürümü tipiktir."
+        },
+        {
+          "id": "a6",
+          "etiket": "Kanlanma azalmış",
+          "renk": "kirmizi",
+          "konum": [
+            2,
+            2
+          ],
+          "tus": true,
+          "ebeveyn": "a3",
+          "not": "Pulmoner akım azaldığı için siyanoz belirgindir; grafide akciğerler oligemik ('karanlık') görünür. TOF, triküspit atrezisi, pulmoner atrezi ve Ebstein anomalisi bu gruptadır."
+        },
+        {
+          "id": "a7",
+          "etiket": "Kanlanma artmış",
+          "renk": "sari",
+          "konum": [
+            3,
+            2
+          ],
+          "tus": true,
+          "ebeveyn": "a3",
+          "not": "Siyanoz ile birlikte artmış akciğer kanlanması karışım lezyonlarını düşündürür: büyük arterlerin transpozisyonu, trunkus arteriyozus ve TAPVD. Tuzak: siyanoz her zaman azalmış kanlanma demek değildir."
+        },
+        {
+          "id": "a8",
+          "etiket": "VSD, ASD, PDA, AVSD",
+          "renk": "mavi",
+          "konum": [
+            0,
+            3
+          ],
+          "tus": true,
+          "ebeveyn": "a4",
+          "not": "En sık KKH VSD'dir. ASD'de S2'nin sabit ve geniş çiftleşmesi, PDA'da sürekli (makine) üfürüm tipiktir; AVSD Down sendromunda sıktır."
+        },
+        {
+          "id": "a9",
+          "etiket": "AD, koarktasyon, PS",
+          "renk": "gri",
+          "konum": [
+            1,
+            3
+          ],
+          "tus": false,
+          "ebeveyn": "a5",
+          "not": "Aort darlığı (AD), aort koarktasyonu ve pulmoner stenoz (PS) obstrüktif lezyonlardır. Koarktasyon Turner, pulmoner stenoz Noonan sendromunda tipiktir."
+        },
+        {
+          "id": "a10",
+          "etiket": "TOF, triküspit atrezisi",
+          "renk": "kirmizi",
+          "konum": [
+            2,
+            3
+          ],
+          "tus": true,
+          "ebeveyn": "a6",
+          "not": "TOF'ta VSD, pulmoner darlık, ata binen aort ve sağ ventrikül hipertrofisi vardır; yenidoğan dönemi dışında en sık siyanotik KKH'dir. Triküspit atrezisinde EKG'de sol aks sapması tipiktir."
+        },
+        {
+          "id": "a11",
+          "etiket": "BAT, trunkus, TAPVD",
+          "renk": "sari",
+          "konum": [
+            3,
+            3
+          ],
+          "tus": true,
+          "ebeveyn": "a7",
+          "not": "BAT yenidoğan döneminde en sık siyanotik KKH'dir; grafide 'ipe asılı yumurta' görülür. TAPVD'de (suprakardiyak tip) 'kardan adam' görünümü, trunkusta 22q11 delesyonu birlikteliği tipiktir."
+        }
+      ],
+      "ortme_sirasi": [
+        "a6",
+        "a7",
+        "a10",
+        "a11",
+        "a4"
+      ],
+      "sabotajlar": [
+        {
+          "tip": "etiket_takas",
+          "hedef": [
+            "a6",
+            "a7"
+          ],
+          "dogrusu": "TOF ve triküspit atrezisinde akciğer kanlanması azalmış; BAT, trunkus ve TAPVD'de artmıştır."
+        },
+        {
+          "tip": "etiket_takas",
+          "hedef": [
+            "a8",
+            "a9"
+          ],
+          "dogrusu": "Soldan sağa şantlar (VSD, ASD, PDA) akciğer kanlanmasını artırır; obstrüktif lezyonlarda kanlanma normaldir."
+        }
+      ]
+    },
+    {
+      "id": "ped.kvs.konjenital.matris",
+      "tip": "matris",
+      "baslik": "5 T: siyanotik KKH karşılaştırması",
+      "akilda_kalan": "Siyanoz + sol aks sapması = triküspit atrezisi",
+      "satirlar": [
+        "TOF",
+        "BAT",
+        "Triküspit atrezisi",
+        "Trunkus",
+        "TAPVD"
+      ],
+      "sutunlar": [
+        "Akciğer kanlanması",
+        "Göğüs grafisi",
+        "EKG",
+        "İlk müdahale"
+      ],
+      "hucreler": [
+        [
+          {
+            "metin": "Azalmış",
+            "renk": "mavi",
+            "tus": false,
+            "not": "TOF'ta sağ ventrikül çıkış yolu darlığı pulmoner akımı azaltır. Darlığın derecesi siyanozun şiddetini belirler."
+          },
+          {
+            "metin": "Çizme şeklinde kalp",
+            "renk": "mavi",
+            "tus": true,
+            "not": "Sağ ventrikül hipertrofisiyle kalp apeksi yukarı kalkar ve pulmoner konus çukurlaşır: 'çizme şeklinde kalp'. Akciğer alanları oligemiktir."
+          },
+          {
+            "metin": "Sağ aks + sağ VH",
+            "renk": "mavi",
+            "tus": false,
+            "not": "Sağ ventrikül hipertrofisine bağlı sağ aks sapması tipiktir. Siyanozlu bebekte sol aks sapması görülürse triküspit atrezisi düşünülür."
+          },
+          {
+            "metin": "Atakta diz-göğüs, morfin",
+            "renk": "yesil",
+            "tus": true,
+            "not": "Hipersiyanotik atakta diz-göğüs pozisyonu, oksijen, morfin ve sıvı verilir; gerekirse fenilefrin ve beta bloker kullanılır. Kesin tedavi total düzeltme ameliyatıdır (zamanlama için kaynağa bak)."
+          }
+        ],
+        [
+          {
+            "metin": "Artmış",
+            "renk": "mavi",
+            "tus": false,
+            "not": "BAT'ta aorta sağ, pulmoner arter sol ventrikülden çıkar; paralel dolaşım nedeniyle pulmoner akım artmıştır. Yaşam için karışım (ASD, VSD ya da PDA) zorunludur."
+          },
+          {
+            "metin": "İpe asılı yumurta",
+            "renk": "mavi",
+            "tus": true,
+            "not": "Dar üst mediasten ve oval kalp gölgesi 'ipe asılı yumurta' görünümü verir. Akciğer kanlanması artmıştır."
+          },
+          {
+            "metin": "Sağ VH (başta normal)",
+            "renk": "mavi",
+            "tus": false,
+            "not": "Yenidoğanda EKG çoğu zaman normaldir; zamanla sağ ventrikül hipertrofisi ve sağ aks belirginleşir. Bu nedenle normal EKG BAT'ı dışlamaz."
+          },
+          {
+            "metin": "PGE₁, balon septostomi",
+            "renk": "yesil",
+            "tus": true,
+            "not": "Karışımı artırmak için PGE₁ ile duktus açık tutulur, yetersizse balon atriyal septostomi (Rashkind) yapılır. Kesin tedavi arteriyel switch (Jatene) ameliyatıdır."
+          }
+        ],
+        [
+          {
+            "metin": "Çoğunlukla azalmış",
+            "renk": "mavi",
+            "tus": false,
+            "not": "Triküspit kapak olmadığından sağ ventrikül hipoplastiktir; pulmoner akım VSD'nin ve pulmoner çıkışın büyüklüğüne bağlıdır. Çoğu hastada kanlanma azalmıştır, büyük VSD'de artmış olabilir."
+          },
+          {
+            "metin": "Kalp normal/hafif büyük",
+            "renk": "mavi",
+            "tus": false,
+            "not": "Kalp boyutu normal ya da hafif büyüktür ve akciğerler genellikle oligemiktir. Grafi tek başına ayırıcı değildir; EKG ipucu verir."
+          },
+          {
+            "metin": "Sol aks + sol VH",
+            "renk": "mavi",
+            "tus": true,
+            "not": "Siyanozlu bebekte sol aks sapması ve sol ventrikül hipertrofisi triküspit atrezisini düşündürür. Sağ ventrikül küçük olduğundan sol ventrikül baskındır."
+          },
+          {
+            "metin": "PGE₁ (duktusa bağımlıysa)",
+            "renk": "yesil",
+            "tus": false,
+            "not": "Pulmoner akım duktusa bağımlıysa PGE₁ başlanır. Ardından evreli palyasyon yapılır: sistemik-pulmoner şant, Glenn ve Fontan ameliyatları."
+          }
+        ],
+        [
+          {
+            "metin": "Artmış",
+            "renk": "mavi",
+            "tus": false,
+            "not": "Tek arteriyel gövde hem sistemik hem pulmoner dolaşımı besler; pulmoner direnç düştükçe akciğer kanlanması artar. Erken dönemde kalp yetmezliği belirgindir."
+          },
+          {
+            "metin": "Kardiyomegali, sağ arkus",
+            "renk": "mavi",
+            "tus": false,
+            "not": "Kardiyomegali ve artmış akciğer kanlanması görülür; sağ arkus aorta sıktır (oran için kaynağa bak). 22q11 delesyonu (DiGeorge) birlikteliği araştırılmalıdır."
+          },
+          {
+            "metin": "Biventriküler hipertrofi",
+            "renk": "mavi",
+            "tus": false,
+            "not": "Her iki ventrikülde yüklenme olduğundan biventriküler hipertrofi tipiktir. Tek başına tanı koydurmaz."
+          },
+          {
+            "metin": "KY tedavisi → cerrahi",
+            "renk": "yesil",
+            "tus": false,
+            "not": "Kalp yetmezliği diüretik ve destek tedavisiyle kontrol altına alınır; pulmoner vasküler hastalık gelişmeden erken cerrahi düzeltme gerekir. Hipokalsemi ve immün yetmezlik açısından DiGeorge araştırılır."
+          }
+        ],
+        [
+          {
+            "metin": "Artmış",
+            "renk": "mavi",
+            "tus": false,
+            "not": "Pulmoner venler sol atriyum yerine sistemik venöz sisteme açılır; tüm kan sağ kalbe döner ve pulmoner akım artar. Yaşam için ASD ya da PFO gerekir."
+          },
+          {
+            "metin": "Kardan adam",
+            "renk": "mavi",
+            "tus": true,
+            "not": "Suprakardiyak tipte genişlemiş vertikal ven, innominat ven ve süperior vena kava 'kardan adam' görünümü oluşturur. Obstrüktif tipte kalp küçük, akciğerlerde venöz konjesyon vardır."
+          },
+          {
+            "metin": "Sağ aks + sağ VH",
+            "renk": "mavi",
+            "tus": false,
+            "not": "Sağ kalp yüklenmesine bağlı sağ aks sapması ve sağ ventrikül hipertrofisi görülür. EKG ayırıcı tanıda tek başına yeterli değildir."
+          },
+          {
+            "metin": "Obstrüktifte acil cerrahi",
+            "renk": "kirmizi",
+            "tus": true,
+            "not": "Obstrüktif TAPVD yenidoğan döneminde cerrahi acildir; PGE₁'den belirgin yarar beklenmez. Obstrüksiyonsuz formlarda da cerrahi düzeltme gerekir."
+          }
+        ]
+      ],
+      "ortme_sirasi": [
+        "r2c2",
+        "r1c1",
+        "r0c1",
+        "r4c3",
+        "r4c1"
+      ],
+      "sabotajlar": [
+        {
+          "tip": "hucre_takas",
+          "hedef": [
+            "r0c1",
+            "r1c1"
+          ],
+          "dogrusu": "TOF'ta çizme şeklinde kalp, BAT'ta ipe asılı yumurta görülür."
+        },
+        {
+          "tip": "hucre_takas",
+          "hedef": [
+            "r0c2",
+            "r2c2"
+          ],
+          "dogrusu": "Triküspit atrezisinde sol aks, TOF'ta sağ aks sapması vardır."
+        }
+      ]
+    }
+  ],
+  "sorular": [
+    {
+      "id": "q1",
+      "levha": "ped.kvs.konjenital.fetal",
+      "dugumler": [
+        "f10"
+      ],
+      "kok": "Doğumdan 6 saat sonra derin siyanoz gelişen term bebeğin ekokardiyografisinde pulmoner atrezi saptanıyor; pulmoner kan akımı duktus arteriyozusa bağımlı. Bu bebekte ilk yapılması gereken tedavi aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "İndometasin",
+        "Prostaglandin E₁ infüzyonu",
+        "Yüksek akımlı %100 oksijen",
+        "Digoksin",
+        "Furosemid"
+      ],
+      "dogru": 1,
+      "aciklama": "Duktusa bağımlı lezyonda duktusun kapanması ölümcüldür; PGE₁ infüzyonu duktusu açık tutar. İndometasin ve yüksek oksijen duktusun kapanmasını hızlandırır.",
+      "aciklama_yolu": [
+        "f6",
+        "f7",
+        "f10"
+      ],
+      "celdirici_dugum": {
+        "0": "f12",
+        "2": "f9"
+      }
+    },
+    {
+      "id": "q2",
+      "levha": "ped.kvs.konjenital.fetal",
+      "dugumler": [
+        "f7",
+        "f12"
+      ],
+      "kok": "28 haftalık doğan prematüre bebekte 3. günde sol sternal kenarda sürekli üfürüm, sıçrayıcı nabızlar ve artan oksijen gereksinimi gelişiyor; ekokardiyografide hemodinamik olarak anlamlı açık duktus arteriyozus saptanıyor. Duktusun kapanmasını sağlamak için kullanılabilecek ilaç aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "Prostaglandin E₁",
+        "İbuprofen",
+        "Digoksin",
+        "Propranolol",
+        "Adenozin"
+      ],
+      "dogru": 1,
+      "aciklama": "Prematürede açık duktusu kapatmak için prostaglandin sentezini baskılayan ibuprofen ya da indometasin (alternatif olarak parasetamol) kullanılır. PGE₁ tam tersine duktusu açık tutar.",
+      "aciklama_yolu": [
+        "f9",
+        "f7",
+        "f12"
+      ],
+      "celdirici_dugum": {
+        "0": "f10"
+      }
+    },
+    {
+      "id": "q3",
+      "levha": "ped.kvs.konjenital.fetal",
+      "dugumler": [
+        "f2"
+      ],
+      "kok": "Fetal dolaşımı anlatan bir hekim, plasentadan gelen oksijenden zengin kanın bir kısmının karaciğere uğramadan kalbe nasıl ulaştığını soruyor. Bu kanın karaciğeri atlatarak inferior vena kavaya ulaşmasını sağlayan yapı aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "Duktus arteriyozus",
+        "Duktus venozus",
+        "Foramen ovale",
+        "Umbilikal arter",
+        "Portal ven"
+      ],
+      "dogru": 1,
+      "aciklama": "Duktus venozus umbilikal ven kanının bir kısmını karaciğeri atlatarak inferior vena kavaya taşır; doğumdan sonra ligamentum venosum olarak kalır.",
+      "aciklama_yolu": [
+        "f1",
+        "f2",
+        "f3"
+      ],
+      "celdirici_dugum": {
+        "0": "f7",
+        "2": "f4"
+      }
+    },
+    {
+      "id": "q4",
+      "levha": "ped.kvs.konjenital.fetal",
+      "dugumler": [
+        "f4",
+        "f11"
+      ],
+      "kok": "Sağlıklı term yenidoğanda ilk solukla birlikte dolaşımda değişiklikler başlıyor. Foramen ovalenin doğumdan sonra fonksiyonel olarak kapanmasının temel nedeni aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "Sol atriyum basıncının sağ atriyum basıncını aşması",
+        "Artan oksijenin foramen ovale dokusunu doğrudan kasması",
+        "Prostaglandin düzeyinin artması",
+        "Pulmoner vasküler direncin artması",
+        "Duktus venozusun genişlemesi"
+      ],
+      "dogru": 0,
+      "aciklama": "Akciğerlerin açılmasıyla pulmoner venöz dönüş ve sol atriyum basıncı artar, plasental dolaşımın kesilmesiyle sağ atriyum basıncı düşer. Basınç farkı kapakçığı kapatır.",
+      "aciklama_yolu": [
+        "f11",
+        "f4"
+      ],
+      "celdirici_dugum": {
+        "1": "f9",
+        "2": "f10",
+        "4": "f2"
+      }
+    },
+    {
+      "id": "q5",
+      "levha": "ped.kvs.konjenital.fetal",
+      "dugumler": [
+        "f7"
+      ],
+      "kok": "Toraks cerrahisi sırasında aort arkı ile sol pulmoner arterin başlangıcı arasında uzanan fibröz bir bant görülüyor. Bu bant fetal dönemdeki hangi yapının kalıntısıdır?",
+      "secenekler": [
+        "Duktus venozus",
+        "Umbilikal ven",
+        "Duktus arteriyozus",
+        "Foramen ovale",
+        "Umbilikal arter"
+      ],
+      "dogru": 2,
+      "aciklama": "Ligamentum arteriosum duktus arteriyozusun kalıntısıdır. Duktus venozus ligamentum venosum, umbilikal ven ligamentum teres, foramen ovale fossa ovalis, umbilikal arterler medial umbilikal ligament olarak kalır.",
+      "aciklama_yolu": [
+        "f6",
+        "f7",
+        "f8"
+      ],
+      "celdirici_dugum": {
+        "0": "f2",
+        "3": "f4",
+        "4": "f8"
+      }
+    },
+    {
+      "id": "q6",
+      "levha": "ped.kvs.konjenital.siniflama",
+      "dugumler": [
+        "a11"
+      ],
+      "kok": "Doğumdan birkaç saat sonra belirgin siyanoz gelişen term bebekte %100 oksijen verilmesine rağmen oksijen satürasyonu yükselmiyor. Göğüs grafisinde akciğer kanlanması artmış, kalp 'ipe asılı yumurta' görünümünde. En olası tanı aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "Fallot tetralojisi",
+        "Büyük arterlerin transpozisyonu",
+        "Triküspit atrezisi",
+        "Ventriküler septal defekt",
+        "Pulmoner stenoz"
+      ],
+      "dogru": 1,
+      "aciklama": "Siyanoz ve artmış akciğer kanlanması karışım lezyonlarını düşündürür; 'ipe asılı yumurta' BAT'a özgüdür ve BAT yenidoğan döneminin en sık siyanotik KKH'sidir.",
+      "aciklama_yolu": [
+        "a1",
+        "a3",
+        "a7",
+        "a11"
+      ],
+      "celdirici_dugum": {
+        "0": "a10",
+        "2": "a10",
+        "3": "a8",
+        "4": "a9"
+      }
+    },
+    {
+      "id": "q7",
+      "levha": "ped.kvs.konjenital.siniflama",
+      "dugumler": [
+        "a10"
+      ],
+      "kok": "Dört aylık bebek ağlarken dudaklarında morarma nedeniyle getiriliyor. Sol sternal kenarda ejeksiyon üfürümü, EKG'de sağ ventrikül hipertrofisi, göğüs grafisinde azalmış akciğer kanlanması ve 'çizme şeklinde' kalp saptanıyor. En olası tanı aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "Fallot tetralojisi",
+        "TAPVD",
+        "Büyük arterlerin transpozisyonu",
+        "Trunkus arteriyozus",
+        "Atriyal septal defekt"
+      ],
+      "dogru": 0,
+      "aciklama": "Siyanoz, azalmış akciğer kanlanması, sağ ventrikül hipertrofisi ve çizme şeklinde kalp Fallot tetralojisini gösterir. TAPVD, BAT ve trunkusta kanlanma artmıştır.",
+      "aciklama_yolu": [
+        "a1",
+        "a3",
+        "a6",
+        "a10"
+      ],
+      "celdirici_dugum": {
+        "1": "a11",
+        "2": "a11",
+        "3": "a11",
+        "4": "a8"
+      }
+    },
+    {
+      "id": "q8",
+      "levha": "ped.kvs.konjenital.siniflama",
+      "dugumler": [
+        "a8"
+      ],
+      "kok": "Altı haftalık bebek beslenirken terleme, hızlı soluma ve kilo alamama ile getiriliyor. Siyanozu yok; sol alt sternal kenarda pansistolik üfürüm duyuluyor. Göğüs grafisinde kardiyomegali ve artmış akciğer kanlanması var. En olası tanı aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "Fallot tetralojisi",
+        "Ventriküler septal defekt",
+        "Triküspit atrezisi",
+        "Aort koarktasyonu",
+        "Büyük arterlerin transpozisyonu"
+      ],
+      "dogru": 1,
+      "aciklama": "Asiyanotik, akciğer kanlanması artmış ve kalp yetmezliği bulguları olan bebekte soldan sağa şant düşünülür; pansistolik üfürüm VSD'yi gösterir.",
+      "aciklama_yolu": [
+        "a1",
+        "a2",
+        "a4",
+        "a8"
+      ],
+      "celdirici_dugum": {
+        "0": "a10",
+        "2": "a10",
+        "3": "a9",
+        "4": "a11"
+      }
+    },
+    {
+      "id": "q9",
+      "levha": "ped.kvs.konjenital.siniflama",
+      "dugumler": [
+        "a7",
+        "a11"
+      ],
+      "kok": "Yenidoğan döneminde hafif siyanoz, takipne ve kalp yetmezliği bulguları gelişen bebeğin göğüs grafisinde kardiyomegali ve artmış akciğer kanlanması görülüyor. Bu tabloyla en uyumlu KKH aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "Fallot tetralojisi",
+        "Triküspit atrezisi",
+        "Pulmoner atrezi",
+        "Trunkus arteriyozus",
+        "Pulmoner stenoz"
+      ],
+      "dogru": 3,
+      "aciklama": "Siyanoz ile birlikte artmış akciğer kanlanması karışım lezyonlarını (BAT, trunkus, TAPVD) düşündürür. TOF, triküspit ve pulmoner atrezide kanlanma azalmıştır; pulmoner stenoz asiyanotiktir.",
+      "aciklama_yolu": [
+        "a3",
+        "a7",
+        "a11"
+      ],
+      "celdirici_dugum": {
+        "0": "a6",
+        "1": "a6",
+        "2": "a6",
+        "4": "a9"
+      }
+    },
+    {
+      "id": "q10",
+      "levha": "ped.kvs.konjenital.matris",
+      "dugumler": [
+        "r2c2"
+      ],
+      "kok": "İki aylık bebek siyanoz nedeniyle getiriliyor. EKG'de sol aks sapması ve sol ventrikül hipertrofisi saptanıyor; göğüs grafisinde akciğer kanlanması azalmış. En olası tanı aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "Fallot tetralojisi",
+        "Büyük arterlerin transpozisyonu",
+        "Triküspit atrezisi",
+        "Trunkus arteriyozus",
+        "TAPVD"
+      ],
+      "dogru": 2,
+      "aciklama": "Siyanozlu bebekte sol aks sapması ve sol ventrikül hipertrofisi triküspit atrezisini düşündürür. TOF, BAT ve TAPVD'de sağ ventrikül baskındır; trunkusta biventriküler hipertrofi görülür.",
+      "aciklama_yolu": [
+        "r2c0",
+        "r2c2"
+      ],
+      "celdirici_dugum": {
+        "0": "r0c2",
+        "1": "r1c2",
+        "3": "r3c2",
+        "4": "r4c2"
+      }
+    },
+    {
+      "id": "q11",
+      "levha": "ped.kvs.konjenital.matris",
+      "dugumler": [
+        "r1c3"
+      ],
+      "kok": "Doğumdan hemen sonra derin siyanoz gelişen bebekte ekokardiyografide büyük arterlerin transpozisyonu ve sağlam ventriküler septum saptanıyor; atriyal düzeyde karışım çok az. İlk yapılması gereken aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "Prostaglandin E₁ infüzyonu",
+        "İndometasin",
+        "Digoksin",
+        "Propranolol",
+        "Furosemid"
+      ],
+      "dogru": 0,
+      "aciklama": "Paralel dolaşımda yaşam karışıma bağlıdır; PGE₁ ile duktus açık tutulur, yetersizse balon atriyal septostomi yapılır. Kesin tedavi arteriyel switch ameliyatıdır.",
+      "aciklama_yolu": [
+        "r1c0",
+        "r1c3"
+      ],
+      "celdirici_dugum": {
+        "1": "r1c3"
+      }
+    },
+    {
+      "id": "q12",
+      "levha": "ped.kvs.konjenital.matris",
+      "dugumler": [
+        "r4c1"
+      ],
+      "kok": "Beş aylık bebek takipne, beslenme güçlüğü ve hafif siyanozla getiriliyor. Göğüs grafisinde kardiyomegali, artmış akciğer kanlanması ve 'kardan adam' görünümü var. En olası tanı aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "TAPVD (suprakardiyak)",
+        "Fallot tetralojisi",
+        "Triküspit atrezisi",
+        "Büyük arterlerin transpozisyonu",
+        "Aort koarktasyonu"
+      ],
+      "dogru": 0,
+      "aciklama": "'Kardan adam' görünümü suprakardiyak TAPVD'ye özgüdür; genişlemiş vertikal ven, innominat ven ve süperior vena kava bu gölgeyi oluşturur.",
+      "aciklama_yolu": [
+        "r4c0",
+        "r4c1"
+      ],
+      "celdirici_dugum": {
+        "1": "r0c1",
+        "3": "r1c1"
+      }
+    },
+    {
+      "id": "q13",
+      "levha": "ped.kvs.konjenital.matris",
+      "dugumler": [
+        "r0c3"
+      ],
+      "kok": "Fallot tetralojisi tanılı dört aylık bebek ağlama sonrası giderek artan siyanoz, huzursuzluk ve hızlı soluma ile getiriliyor; daha önce duyulan üfürüm belirgin şekilde azalmış. İlk yapılması gereken aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "Bebeği diz-göğüs pozisyonuna getirmek",
+        "Digoksin vermek",
+        "Prostaglandin E₁ başlamak",
+        "İndometasin vermek",
+        "Furosemid vermek"
+      ],
+      "dogru": 0,
+      "aciklama": "Hipersiyanotik atakta çıkış yolu spazmıyla pulmoner akım azalır ve üfürüm kısalır. Diz-göğüs pozisyonu sistemik direnci artırarak sağdan sola şantı azaltır; ardından oksijen, morfin, sıvı ve gerekirse fenilefrin verilir.",
+      "aciklama_yolu": [
+        "r0c0",
+        "r0c3"
+      ],
+      "celdirici_dugum": {
+        "2": "r2c3"
+      }
+    },
+    {
+      "id": "q14",
+      "levha": "ped.kvs.konjenital.matris",
+      "dugumler": [
+        "r3c1",
+        "r3c3"
+      ],
+      "kok": "Trunkus arteriyozus tanısı alan yenidoğan nöbet geçiriyor; serum kalsiyumu düşük, göğüs grafisinde timus gölgesi seçilmiyor. Bu tabloya en sık eşlik eden genetik bozukluk aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "Trizomi 21",
+        "22q11.2 delesyonu",
+        "45,X",
+        "7q11.23 delesyonu",
+        "PTPN11 mutasyonu"
+      ],
+      "dogru": 1,
+      "aciklama": "Konotrunkal anomali, hipokalsemi ve timus hipoplazisi 22q11.2 delesyonunu (DiGeorge) düşündürür; trunkus arteriyozus bu sendromla sık birliktedir.",
+      "aciklama_yolu": [
+        "r3c1",
+        "r3c3"
+      ],
+      "celdirici_dugum": {}
+    }
+  ]
+}

@@ -9,7 +9,6 @@ struct RootView: View {
     @Environment(\.modelContext) private var context
     @StateObject private var klasor = PaketKlasoru()
     @State private var sekme: Sekme = Sekme(rawValue: UserDefaults.standard.string(forKey: "baslangicSekme") ?? "") ?? .bugun
-    @Query private var sorular: [Soru]
 
     var body: some View {
         TabView(selection: $sekme) {
@@ -19,8 +18,7 @@ struct RootView: View {
             LevhaSekmesi()
                 .tabItem { Label("Levha", systemImage: "square.grid.3x3.square") }
                 .tag(Sekme.levha)
-            YerTutucu(baslik: "Soru modu Part 2'de", simge: "questionmark.circle",
-                      aciklama: "\(sorular.count) soru içe aktarıldı. Cevap yolu animasyonlu Soru modu Part 2'de açılacak.")
+            SoruSekmesi()
                 .tabItem { Label("Soru", systemImage: "questionmark.circle") }
                 .tag(Sekme.soru)
             YerTutucu(baslik: "Sor Part 4'te", simge: "bubble.left.and.text.bubble.right",

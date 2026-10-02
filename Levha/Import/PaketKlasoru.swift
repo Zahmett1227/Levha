@@ -95,21 +95,40 @@ final class PaketKlasoru: ObservableObject {
     }
 }
 
-/// İlk açılışta uygulamayla gelen örnek paket(ler)i klasöre koyar ve içe aktarır.
+/// Uygulamayla gelen örnek paketleri klasöre koyar ve içe aktarır. Her dosyanın içerik özeti
+/// saklanır: yeni eklenen ya da yeni sürümle değişen örnek paket bir kez daha yüklenir.
 @MainActor
 enum Baslangic {
+    static let anahtar = "yuklenenOrnekler"
+
     static func calistir(klasor: PaketKlasoru, context: ModelContext) async {
         await klasor.hazirla()
-        let anahtar = "ornekPaketlerYuklendi"
-        guard !UserDefaults.standard.bool(forKey: anahtar) else { return }
-        for url in Bundle.main.urls(forResourcesWithExtension: "json", subdirectory: nil) ?? [] {
+        var yuklenen = UserDefaults.standard.dictionary(forKey: anahtar) as? [String: String] ?? [:]
+        var degisti = false
+        let urller = (Bundle.main.urls(forResourcesWithExtension: "json", subdirectory: nil) ?? [])
+            .sorted { $0.lastPathComponent < $1.lastPathComponent }
+        for url in urller {
             guard let veri = try? Data(contentsOf: url) else { continue }
-            if let kok = klasor.kok, !FileManager.default.fileExists(atPath: kok.appending(path: url.lastPathComponent).path) {
-                _ = try? klasor.yaz(veri, ad: url.lastPathComponent)
-            }
-            _ = PaketIceAktarici.iceAktar(veri: veri, dosyaAdi: url.lastPathComponent, context: context)
+            let ad = url.lastPathComponent
+            let ozet = ozet(veri)
+            guard yuklenen[ad] != ozet else { continue }
+            _ = try? klasor.yaz(veri, ad: ad)
+            _ = PaketIceAktarici.iceAktar(veri: veri, dosyaAdi: ad, context: context)
+            yuklenen[ad] = ozet
+            degisti = true
         }
-        UserDefaults.standard.set(true, forKey: anahtar)
-        klasor.tara()
+        if degisti {
+            UserDefaults.standard.set(yuklenen, forKey: anahtar)
+            klasor.tara()
+        }
+    }
+
+    private static func ozet(_ veri: Data) -> String {
+        var h: UInt64 = 0xcbf29ce484222325
+        for bayt in veri {
+            h ^= UInt64(bayt)
+            h = h &* 0x100000001b3
+        }
+        return String(h, radix: 16)
     }
 }

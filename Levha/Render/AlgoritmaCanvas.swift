@@ -1,18 +1,28 @@
 import SwiftUI
 
-/// Izgara geometrisi. Düzen tamamen JSON'daki [sütun, satır] konumlarından gelir;
+/// Algoritma, yolak ve ağaç: düğümler JSON'daki [sütun, satır] ızgarasına oturur;
 /// motor hiçbir düğümü yeniden yerleştirmez.
-struct AlgoritmaGeometri {
+enum IzgaraStili {
+    case algoritma, yolak, agac
+
+    /// Yolakta aynı satırda yatay oklar sık; sütun arası daha geniş.
+    var yatayBosluk: CGFloat { self == .yolak ? 26 : 12 }
+}
+
+struct IzgaraGeometri {
     let cizim: LevhaCizim
     let boyut: CGSize
+    let stil: IzgaraStili
     let pad: CGFloat = 10
 
     var hucreW: CGFloat { (boyut.width - pad * 2) / CGFloat(cizim.sutun) }
     var hucreH: CGFloat { (boyut.height - pad * 2) / CGFloat(cizim.satir) }
-    var dugumW: CGFloat { max(40, hucreW - 12) }
+    var dugumW: CGFloat { max(40, hucreW - stil.yatayBosluk) }
     /// Satırlar arasında bağlantı etiketleri için ~30 pt kanal bırakılır.
     var dugumH: CGFloat { min(max(34, hucreH - 30), 68) }
     var punto: CGFloat { hucreW >= 100 ? 12.5 : 11 }
+
+    var yerlesikler: [CizimDugumu] { cizim.dugumler.filter { $0.konum.count == 2 } }
 
     func cerceve(_ d: CizimDugumu) -> CGRect {
         CGRect(x: pad + CGFloat(d.sutun) * hucreW + (hucreW - dugumW) / 2,
@@ -20,7 +30,46 @@ struct AlgoritmaGeometri {
                width: dugumW, height: dugumH)
     }
 
-    func kose(_ d: CizimDugumu) -> CGFloat { d.sekil == .surec ? min(22, dugumH / 2) : 10 }
+    func kose(_ d: CizimDugumu) -> CGFloat {
+        switch d.sekil {
+        case .surec: return min(22, dugumH / 2)
+        case .madde: return 4
+        case .durum, .karar: return 10
+        }
+    }
+
+    // MARK: Katmanlar
+
+    /// Ağaçta derinlik (kök 0). Bağlantılar ebeveyn → çocuk yönündedir.
+    var derinlikler: [String: Int] {
+        var ebeveyn: [String: String] = [:]
+        for b in cizim.baglantilar where ebeveyn[b.to] == nil { ebeveyn[b.to] = b.from }
+        var sonuc: [String: Int] = [:]
+        for d in cizim.dugumler {
+            var n = 0
+            var simdiki = d.id
+            var gorulen: Set<String> = [simdiki]
+            while let e = ebeveyn[simdiki], gorulen.insert(e).inserted {
+                n += 1
+                simdiki = e
+            }
+            sonuc[d.id] = n
+        }
+        return sonuc
+    }
+
+    /// Düğümün göründüğü ilk Keşif katmanı.
+    func dugumKatmani(_ d: CizimDugumu, derinlik: [String: Int]) -> Int {
+        stil == .agac && (derinlik[d.id] ?? 0) > 1 ? 2 : 1
+    }
+
+    func baglantiKatmani(_ b: CizimBaglantisi, derinlik: [String: Int]) -> Int {
+        guard stil == .agac else { return 2 }
+        let k = [b.from, b.to].compactMap { id in cizim.dugum(id).map { dugumKatmani($0, derinlik: derinlik) } }
+        return k.max() ?? 1
+    }
+
+    // MARK: Rota
 
     /// `r` satırının altındaki kanalın (iki satır arasındaki boşluğun) orta çizgisi.
     func kanalY(altinda r: Int) -> CGFloat { pad + CGFloat(r + 1) * hucreH }
@@ -62,33 +111,63 @@ struct AlgoritmaGeometri {
                     etiketNoktasi: CGPoint(x: p1.x, y: kanal))
     }
 
-    func baglantilariCiz(_ ctx: inout GraphicsContext) {
-        let dolu = Set(cizim.dugumler.filter { $0.konum.count == 2 }.map(\.konum))
+    // MARK: Çizim
+
+    /// `katman`: yalnız o katmanda beliren bağlantılar; nil ise hepsi. `vurgu`: yalnız kalın vurgulananlar.
+    func baglantilariCiz(_ ctx: inout GraphicsContext, katman: Int?, vurgu: Set<String>?) {
+        let dolu = Set(yerlesikler.map(\.konum))
+        let derinlik = derinlikler
         var etiketler: [(String, CGPoint)] = []
 
         for b in cizim.baglantilar {
+            if let katman, baglantiKatmani(b, derinlik: derinlik) != katman { continue }
+            if let vurgu, !vurgu.contains(b.anahtar) && !vurgu.contains("\(b.to)>\(b.from)") { continue }
             guard let r = rota(b, dolu: dolu), r.noktalar.count >= 2 else { continue }
+            let kalin = vurgu != nil
+            let renk = kalin ? Tema.metin : (b.tip == .inhibe ? Tema.ikincil : Tema.cizgi)
+            let kalinlik: CGFloat = kalin ? 3 : 1.5
+
             var noktalar = r.noktalar
             let uc = noktalar[noktalar.count - 1]
             let onceki = noktalar[noktalar.count - 2]
             let uzunluk = max(0.001, hypot(uc.x - onceki.x, uc.y - onceki.y))
             let yon = CGVector(dx: (uc.x - onceki.x) / uzunluk, dy: (uc.y - onceki.y) / uzunluk)
-            let okBoyu: CGFloat = 7
+            let dik = CGVector(dx: -yon.dy, dy: yon.dx)
+            let okBoyu: CGFloat = b.tip == .inhibe ? 4 : 7
             let taban = CGPoint(x: uc.x - yon.dx * okBoyu, y: uc.y - yon.dy * okBoyu)
             noktalar[noktalar.count - 1] = taban
 
             var yol = Path()
             yol.addLines(noktalar)
-            ctx.stroke(yol, with: .color(Tema.cizgi), style: StrokeStyle(lineWidth: 1.5, lineCap: .round, lineJoin: .round))
+            let cizgiStili = StrokeStyle(lineWidth: kalinlik, lineCap: .round, lineJoin: .round,
+                                         dash: b.tip == .olasi ? [5, 4] : [])
+            ctx.stroke(yol, with: .color(renk), style: cizgiStili)
 
-            var ok = Path()
-            ok.move(to: uc)
-            ok.addLine(to: CGPoint(x: taban.x - yon.dy * 4.5, y: taban.y + yon.dx * 4.5))
-            ok.addLine(to: CGPoint(x: taban.x + yon.dy * 4.5, y: taban.y - yon.dx * 4.5))
-            ok.closeSubpath()
-            ctx.fill(ok, with: .color(Tema.cizgi))
+            if b.tip == .inhibe {
+                // ⊣ : uçta dik çubuk
+                var cubuk = Path()
+                cubuk.move(to: CGPoint(x: taban.x + dik.dx * 7, y: taban.y + dik.dy * 7))
+                cubuk.addLine(to: CGPoint(x: taban.x - dik.dx * 7, y: taban.y - dik.dy * 7))
+                ctx.stroke(cubuk, with: .color(renk), style: StrokeStyle(lineWidth: kalin ? 3.5 : 2.5, lineCap: .round))
+            } else {
+                var ok = Path()
+                ok.move(to: uc)
+                ok.addLine(to: CGPoint(x: taban.x + dik.dx * 4.5, y: taban.y + dik.dy * 4.5))
+                ok.addLine(to: CGPoint(x: taban.x - dik.dx * 4.5, y: taban.y - dik.dy * 4.5))
+                ok.closeSubpath()
+                ctx.fill(ok, with: .color(renk))
+            }
 
-            if !b.etiket.isEmpty { etiketler.append((b.etiket, r.etiketNoktasi)) }
+            if b.tip == .uyarir && !kalin {
+                // ok + "+" rozeti, okun hemen gerisinde
+                let merkez = CGPoint(x: uc.x - yon.dx * 16, y: uc.y - yon.dy * 16)
+                let daire = Path(ellipseIn: CGRect(x: merkez.x - 6.5, y: merkez.y - 6.5, width: 13, height: 13))
+                ctx.fill(daire, with: .color(.white))
+                ctx.stroke(daire, with: .color(RenkSeti.yesil.kenar), lineWidth: 1.5)
+                ctx.draw(ctx.resolve(Text("+").font(.system(size: 11, weight: .heavy)).foregroundColor(RenkSeti.yesil.kenar)), at: merkez)
+            }
+
+            if !b.etiket.isEmpty && !kalin { etiketler.append((b.etiket, r.etiketNoktasi)) }
         }
 
         // Etiketler çizgilerin üstünde, beyaz hap içinde.
@@ -103,8 +182,9 @@ struct AlgoritmaGeometri {
         }
     }
 
-    func dugumleriCiz(_ ctx: inout GraphicsContext) {
-        for d in cizim.dugumler where d.konum.count == 2 {
+    func dugumleriCiz(_ ctx: inout GraphicsContext, katman: Int) {
+        let derinlik = derinlikler
+        for d in yerlesikler where dugumKatmani(d, derinlik: derinlik) == katman {
             let yol = Path(roundedRect: cerceve(d), cornerRadius: kose(d), style: .continuous)
             ctx.fill(yol, with: .color(d.renk.zemin))
             ctx.stroke(yol, with: .color(d.renk.kenar), lineWidth: 1.5)
@@ -113,31 +193,46 @@ struct AlgoritmaGeometri {
 
     /// TUS'un sevdiği düğüm: 3 px kenarlık.
     func tusCiz(_ ctx: inout GraphicsContext) {
-        for d in cizim.dugumler where d.konum.count == 2 && d.tus {
+        for d in yerlesikler where d.tus {
             ctx.stroke(Path(roundedRect: cerceve(d), cornerRadius: kose(d), style: .continuous),
                        with: .color(d.renk.kenar), lineWidth: 3)
         }
     }
 }
 
-struct AlgoritmaCanvas: View {
+/// Algoritma, yolak ve ağacın ortak tuvali.
+struct IzgaraCanvas: View {
     let cizim: LevhaCizim
     let durum: LevhaGorunumDurumu
     let boyut: CGSize
+    let stil: IzgaraStili
     let dokun: (String) -> Void
 
     var body: some View {
-        let g = AlgoritmaGeometri(cizim: cizim, boyut: boyut)
-        let dugumler = cizim.dugumler.filter { $0.konum.count == 2 }
+        let g = IzgaraGeometri(cizim: cizim, boyut: boyut, stil: stil)
+        let derinlik = g.derinlikler
 
         ZStack(alignment: .topLeading) {
-            Canvas { ctx, _ in g.baglantilariCiz(&ctx) }
+            if stil == .agac {
+                // Ağaçta kenarlar düğümlerle birlikte belirir: 1 = kök + 1. seviye, 2 = alt seviyeler.
+                Canvas { ctx, _ in g.baglantilariCiz(&ctx, katman: 1, vurgu: nil) }
+                Canvas { ctx, _ in g.baglantilariCiz(&ctx, katman: 2, vurgu: nil) }
+                    .katmanda(durum.katman >= 2)
+            } else {
+                Canvas { ctx, _ in g.baglantilariCiz(&ctx, katman: 2, vurgu: nil) }
+                    .katmanda(durum.katman >= 2)
+            }
+            if !durum.kalinBaglantilar.isEmpty {
+                Canvas { ctx, _ in g.baglantilariCiz(&ctx, katman: nil, vurgu: durum.kalinBaglantilar) }
+                    .transition(.opacity)
+            }
+            Canvas { ctx, _ in g.dugumleriCiz(&ctx, katman: 1) }
+            Canvas { ctx, _ in g.dugumleriCiz(&ctx, katman: 2) }
                 .katmanda(durum.katman >= 2)
-            Canvas { ctx, _ in g.dugumleriCiz(&ctx) }
             Canvas { ctx, _ in g.tusCiz(&ctx) }
                 .katmanda(durum.katman >= 3)
 
-            ForEach(dugumler) { d in
+            ForEach(g.yerlesikler) { d in
                 let f = g.cerceve(d)
                 Button { dokun(d.id) } label: {
                     Text(d.etiket)
@@ -154,17 +249,29 @@ struct AlgoritmaCanvas: View {
                         .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
-                .allowsHitTesting(durum.dugumlerDokunulabilir)
+                .katmanda(durum.katman >= g.dugumKatmani(d, derinlik: derinlik))
+                .allowsHitTesting(durum.dokunulabilir)
                 .position(x: f.midX, y: f.midY)
                 .accessibilityLabel(d.etiket)
                 .accessibilityValue(d.tus ? "TUS'un sevdiği düğüm" : "")
-                .accessibilityHint(durum.dugumlerDokunulabilir ? "Notu göster" : "")
             }
 
-            DugumUstKatmani(alanlar: dugumler.map { DugumAlani(id: $0.id, cerceve: g.cerceve($0), kose: g.kose($0)) },
+            DugumUstKatmani(alanlar: g.yerlesikler.map { DugumAlani(id: $0.id, cerceve: g.cerceve($0), kose: g.kose($0)) },
                             durum: durum, boyut: boyut, dokun: dokun)
         }
         .frame(width: boyut.width, height: boyut.height, alignment: .topLeading)
         .animation(.easeOut(duration: 0.25), value: durum.katman)
+        .animation(.easeOut(duration: 0.25), value: durum.kalinBaglantilar)
+    }
+}
+
+struct AlgoritmaCanvas: View {
+    let cizim: LevhaCizim
+    let durum: LevhaGorunumDurumu
+    let boyut: CGSize
+    let dokun: (String) -> Void
+
+    var body: some View {
+        IzgaraCanvas(cizim: cizim, durum: durum, boyut: boyut, stil: .algoritma, dokun: dokun)
     }
 }

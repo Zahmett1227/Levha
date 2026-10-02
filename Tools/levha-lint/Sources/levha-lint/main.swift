@@ -7,20 +7,22 @@ guard !dosyalar.isEmpty else {
     exit(2)
 }
 
-var toplam = 0
+var hataSayisi = 0
+var uyariSayisi = 0
 for yol in dosyalar {
     let url = URL(fileURLWithPath: yol)
     guard let veri = try? Data(contentsOf: url) else {
         print("\(yol): dosya okunamadı")
-        toplam += 1
+        hataSayisi += 1
         continue
     }
     let sonuc = LevhaLint.denetle(veri: veri)
-    for bulgu in sonuc.bulgular {
-        print("\(url.lastPathComponent): \(bulgu)")
-    }
-    toplam += sonuc.bulgular.count
+    for bulgu in sonuc.hatalar { print("\(url.lastPathComponent): \(bulgu)") }
+    for bulgu in sonuc.uyarilar { print("\(url.lastPathComponent): uyarı: \(bulgu)") }
+    hataSayisi += sonuc.hatalar.count
+    uyariSayisi += sonuc.uyarilar.count
 }
 
-print(toplam == 0 ? "OK" : "\(toplam) hata")
-exit(toplam == 0 ? 0 : 1)
+let uyariEki = uyariSayisi > 0 ? " · \(uyariSayisi) uyarı" : ""
+print(hataSayisi == 0 ? "OK\(uyariEki)" : "\(hataSayisi) hata\(uyariEki)")
+exit(hataSayisi == 0 ? 0 : 1)

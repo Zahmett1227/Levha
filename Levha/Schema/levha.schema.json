@@ -1,161 +1,827 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "levha.schema.json",
-  "title": "LEVHA paketi (şema v1)",
-  "description": "Bir paket = bir alt konu = bir .json dosyası. Yapısal kurallar (ızgara içinde/çakışmasız konum, referans bütünlüğü, etiket ≤ 28 karakter, düğüm sayıları) levha-lint ile denetlenir.",
+  "title": "LEVHA paketi (şema v2)",
+  "description": "Bir paket = bir alt konu = bir .json dosyası. Yapısal kurallar (ızgara içinde/çakışmasız konum, referans bütünlüğü, etiket ≤ 28 karakter, düğüm sayıları) levha-lint ile denetlenir. Sürüm 1 paketler okunmaya devam eder.",
   "type": "object",
-  "required": ["sema_surumu", "paket_id", "ders", "bolum", "alt_konu", "levhalar"],
+  "required": [
+    "sema_surumu",
+    "paket_id",
+    "ders",
+    "bolum",
+    "alt_konu",
+    "levhalar"
+  ],
   "properties": {
-    "sema_surumu": { "const": 1 },
-    "paket_id": { "type": "string", "minLength": 1, "examples": ["ped.neo.sarilik"] },
-    "ders": { "type": "string", "minLength": 1 },
-    "bolum": { "type": "string", "minLength": 1 },
-    "alt_konu": { "type": "string", "minLength": 1 },
-    "levhalar": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/levha" } },
-    "sorular": { "type": "array", "items": { "$ref": "#/$defs/soru" } }
+    "sema_surumu": {
+      "enum": [
+        1,
+        2
+      ]
+    },
+    "paket_id": {
+      "type": "string",
+      "minLength": 1,
+      "examples": [
+        "ped.neo.sarilik"
+      ]
+    },
+    "ders": {
+      "type": "string",
+      "minLength": 1
+    },
+    "bolum": {
+      "type": "string",
+      "minLength": 1
+    },
+    "alt_konu": {
+      "type": "string",
+      "minLength": 1
+    },
+    "levhalar": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/levha"
+      }
+    },
+    "sorular": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/soru"
+      }
+    }
   },
   "$defs": {
-    "renk": { "enum": ["kirmizi", "mavi", "yesil", "sari", "gri"] },
-    "sekil": { "enum": ["durum", "karar", "surec"] },
-    "etiket": { "type": "string", "minLength": 1, "maxLength": 28 },
-
+    "renk": {
+      "enum": [
+        "kirmizi",
+        "mavi",
+        "yesil",
+        "sari",
+        "gri"
+      ]
+    },
+    "sekil": {
+      "enum": [
+        "durum",
+        "karar",
+        "surec",
+        "madde"
+      ],
+      "description": "madde = dikdörtgen (yolak), surec = yuvarlak (enzim/ilaç), karar = KARAR etiketli"
+    },
+    "etiket": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 28
+    },
     "levha": {
       "type": "object",
-      "required": ["id", "tip", "baslik", "akilda_kalan"],
+      "required": [
+        "id",
+        "tip",
+        "baslik",
+        "akilda_kalan"
+      ],
       "properties": {
-        "id": { "type": "string", "minLength": 1 },
-        "tip": { "enum": ["algoritma", "matris", "sayi_cetveli", "zaman_cizelgesi", "yolak", "agac", "vucut_haritasi"] },
-        "baslik": { "type": "string" },
-        "akilda_kalan": { "type": "string" },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "tip": {
+          "enum": [
+            "algoritma",
+            "matris",
+            "sayi_cetveli",
+            "zaman_cizelgesi",
+            "yolak",
+            "agac",
+            "vucut_haritasi"
+          ]
+        },
+        "baslik": {
+          "type": "string"
+        },
+        "akilda_kalan": {
+          "type": "string"
+        },
         "duzen": {
           "type": "object",
-          "required": ["izgara"],
+          "required": [
+            "izgara"
+          ],
           "properties": {
             "izgara": {
               "description": "[sütun sayısı (2–4), satır sayısı (2–6)]",
-              "type": "array", "prefixItems": [
-                { "type": "integer", "minimum": 2, "maximum": 4 },
-                { "type": "integer", "minimum": 2, "maximum": 6 }
-              ], "minItems": 2, "maxItems": 2
+              "type": "array",
+              "prefixItems": [
+                {
+                  "type": "integer",
+                  "minimum": 2,
+                  "maximum": 4
+                },
+                {
+                  "type": "integer",
+                  "minimum": 2,
+                  "maximum": 6
+                }
+              ],
+              "minItems": 2,
+              "maxItems": 2
             },
-            "sabit": { "type": "boolean" }
-          }
-        },
-        "dugumler": { "type": "array", "items": { "$ref": "#/$defs/dugum" } },
-        "baglantilar": { "type": "array", "items": { "$ref": "#/$defs/baglanti" } },
-        "ortme_sirasi": {
-          "description": "Örtme modunda gizlenecek düğümler, öncelik sırasıyla; ilk 3'ü varsayılan maske. Matris hücreleri r{satır}c{sütun}.",
-          "type": "array", "items": { "type": "string" }
-        },
-        "sabotajlar": {
-          "description": "Part 2'de yorumlanır; şimdilik ham saklanır.",
-          "type": "array",
-          "items": {
-            "type": "object",
-            "required": ["tip"],
-            "properties": {
-              "tip": { "type": "string" },
-              "hedef": { "type": "array", "items": { "type": "string" } },
-              "dogrusu": { "type": "string" }
+            "sabit": {
+              "type": "boolean"
             }
           }
         },
-        "satirlar": { "type": "array", "items": { "type": "string" } },
-        "sutunlar": { "type": "array", "items": { "type": "string" } },
+        "dugumler": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/dugum"
+          }
+        },
+        "baglantilar": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/baglanti"
+          }
+        },
+        "ortme_sirasi": {
+          "description": "Örtme modunda gizlenecek düğümler, öncelik sırasıyla; ilk 3'ü varsayılan maske. Matris hücreleri r{satır}c{sütun}.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sabotajlar": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/sabotaj"
+          },
+          "description": "Yazılmış sabotajlar; yoksa uygulama tip bazlı üretir."
+        },
+        "satirlar": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "sutunlar": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "hucreler": {
           "description": "satirlar.count × sutunlar.count; hücre id'si r{satır}c{sütun} (0 tabanlı).",
-          "type": "array", "items": { "type": "array", "items": { "$ref": "#/$defs/hucre" } }
+          "type": "array",
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/hucre"
+            }
+          }
         },
         "eksen": {
           "type": "object",
-          "required": ["min", "max", "birim"],
-          "properties": { "min": { "type": "number" }, "max": { "type": "number" }, "birim": { "type": "string" } }
+          "required": [
+            "min",
+            "max",
+            "birim"
+          ],
+          "properties": {
+            "min": {
+              "type": "number"
+            },
+            "max": {
+              "type": "number"
+            },
+            "birim": {
+              "type": "string",
+              "description": "zaman_cizelgesi için gun | hafta | ay | yil"
+            }
+          }
         },
-        "isaretler": { "type": "array", "items": { "$ref": "#/$defs/isaret" } }
+        "isaretler": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/isaret"
+          }
+        },
+        "seritler": {
+          "type": "array",
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "ad"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "ad": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "olaylar": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/olay"
+          }
+        },
+        "bolgeler": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/bolgeIsareti"
+          }
+        }
       },
       "allOf": [
-        { "if": { "properties": { "tip": { "const": "algoritma" } } },
-          "then": { "required": ["duzen", "dugumler"], "properties": { "dugumler": { "minItems": 6, "maxItems": 20 } } } },
-        { "if": { "properties": { "tip": { "const": "matris" } } },
-          "then": { "required": ["satirlar", "sutunlar", "hucreler"] } },
-        { "if": { "properties": { "tip": { "const": "sayi_cetveli" } } },
-          "then": { "required": ["eksen", "isaretler"], "properties": { "isaretler": { "minItems": 6, "maxItems": 20 } } } }
+        {
+          "if": {
+            "properties": {
+              "tip": {
+                "const": "algoritma"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "duzen",
+              "dugumler"
+            ],
+            "properties": {
+              "dugumler": {
+                "minItems": 6,
+                "maxItems": 20
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "tip": {
+                "const": "matris"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "satirlar",
+              "sutunlar",
+              "hucreler"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "tip": {
+                "const": "sayi_cetveli"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "eksen",
+              "isaretler"
+            ],
+            "properties": {
+              "isaretler": {
+                "minItems": 6,
+                "maxItems": 20
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "tip": {
+                "enum": [
+                  "yolak",
+                  "agac"
+                ]
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "duzen",
+              "dugumler"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "tip": {
+                "const": "zaman_cizelgesi"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "eksen",
+              "seritler",
+              "olaylar"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "tip": {
+                "const": "vucut_haritasi"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "bolgeler"
+            ]
+          }
+        }
       ]
     },
-
     "dugum": {
       "type": "object",
-      "required": ["id", "etiket"],
+      "required": [
+        "id",
+        "etiket"
+      ],
       "properties": {
-        "id": { "type": "string", "minLength": 1 },
-        "etiket": { "$ref": "#/$defs/etiket" },
-        "sekil": { "$ref": "#/$defs/sekil", "default": "durum" },
-        "renk": { "$ref": "#/$defs/renk", "default": "gri" },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "etiket": {
+          "$ref": "#/$defs/etiket"
+        },
+        "sekil": {
+          "$ref": "#/$defs/sekil",
+          "default": "durum"
+        },
+        "renk": {
+          "$ref": "#/$defs/renk",
+          "default": "gri"
+        },
         "konum": {
           "description": "[sütun, satır], 0 tabanlı; algoritmada zorunlu.",
-          "type": "array", "items": { "type": "integer", "minimum": 0 }, "minItems": 2, "maxItems": 2
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "minItems": 2,
+          "maxItems": 2
         },
-        "tus": { "type": "boolean", "default": false, "description": "TUS'un sevdiği düğüm: 3 px kenarlık." },
-        "not": { "type": "string", "description": "2–4 cümle; düğüme dokununca açılır." }
+        "tus": {
+          "type": "boolean",
+          "default": false,
+          "description": "TUS'un sevdiği düğüm: 3 px kenarlık."
+        },
+        "not": {
+          "type": "string",
+          "description": "2–4 cümle; düğüme dokununca açılır."
+        },
+        "ebeveyn": {
+          "type": "string",
+          "description": "ağaç: bağlantı verilmezse kenar bu alandan çizilir"
+        }
       }
     },
-
     "baglanti": {
       "type": "object",
-      "required": ["from", "to"],
+      "required": [
+        "from",
+        "to"
+      ],
       "properties": {
-        "from": { "type": "string" },
-        "to": { "type": "string" },
-        "etiket": { "type": "string" }
+        "from": {
+          "type": "string"
+        },
+        "to": {
+          "type": "string"
+        },
+        "etiket": {
+          "type": "string"
+        },
+        "tip": {
+          "enum": [
+            "normal",
+            "inhibe",
+            "uyarir",
+            "olasi"
+          ],
+          "default": "normal",
+          "description": "normal: ok · inhibe: uçta ⊣ · uyarir: ok + '+' rozeti · olasi: kesikli çizgi"
+        }
       }
     },
-
     "hucre": {
       "type": "object",
-      "required": ["metin"],
+      "required": [
+        "metin"
+      ],
       "properties": {
-        "metin": { "$ref": "#/$defs/etiket" },
-        "renk": { "$ref": "#/$defs/renk", "default": "gri" },
-        "tus": { "type": "boolean", "default": false },
-        "not": { "type": "string" }
+        "metin": {
+          "$ref": "#/$defs/etiket"
+        },
+        "renk": {
+          "$ref": "#/$defs/renk",
+          "default": "gri"
+        },
+        "tus": {
+          "type": "boolean",
+          "default": false
+        },
+        "not": {
+          "type": "string"
+        }
       }
     },
-
     "isaret": {
       "type": "object",
-      "required": ["id", "etiket"],
+      "required": [
+        "id",
+        "etiket"
+      ],
       "properties": {
-        "id": { "type": "string", "minLength": 1 },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
         "deger": {
           "type": "number",
           "description": "Eksen aralığında olmalı. Boş bırakılırsa işaret sabit bir sayıya bağlanmaz; 'nomograma bağlı' şeridinde çizilir."
         },
-        "etiket": { "$ref": "#/$defs/etiket" },
-        "renk": { "$ref": "#/$defs/renk", "default": "gri" },
-        "tus": { "type": "boolean", "default": false },
-        "not": { "type": "string" }
+        "etiket": {
+          "$ref": "#/$defs/etiket"
+        },
+        "renk": {
+          "$ref": "#/$defs/renk",
+          "default": "gri"
+        },
+        "tus": {
+          "type": "boolean",
+          "default": false
+        },
+        "not": {
+          "type": "string"
+        }
       }
     },
-
     "soru": {
       "type": "object",
-      "required": ["id", "levha", "kok", "secenekler", "dogru", "aciklama"],
+      "required": [
+        "id",
+        "levha",
+        "kok",
+        "secenekler",
+        "dogru",
+        "aciklama"
+      ],
       "properties": {
-        "id": { "type": "string", "minLength": 1 },
-        "levha": { "type": "string", "description": "Bu paketteki bir levhanın id'si." },
-        "dugumler": { "type": "array", "items": { "type": "string" } },
-        "kok": { "type": "string", "minLength": 1 },
-        "secenekler": { "type": "array", "items": { "type": "string" }, "minItems": 5, "maxItems": 5 },
-        "dogru": { "type": "integer", "minimum": 0, "maximum": 4 },
-        "aciklama": { "type": "string" },
-        "aciklama_yolu": { "type": "array", "items": { "type": "string" } },
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "levha": {
+          "type": "string",
+          "description": "Bu paketteki bir levhanın id'si."
+        },
+        "dugumler": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "kok": {
+          "type": "string",
+          "minLength": 1
+        },
+        "secenekler": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 5,
+          "maxItems": 5
+        },
+        "dogru": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        },
+        "aciklama": {
+          "type": "string"
+        },
+        "aciklama_yolu": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "celdirici_dugum": {
           "description": "{\"seçenek indeksi\": \"düğüm id\"} — çeldiriciyi açıklayan düğüm.",
           "type": "object",
-          "propertyNames": { "pattern": "^[0-4]$" },
-          "additionalProperties": { "type": "string" }
+          "propertyNames": {
+            "pattern": "^[0-4]$"
+          },
+          "additionalProperties": {
+            "type": "string"
+          }
         }
       }
+    },
+    "bolge": {
+      "enum": [
+        "bas",
+        "yuz",
+        "goz",
+        "kulak",
+        "agiz",
+        "boyun",
+        "gogus",
+        "kalp",
+        "karin",
+        "karaciger",
+        "dalak",
+        "bobrek",
+        "genital",
+        "kol",
+        "el",
+        "bacak",
+        "ayak",
+        "deri",
+        "eklem",
+        "omurga"
+      ]
+    },
+    "olay": {
+      "type": "object",
+      "required": [
+        "id",
+        "serit",
+        "bas",
+        "etiket"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "serit": {
+          "type": "string"
+        },
+        "bas": {
+          "type": "number"
+        },
+        "bit": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "description": "Doluysa aralık çubuğu, boşsa nokta işareti."
+        },
+        "etiket": {
+          "$ref": "#/$defs/etiket"
+        },
+        "renk": {
+          "$ref": "#/$defs/renk"
+        },
+        "tus": {
+          "type": "boolean"
+        },
+        "not": {
+          "type": "string"
+        }
+      }
+    },
+    "bolgeIsareti": {
+      "type": "object",
+      "required": [
+        "id",
+        "bolge",
+        "etiket"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "bolge": {
+          "$ref": "#/$defs/bolge"
+        },
+        "etiket": {
+          "$ref": "#/$defs/etiket"
+        },
+        "renk": {
+          "$ref": "#/$defs/renk"
+        },
+        "tus": {
+          "type": "boolean"
+        },
+        "not": {
+          "type": "string"
+        }
+      }
+    },
+    "sabotaj": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "tip",
+            "hedef",
+            "dogrusu"
+          ],
+          "properties": {
+            "tip": {
+              "const": "etiket_takas"
+            },
+            "hedef": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "dogrusu": {
+              "type": "string",
+              "description": "Tek cümle; hata bulununca gösterilir."
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "tip",
+            "hedef",
+            "dogrusu",
+            "yanlis_deger"
+          ],
+          "properties": {
+            "tip": {
+              "const": "deger_kaydir"
+            },
+            "hedef": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1,
+              "maxItems": 1
+            },
+            "dogrusu": {
+              "type": "string",
+              "description": "Tek cümle; hata bulununca gösterilir."
+            },
+            "yanlis_deger": {
+              "type": "number"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "tip",
+            "hedef",
+            "dogrusu",
+            "yanlis_renk"
+          ],
+          "properties": {
+            "tip": {
+              "const": "renk_degistir"
+            },
+            "hedef": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1,
+              "maxItems": 1
+            },
+            "dogrusu": {
+              "type": "string",
+              "description": "Tek cümle; hata bulununca gösterilir."
+            },
+            "yanlis_renk": {
+              "$ref": "#/$defs/renk"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "tip",
+            "hedef",
+            "dogrusu"
+          ],
+          "properties": {
+            "tip": {
+              "const": "baglanti_ters"
+            },
+            "hedef": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "dogrusu": {
+              "type": "string",
+              "description": "Tek cümle; hata bulununca gösterilir."
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "tip",
+            "hedef",
+            "dogrusu"
+          ],
+          "properties": {
+            "tip": {
+              "const": "hucre_takas"
+            },
+            "hedef": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "dogrusu": {
+              "type": "string",
+              "description": "Tek cümle; hata bulununca gösterilir."
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "tip",
+            "hedef",
+            "dogrusu"
+          ],
+          "properties": {
+            "tip": {
+              "const": "sira_boz"
+            },
+            "hedef": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 2,
+              "maxItems": 2
+            },
+            "dogrusu": {
+              "type": "string",
+              "description": "Tek cümle; hata bulununca gösterilir."
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": [
+            "tip",
+            "hedef",
+            "dogrusu",
+            "yanlis_bolge"
+          ],
+          "properties": {
+            "tip": {
+              "const": "bolge_kaydir"
+            },
+            "hedef": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 1,
+              "maxItems": 1
+            },
+            "dogrusu": {
+              "type": "string",
+              "description": "Tek cümle; hata bulununca gösterilir."
+            },
+            "yanlis_bolge": {
+              "$ref": "#/$defs/bolge"
+            }
+          }
+        }
+      ]
     }
   }
 }

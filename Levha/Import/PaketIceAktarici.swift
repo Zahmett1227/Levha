@@ -52,7 +52,7 @@ enum PaketIceAktarici {
         // Sorular her zaman yeniden yazılır.
         for s in paket.sorular { context.delete(s) }
         for (i, sj) in (json.sorular ?? []).enumerated() {
-            let s = Soru(sj, sira: i)
+            let s = Soru(sj, paketId: pid, sira: i)
             context.insert(s)
             s.paket = paket
         }
@@ -77,8 +77,8 @@ enum PaketIceAktarici {
 
         if let mevcut = try? context.fetch(FetchDescriptor<Levha>(predicate: #Predicate { $0.id == lid })).first {
             levha = mevcut
-            // Sabit konum kuralı: aynı id'li algoritma levhasının yerleşimi değişmez.
-            if mevcut.tip == lj.tip.rawValue, lj.tip == .algoritma {
+            // Sabit konum kuralı: aynı id'li ızgara levhasının (algoritma, yolak, ağaç) yerleşimi değişmez.
+            if mevcut.tip == lj.tip.rawValue, lj.tip.izgaraTabanli {
                 for d in mevcut.dugumler { eskiKonumlar[d.id] = d.konum }
                 eskiIzgara = mevcut.izgara
                 eskiImza = mevcut.duzenImzasi
@@ -100,6 +100,8 @@ enum PaketIceAktarici {
         levha.eksenMin = lj.eksen?.min ?? 0
         levha.eksenMax = lj.eksen?.max ?? 1
         levha.eksenBirim = lj.eksen?.birim ?? ""
+        levha.seritIdleri = lj.seritler?.map(\.id)
+        levha.seritAdlari = lj.seritler?.map(\.ad)
         levha.sabotajlar = lj.sabotajlar.flatMap { try? JSONEncoder().encode($0) }
         levha.hamJSON = ham
 
@@ -127,11 +129,14 @@ enum PaketIceAktarici {
         for (i, d) in dugumler.enumerated() {
             let dugum = Dugum(id: d.id, etiket: d.etiket, sekil: d.sekil, renk: d.renk, konum: d.konum,
                               tus: d.tus, not: d.not, deger: d.deger, sira: i)
+            dugum.bit = d.bit
+            dugum.serit = d.serit
+            dugum.bolge = d.bolge
             context.insert(dugum)
             dugum.levha = levha
         }
-        for (i, b) in (lj.baglantilar ?? []).enumerated() {
-            let bag = Baglanti(from: b.from, to: b.to, etiket: b.etiket ?? "", sira: i)
+        for (i, b) in baglantiListesi(lj).enumerated() {
+            let bag = Baglanti(from: b.from, to: b.to, etiket: b.etiket ?? "", tip: b.tip?.rawValue, sira: i)
             context.insert(bag)
             bag.levha = levha
         }
@@ -147,6 +152,22 @@ enum PaketIceAktarici {
         var tus: Bool
         var not: String
         var deger: Double?
+        var bit: Double?
+        var serit: String?
+        var bolge: String?
+    }
+
+    /// Ağaçta bağlantısı verilmemiş her `ebeveyn` ilişkisi normal bir kenara dönüşür.
+    private static func baglantiListesi(_ lj: LevhaJSON) -> [BaglantiJSON] {
+        var liste = lj.baglantilar ?? []
+        guard lj.tip == .agac else { return liste }
+        let mevcut = Set(liste.map { "\($0.from)>\($0.to)" })
+        for d in lj.dugumler ?? [] {
+            if let e = d.ebeveyn, !mevcut.contains("\(e)>\(d.id)") {
+                liste.append(BaglantiJSON(from: e, to: d.id, etiket: nil, tip: nil))
+            }
+        }
+        return liste
     }
 
     /// Her tipi ortak düğüm listesine indirger: matris hücreleri ve cetvel işaretleri de düğümdür.
@@ -167,7 +188,17 @@ enum PaketIceAktarici {
                 DugumTaslagi(id: $0.id, etiket: $0.etiket, sekil: DugumSekli.durum.rawValue, renk: ($0.renk ?? .gri).rawValue,
                              konum: [], tus: $0.tus ?? false, not: $0.not ?? "", deger: $0.deger)
             }
-        default:
+        case .zaman_cizelgesi:
+            return (lj.olaylar ?? []).map {
+                DugumTaslagi(id: $0.id, etiket: $0.etiket, sekil: DugumSekli.durum.rawValue, renk: ($0.renk ?? .gri).rawValue,
+                             konum: [], tus: $0.tus ?? false, not: $0.not ?? "", deger: $0.bas, bit: $0.bit, serit: $0.serit)
+            }
+        case .vucut_haritasi:
+            return (lj.bolgeler ?? []).map {
+                DugumTaslagi(id: $0.id, etiket: $0.etiket, sekil: DugumSekli.durum.rawValue, renk: ($0.renk ?? .gri).rawValue,
+                             konum: [], tus: $0.tus ?? false, not: $0.not ?? "", deger: nil, bolge: $0.bolge.rawValue)
+            }
+        case .algoritma, .yolak, .agac:
             return (lj.dugumler ?? []).map {
                 DugumTaslagi(id: $0.id, etiket: $0.etiket, sekil: ($0.sekil ?? .durum).rawValue, renk: ($0.renk ?? .gri).rawValue,
                              konum: $0.konum ?? [], tus: $0.tus ?? false, not: $0.not ?? "", deger: nil)
@@ -190,6 +221,11 @@ enum PaketIceAktarici {
             parcalar += dugumler.map { "\($0.id)@\($0.deger.map { "\($0)" } ?? "-")" }.sorted()
         case .matris:
             parcalar += (lj.satirlar ?? []) + (lj.sutunlar ?? [])
+        case .zaman_cizelgesi:
+            parcalar.append("\(lj.eksen?.min ?? 0)-\(lj.eksen?.max ?? 0)")
+            parcalar += dugumler.map { "\($0.id)@\($0.serit ?? "")@\($0.deger ?? 0)-\($0.bit.map { "\($0)" } ?? "")" }.sorted()
+        case .vucut_haritasi:
+            parcalar += dugumler.map { "\($0.id)@\($0.bolge ?? "")" }
         default:
             parcalar += dugumler.map { "\($0.id)@\($0.konum.map(String.init).joined(separator: ","))" }.sorted()
         }

@@ -1,6 +1,6 @@
 import Foundation
 
-// Şema v1'in Codable karşılığı. Alan adları JSON anahtarlarıyla birebir aynıdır.
+// Şema v2'nin Codable karşılığı (v1 paketler de okunur). Alan adları JSON anahtarlarıyla birebir aynıdır.
 // Bu dosya hem levha-lint'te hem de iOS uygulamasında derlenir.
 
 public enum LevhaTipi: String, Codable, CaseIterable {
@@ -20,18 +20,100 @@ public enum LevhaTipi: String, Codable, CaseIterable {
         }
     }
 
-    /// Part 1'de render motorunun çizebildiği tipler.
-    public var cizilebilir: Bool { self == .algoritma || self == .matris || self == .sayi_cetveli }
+    /// Render motorunun çizebildiği tipler (Part 2'den itibaren hepsi).
+    public var cizilebilir: Bool { true }
+
+    /// Düğümleri [sütun, satır] ızgarasına yerleşen tipler; bunlarda düzen sabittir.
+    public var izgaraTabanli: Bool { self == .algoritma || self == .yolak || self == .agac }
 }
 
 public enum DugumSekli: String, Codable, CaseIterable {
-    case durum, karar, surec
+    case durum, karar, surec, madde
     public init(from decoder: Decoder) throws { self = try semaEnumCoz(decoder) }
 }
 
 public enum RenkAdi: String, Codable, CaseIterable {
     case kirmizi, mavi, yesil, sari, gri
     public init(from decoder: Decoder) throws { self = try semaEnumCoz(decoder) }
+}
+
+public enum BaglantiTipi: String, Codable, CaseIterable {
+    /// ok
+    case normal
+    /// uçta ⊣ çubuğu
+    case inhibe
+    /// ok + "+" rozeti
+    case uyarir
+    /// kesikli çizgi + ok
+    case olasi
+    public init(from decoder: Decoder) throws { self = try semaEnumCoz(decoder) }
+}
+
+public enum SabotajTipi: String, Codable, CaseIterable {
+    case etiket_takas, deger_kaydir, renk_degistir, baglanti_ters, hucre_takas, sira_boz, bolge_kaydir
+
+    /// `hedef` dizisinde beklenen düğüm sayısı.
+    public var hedefSayisi: Int {
+        switch self {
+        case .etiket_takas, .baglanti_ters, .hucre_takas, .sira_boz: return 2
+        case .deger_kaydir, .renk_degistir, .bolge_kaydir: return 1
+        }
+    }
+
+    public func uygun(_ tip: LevhaTipi) -> Bool {
+        switch self {
+        case .etiket_takas: return tip != .matris
+        case .renk_degistir: return true
+        case .baglanti_ters: return tip.izgaraTabanli
+        case .hucre_takas: return tip == .matris
+        case .deger_kaydir: return tip == .sayi_cetveli || tip == .zaman_cizelgesi
+        case .sira_boz: return tip == .zaman_cizelgesi
+        case .bolge_kaydir: return tip == .vucut_haritasi
+        }
+    }
+}
+
+/// Vücut haritasındaki sabit bölge listesi.
+public enum VucutBolgesi: String, Codable, CaseIterable {
+    case bas, yuz, goz, kulak, agiz, boyun, gogus, kalp, karin, karaciger, dalak, bobrek, genital, kol, el, bacak, ayak, deri, eklem, omurga
+    public init(from decoder: Decoder) throws { self = try semaEnumCoz(decoder) }
+
+    public var ad: String {
+        switch self {
+        case .bas: return "baş"
+        case .yuz: return "yüz"
+        case .goz: return "göz"
+        case .kulak: return "kulak"
+        case .agiz: return "ağız"
+        case .boyun: return "boyun"
+        case .gogus: return "göğüs"
+        case .kalp: return "kalp"
+        case .karin: return "karın"
+        case .karaciger: return "karaciğer"
+        case .dalak: return "dalak"
+        case .bobrek: return "böbrek"
+        case .genital: return "genital"
+        case .kol: return "kol"
+        case .el: return "el"
+        case .bacak: return "bacak"
+        case .ayak: return "ayak"
+        case .deri: return "deri"
+        case .eklem: return "eklem"
+        case .omurga: return "omurga"
+        }
+    }
+}
+
+public enum ZamanBirimi: String, CaseIterable {
+    case gun, hafta, ay, yil
+    public var ad: String {
+        switch self {
+        case .gun: return "gün"
+        case .hafta: return "hafta"
+        case .ay: return "ay"
+        case .yil: return "yıl"
+        }
+    }
 }
 
 func semaEnumCoz<T: RawRepresentable & CaseIterable>(_ decoder: Decoder) throws -> T where T.RawValue == String {
@@ -65,12 +147,15 @@ public struct DugumJSON: Codable {
     public var konum: [Int]?
     public var tus: Bool?
     public var not: String?
+    /// ağaç: bağlantı verilmezse kenarlar bu alandan çizilir.
+    public var ebeveyn: String?
 }
 
 public struct BaglantiJSON: Codable {
     public var from: String
     public var to: String
     public var etiket: String?
+    public var tip: BaglantiTipi?
 }
 
 public struct HucreJSON: Codable {
@@ -88,12 +173,59 @@ public struct EksenJSON: Codable {
 
 public struct IsaretJSON: Codable {
     public var id: String
-    /// Boş bırakılırsa işaret sabit bir sayıya bağlanmaz; "nomograma bağlı" şeridinde çizilir.
+    /// Boş bırakılırsa işaret sabit bir sayıya bağlanmaz; "sabit sayı yok" şeridinde çizilir.
     public var deger: Double?
     public var etiket: String
     public var renk: RenkAdi?
     public var tus: Bool?
     public var not: String?
+}
+
+public struct SeritJSON: Codable {
+    public var id: String
+    public var ad: String
+}
+
+public struct OlayJSON: Codable {
+    public var id: String
+    public var serit: String
+    public var bas: Double
+    /// Doluysa aralık çubuğu, boşsa nokta işareti.
+    public var bit: Double?
+    public var etiket: String
+    public var renk: RenkAdi?
+    public var tus: Bool?
+    public var not: String?
+}
+
+public struct BolgeJSON: Codable {
+    public var id: String
+    public var bolge: VucutBolgesi
+    public var etiket: String
+    public var renk: RenkAdi?
+    public var tus: Bool?
+    public var not: String?
+}
+
+/// Tipli sabotaj. Çözümleme gevşektir (v1 paketler bozulmasın); kuralları levha-lint denetler.
+public struct SabotajJSON: Codable, Equatable {
+    public var tip: String
+    public var hedef: [String]?
+    public var dogrusu: String?
+    public var yanlis_deger: Double?
+    public var yanlis_renk: String?
+    public var yanlis_bolge: String?
+
+    public init(tip: String, hedef: [String]?, dogrusu: String?, yanlis_deger: Double? = nil, yanlis_renk: String? = nil, yanlis_bolge: String? = nil) {
+        self.tip = tip
+        self.hedef = hedef
+        self.dogrusu = dogrusu
+        self.yanlis_deger = yanlis_deger
+        self.yanlis_renk = yanlis_renk
+        self.yanlis_bolge = yanlis_bolge
+    }
+
+    public var sabotajTipi: SabotajTipi? { SabotajTipi(rawValue: tip) }
 }
 
 public struct LevhaJSON: Codable {
@@ -105,14 +237,19 @@ public struct LevhaJSON: Codable {
     public var dugumler: [DugumJSON]?
     public var baglantilar: [BaglantiJSON]?
     public var ortme_sirasi: [String]?
-    public var sabotajlar: [JSONDeger]?
+    public var sabotajlar: [SabotajJSON]?
     // matris
     public var satirlar: [String]?
     public var sutunlar: [String]?
     public var hucreler: [[HucreJSON]]?
-    // sayi_cetveli
+    // sayi_cetveli, zaman_cizelgesi
     public var eksen: EksenJSON?
     public var isaretler: [IsaretJSON]?
+    // zaman_cizelgesi
+    public var seritler: [SeritJSON]?
+    public var olaylar: [OlayJSON]?
+    // vucut_haritasi
+    public var bolgeler: [BolgeJSON]?
 }
 
 public struct SoruJSON: Codable {
@@ -127,7 +264,7 @@ public struct SoruJSON: Codable {
     public var celdirici_dugum: [String: String]?
 }
 
-/// Levhaların ham hâlini (Part 2+ tiplerinin bilinmeyen alanları dahil) saklamak için.
+/// Levhaların ham hâlini saklamak için.
 public struct HamPaketJSON: Codable {
     public var levhalar: [JSONDeger]
 }
@@ -160,20 +297,5 @@ public enum JSONDeger: Codable, Equatable {
         case .dizi(let a): try kap.encode(a)
         case .nesne(let o): try kap.encode(o)
         }
-    }
-
-    public subscript(anahtar: String) -> JSONDeger? {
-        if case .nesne(let o) = self { return o[anahtar] }
-        return nil
-    }
-
-    public var metinDegeri: String? {
-        if case .metin(let s) = self { return s }
-        return nil
-    }
-
-    public var diziDegeri: [JSONDeger]? {
-        if case .dizi(let a) = self { return a }
-        return nil
     }
 }

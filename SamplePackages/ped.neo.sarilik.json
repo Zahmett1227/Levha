@@ -1,5 +1,5 @@
 {
-  "sema_surumu": 1,
+  "sema_surumu": 2,
   "paket_id": "ped.neo.sarilik",
   "ders": "Pediatri",
   "bolum": "Neonatoloji",
@@ -92,7 +92,8 @@
       ],
       "ortme_sirasi": ["r1c0", "r2c2", "r1c3", "r0c0", "r2c3"],
       "sabotajlar": [
-        { "tip": "hucre_takas", "hedef": ["r0c0", "r1c0"], "dogrusu": "Fizyolojik sarılık 24 saatten sonra, hemolitik sarılık ilk 24 saatte başlar." }
+        { "tip": "hucre_takas", "hedef": ["r0c0", "r1c0"], "dogrusu": "Fizyolojik sarılık 24 saatten sonra, hemolitik sarılık ilk 24 saatte başlar." },
+        { "tip": "hucre_takas", "hedef": ["r0c2", "r2c2"], "dogrusu": "Fizyolojik sarılıkta indirekt, kolestazda direkt bilirubin artar." }
       ]
     },
     {
@@ -117,7 +118,8 @@
       ],
       "ortme_sirasi": ["m4", "m2", "m6", "m1", "m5"],
       "sabotajlar": [
-        { "tip": "deger_kaydir", "hedef": ["m2"], "dogrusu": "Yenidoğanda sarılık yaklaşık 5 mg/dL'de görünür; 2 mg/dL erişkin değeridir." }
+        { "tip": "deger_kaydir", "hedef": ["m2"], "yanlis_deger": 2, "dogrusu": "Yenidoğanda sarılık yaklaşık 5 mg/dL'de görünür; 2 mg/dL erişkin değeridir." },
+        { "tip": "deger_kaydir", "hedef": ["m4"], "yanlis_deger": 15, "dogrusu": "Term bebekte klasik fizyolojik üst sınır 12,9 mg/dL'dir; 15 mg/dL pretermler içindir." }
       ]
     }
   ],

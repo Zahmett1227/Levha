@@ -1,17 +1,31 @@
 import SwiftUI
 import SwiftData
 
+/// Levha sayfasının dışarıya bildirdiği olaylar (Günlük Tur blokları ilerlemeyi bununla sayar).
+enum LevhaOlayi {
+    case ortmeKaydedildi(levhaId: String)
+    case sabotajBitti(levhaId: String, bulundu: Bool)
+}
+
 /// Zincirdeki tek bir levha: başlık, akılda kalan şeridi, mod seçici, levha kartı, not paneli.
 struct LevhaSayfasi: View {
     let levha: Levha
     @Binding var mod: LevhaModu
+    var izinliModlar: [LevhaModu] = LevhaModu.allCases
+    var bildir: (LevhaOlayi) -> Void = { _ in }
 
     @Environment(\.modelContext) private var context
     @State private var katman = 1
     @State private var secili: String?
+    // Örtme
     @State private var acilan: Set<String> = []
     @State private var asama: OrtmeAsamasi = .aciliyor
     @State private var bilemedikler: Set<String> = []
+    @State private var hedefler: [String] = []
+    // Sabotaj
+    @State private var senaryo: SabotajSenaryosu?
+    @State private var sabotajDeneme = 0
+    @State private var sabotajAsama: SabotajAsamasi = .ariyor(yanlis: 0)
 
     enum OrtmeAsamasi: Equatable {
         case aciliyor
@@ -20,21 +34,29 @@ struct LevhaSayfasi: View {
         case kaydedildi(bildim: Int, bilemedim: Int)
     }
 
-    private var cizilebilir: Bool { levha.levhaTipi?.cizilebilir == true }
-
-    /// Örtme sırasındaki ilk 3 (var olan) düğüm.
-    private var hedefler: [String] {
-        let idler = Set(levha.dugumler.map(\.id))
-        return Array(levha.ortme_sirasi.filter { idler.contains($0) }.prefix(3))
+    enum SabotajAsamasi: Equatable {
+        case ariyor(yanlis: Int)
+        case bulundu(deneme: Int)
+        case bulunamadi
     }
 
     private var durum: LevhaGorunumDurumu {
         switch mod {
         case .ortme:
-            return LevhaGorunumDurumu(mod: .ortme, katman: LevhaGorunumDurumu.katmanSayisi, secili: nil,
+            return LevhaGorunumDurumu(mod: .ortme, katman: LevhaGorunumDurumu.katmanSayisi,
                                       gizli: Set(hedefler).subtracting(acilan))
-        default:
-            return LevhaGorunumDurumu(mod: .kesif, katman: katman, secili: secili, gizli: [])
+        case .sabotaj:
+            // Hatalı hâl, Keşif'in son katmanı açık ama notlar kapalı.
+            var d = LevhaGorunumDurumu(mod: .sabotaj, katman: LevhaGorunumDurumu.katmanSayisi)
+            switch sabotajAsama {
+            case .ariyor: d.dokunulabilir = senaryo != nil
+            case .bulundu, .bulunamadi:
+                for id in senaryo?.hedef ?? [] { d.halkalar[id] = .yesil }
+            }
+            return d
+        case .kesif:
+            return LevhaGorunumDurumu(mod: .kesif, katman: katman, secili: secili,
+                                      dokunulabilir: katman >= LevhaGorunumDurumu.katmanSayisi)
         }
     }
 
@@ -49,10 +71,11 @@ struct LevhaSayfasi: View {
 
             AkildaKalanSeridi(metin: levha.akilda_kalan)
 
-            ModSecici(mod: $mod)
-                .disabled(!cizilebilir)
+            if izinliModlar.count > 1 {
+                ModSecici(mod: $mod, izinli: izinliModlar)
+            }
 
-            LevhaView(levha: levha, mode: durum, dokun: dugumeDokun)
+            LevhaView(levha: levha, mode: durum, cizim: mod == .sabotaj ? senaryo?.cizim : nil, dokun: dugumeDokun)
                 .padding(4)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .levhaKarti()
@@ -60,16 +83,11 @@ struct LevhaSayfasi: View {
                 .onTapGesture(perform: kartaDokun)
                 .accessibilityAction(named: "Sonraki katman", kartaDokun)
 
-            NotPaneli {
-                if !cizilebilir {
-                    PanelBasligi(ust: levha.tipAdi.uppercased(), alt: nil)
-                    Text("Bu levha içe aktarıldı; bu tipin çizimi Part 2'de gelecek.")
-                        .font(.system(size: 14))
-                        .foregroundStyle(Tema.ikincil)
-                } else if mod == .ortme {
-                    ortmePaneli
-                } else {
-                    kesifPaneli
+            NotPaneli(kenar: panelKenari) {
+                switch mod {
+                case .kesif: kesifPaneli
+                case .ortme: ortmePaneli
+                case .sabotaj: sabotajPaneli
                 }
             }
         }
@@ -77,13 +95,52 @@ struct LevhaSayfasi: View {
         .padding(.bottom, 10)
         .sensoryFeedback(.selection, trigger: katman)
         .sensoryFeedback(.impact(weight: .light), trigger: acilan.count)
+        .sensoryFeedback(trigger: sabotajAsama) { _, yeni in
+            switch yeni {
+            case .bulundu: return .success
+            case .ariyor(let y) where y > 0: return .warning
+            case .bulunamadi: return .error
+            default: return nil
+            }
+        }
+        .onAppear(perform: hazirla)
         .onChange(of: mod) { sifirla() }
+    }
+
+    private var panelKenari: Color? {
+        if mod == .sabotaj, case .ariyor(let y) = sabotajAsama, y > 0 { return RenkSeti.sari.kenar }
+        return nil
+    }
+
+    // MARK: - Hazırlık
+
+    private func hazirla() {
+        if !izinliModlar.contains(mod), let ilk = izinliModlar.first { mod = ilk }
+        hedefleriSec()
+        sabotajKur()
+    }
+
+    /// Örtme maskesi: `ortme_sirasi` düğüm zayıflığına göre yeniden sıralanır (zayıf öne), ilk 3'ü gizlenir.
+    private func hedefleriSec() {
+        let idler = Set(levha.dugumler.map(\.id))
+        let zayiflik = DurumServisi.zayifliklar(levha.id, context)
+        let sira = levha.ortme_sirasi.filter { idler.contains($0) }
+        hedefler = Array(sira.enumerated()
+            .sorted { (zayiflik[$0.element] ?? 0, -$0.offset) > (zayiflik[$1.element] ?? 0, -$1.offset) }
+            .map(\.element)
+            .prefix(3))
+    }
+
+    private func sabotajKur() {
+        let tohum = "\(levha.id)|\(DurumServisi.gunAnahtari())|\(sabotajDeneme)"
+        senaryo = MutasyonMotoru.sec(LevhaCizim(levha), yazilmis: levha.yazilmisSabotajlar, tohum: tohum)
+        sabotajAsama = .ariyor(yanlis: 0)
     }
 
     // MARK: - Etkileşim
 
     private func kartaDokun() {
-        guard cizilebilir, mod == .kesif else { return }
+        guard mod == .kesif else { return }
         if katman < LevhaGorunumDurumu.katmanSayisi {
             withAnimation(.easeOut(duration: 0.25)) { katman += 1 }
             if katman == LevhaGorunumDurumu.katmanSayisi { calisildi() }
@@ -104,20 +161,31 @@ struct LevhaSayfasi: View {
                 withAnimation(.easeOut(duration: 0.25)) { asama = .degerlendir }
             }
         case .sabotaj:
-            break
+            guard let s = senaryo, case .ariyor(let yanlis) = sabotajAsama else { return }
+            if s.hedef.contains(id) {
+                withAnimation(.easeOut(duration: 0.25)) { sabotajAsama = .bulundu(deneme: yanlis + 1) }
+                sabotajBitir(bulundu: true, deneme: yanlis + 1)
+            } else if yanlis == 0 {
+                withAnimation(.easeOut(duration: 0.2)) { sabotajAsama = .ariyor(yanlis: 1) }
+            } else {
+                withAnimation(.easeOut(duration: 0.25)) { sabotajAsama = .bulunamadi }
+                sabotajBitir(bulundu: false, deneme: 2)
+            }
         }
     }
 
+    private func sabotajBitir(bulundu: Bool, deneme: Int) {
+        guard let s = senaryo else { return }
+        DurumServisi.sabotajKaydet(levha: levha, tip: s.tip, bulundu: bulundu, deneme: deneme, context)
+        bildir(.sabotajBitti(levhaId: levha.id, bulundu: bulundu))
+    }
+
     private func kaydet(bilemedikler: Set<String>) {
-        let simdi = Date.now
-        for id in hedefler {
-            context.insert(OrtmeOlayi(levhaId: levha.id, dugumId: id, tarih: simdi, bildim: !bilemedikler.contains(id)))
-        }
-        levha.sonCalisma = simdi
-        try? context.save()
+        DurumServisi.ortmeKaydet(levha: levha, hedefler: hedefler, bilemedikler: bilemedikler, context)
         withAnimation(.easeOut(duration: 0.25)) {
             asama = .kaydedildi(bildim: hedefler.count - bilemedikler.count, bilemedim: bilemedikler.count)
         }
+        bildir(.ortmeKaydedildi(levhaId: levha.id))
     }
 
     private func calisildi() {
@@ -133,14 +201,20 @@ struct LevhaSayfasi: View {
             asama = .aciliyor
             bilemedikler = []
         }
+        hedefleriSec()
+        sabotajKur()
     }
 
     // MARK: - Paneller
 
     private static let katmanAdlari: [LevhaTipi: [String]] = [
         .algoritma: ["Düğümler", "Bağlantılar", "TUS vurguları", "Notlar"],
+        .yolak: ["Maddeler", "Bağlantılar", "TUS vurguları", "Notlar"],
+        .agac: ["Kök ve 1. seviye", "Alt seviyeler", "TUS vurguları", "Notlar"],
         .matris: ["Başlıklar", "Hücreler", "TUS vurguları", "Notlar"],
         .sayi_cetveli: ["İşaretler", "Değerler", "TUS vurguları", "Notlar"],
+        .zaman_cizelgesi: ["Eksen ve şeritler", "Olaylar", "TUS vurguları", "Notlar"],
+        .vucut_haritasi: ["Silüet", "İşaretler", "TUS vurguları", "Notlar"],
     ]
 
     private var katmanAdlari: [String] {
@@ -161,19 +235,7 @@ struct LevhaSayfasi: View {
             }
         }
         if let id = secili, let d = levha.dugumler.first(where: { $0.id == id }) {
-            let renk = RenkSeti.ad(d.renk)
-            Text(d.etiket)
-                .font(.system(size: 15, weight: .bold))
-                .foregroundStyle(renk.yazi)
-                .lineLimit(1)
-                .minimumScaleFactor(0.8)
-            ScrollView {
-                Text(d.not.isEmpty ? "Bu düğüm için not yok." : d.not)
-                    .font(.system(size: 13))
-                    .foregroundStyle(Tema.metin)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .scrollIndicators(.visible)
+            NotIcerigi(dugum: d)
         } else if katman < toplam {
             Text("Levhaya dokun → \(katmanAdlari[katman])")
                 .font(.system(size: 14))
@@ -250,9 +312,87 @@ struct LevhaSayfasi: View {
             PanelDugmesi(baslik: "Baştan dene", renk: .gri, dolu: false, action: sifirla)
         }
     }
+
+    @ViewBuilder
+    private var sabotajPaneli: some View {
+        HStack(spacing: 8) {
+            PanelBasligi(ust: "SABOTAJ", alt: senaryo.map { $0.yazilmis ? "yazılmış" : "üretilmiş" })
+            Spacer()
+            if case .ariyor(let y) = sabotajAsama {
+                Text("Hak \(2 - y)/2")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(Tema.ikincil)
+            }
+        }
+        if senaryo == nil {
+            Text("Bu levha için sabotaj üretilemedi.")
+                .font(.system(size: 14))
+                .foregroundStyle(Tema.ikincil)
+        } else {
+            switch sabotajAsama {
+            case .ariyor(let yanlis):
+                if yanlis == 0 {
+                    Text("Bu levhada bir hata var. Yanlış düğüme dokun.")
+                        .font(.system(size: 14.5, weight: .semibold))
+                        .foregroundStyle(Tema.metin)
+                } else {
+                    Label("Bu düğüm doğru. Bir hakkın daha var.", systemImage: "exclamationmark.triangle.fill")
+                        .font(.system(size: 14.5, weight: .semibold))
+                        .foregroundStyle(RenkSeti.sari.yazi)
+                }
+            case .bulundu(let deneme):
+                Label(deneme == 1 ? "Buldun!" : "Buldun (2. deneme)", systemImage: "checkmark.seal.fill")
+                    .font(.system(size: 14.5, weight: .bold))
+                    .foregroundStyle(RenkSeti.yesil.yazi)
+                sabotajSonu
+            case .bulunamadi:
+                Label("Bulamadın — hata yeşil halkada", systemImage: "xmark.octagon.fill")
+                    .font(.system(size: 14.5, weight: .bold))
+                    .foregroundStyle(RenkSeti.kirmizi.yazi)
+                sabotajSonu
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var sabotajSonu: some View {
+        if let s = senaryo {
+            Text(s.dogrusu)
+                .font(.system(size: 13))
+                .foregroundStyle(Tema.metin)
+                .lineLimit(3)
+                .minimumScaleFactor(0.85)
+        }
+        Spacer(minLength: 0)
+        Button("Baştan dene (yeni sabotaj)") {
+            sabotajDeneme += 1
+            withAnimation(.easeOut(duration: 0.25)) { sabotajKur() }
+        }
+        .font(.system(size: 13.5, weight: .semibold))
+        .foregroundStyle(Tema.ikincil)
+    }
 }
 
 // MARK: - Parçalar
+
+struct NotIcerigi: View {
+    let dugum: Dugum
+
+    var body: some View {
+        Text(dugum.etiket)
+            .font(.system(size: 15, weight: .bold))
+            .foregroundStyle(RenkSeti.ad(dugum.renk).yazi)
+            .lineLimit(1)
+            .minimumScaleFactor(0.8)
+        ScrollView {
+            Text(dugum.not.isEmpty ? "Bu düğüm için not yok." : dugum.not)
+                .font(.system(size: 13))
+                .foregroundStyle(Tema.metin)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+        .scrollIndicators(.visible)
+    }
+}
 
 struct AkildaKalanSeridi: View {
     let metin: String
@@ -279,26 +419,22 @@ struct AkildaKalanSeridi: View {
 
 struct ModSecici: View {
     @Binding var mod: LevhaModu
+    var izinli: [LevhaModu] = LevhaModu.allCases
 
     var body: some View {
         HStack(spacing: 4) {
-            ForEach(LevhaModu.allCases) { m in
+            ForEach(izinli) { m in
                 Button {
                     withAnimation(.easeOut(duration: 0.2)) { mod = m }
                 } label: {
-                    HStack(spacing: 4) {
-                        Text(m.ad)
-                        if !m.aktif { Image(systemName: "lock.fill").font(.system(size: 9)) }
-                    }
-                    .font(.system(size: 13.5, weight: .semibold))
-                    .foregroundStyle(mod == m ? Color.white : (m.aktif ? Tema.metin : Tema.cizgi))
-                    .frame(maxWidth: .infinity, minHeight: 30)
-                    .background(mod == m ? Tema.metin : Color.clear, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
-                    .contentShape(Rectangle())
+                    Text(m.ad)
+                        .font(.system(size: 13.5, weight: .semibold))
+                        .foregroundStyle(mod == m ? Color.white : Tema.metin)
+                        .frame(maxWidth: .infinity, minHeight: 30)
+                        .background(mod == m ? Tema.metin : Color.clear, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+                        .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
-                .disabled(!m.aktif)
-                .accessibilityHint(m.aktif ? "" : "Part 2'de açılacak")
                 .accessibilityAddTraits(mod == m ? .isSelected : [])
             }
         }
@@ -309,6 +445,7 @@ struct ModSecici: View {
 }
 
 struct NotPaneli<Icerik: View>: View {
+    var kenar: Color?
     @ViewBuilder var icerik: Icerik
 
     var body: some View {
@@ -317,6 +454,12 @@ struct NotPaneli<Icerik: View>: View {
             .frame(maxWidth: .infinity, alignment: .topLeading)
             .frame(height: 156, alignment: .topLeading)
             .levhaKarti()
+            .overlay {
+                if let kenar {
+                    RoundedRectangle(cornerRadius: Tema.kartKose, style: .continuous).strokeBorder(kenar, lineWidth: 2)
+                }
+            }
+            .animation(.easeOut(duration: 0.2), value: kenar)
     }
 }
 

@@ -82,7 +82,9 @@ enum Sigdir {
         let enUzun = metin.split(whereSeparator: { $0 == " " || $0 == "\n" })
             .map { (String($0) as NSString).size(withAttributes: [.font: font]).width }
             .max() ?? 0
-        guard genislik > 0, enUzun > genislik else { return temel }
-        return max(enAz, (temel * genislik / enUzun * 10).rounded(.down) / 10)
+        // SwiftUI satır kırma ölçümü NSString'den biraz geniş; %8 pay bırak.
+        let hedef = genislik * 0.92
+        guard hedef > 0, enUzun > hedef else { return temel }
+        return max(enAz, (temel * hedef / enUzun * 10).rounded(.down) / 10)
     }
 }

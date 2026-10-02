@@ -119,3 +119,79 @@ final class LevhaLintTests: XCTestCase {
         XCTAssertTrue(b.contains { $0.yer.hasSuffix("m1.deger") && $0.engelleyici })
     }
 }
+
+final class LevhaLintV2Tests: XCTestCase {
+    private func paket(_ ad: String) throws -> [String: Any] {
+        let kok = URL(fileURLWithPath: #filePath)
+            .deletingLastPathComponent().deletingLastPathComponent().deletingLastPathComponent()
+            .deletingLastPathComponent().deletingLastPathComponent()
+        let veri = try Data(contentsOf: kok.appendingPathComponent("SamplePackages/\(ad).json"))
+        return try JSONSerialization.jsonObject(with: veri) as! [String: Any]
+    }
+
+    private func denetle(_ p: [String: Any]) throws -> LintSonucu {
+        LevhaLint.denetle(veri: try JSONSerialization.data(withJSONObject: p))
+    }
+
+    func testTumOrnekPaketlerTemiz() throws {
+        for ad in ["ped.neo.sarilik", "ped.gelisim.basamaklar", "ped.kvs.konjenital", "ped.genetik.sendromlar"] {
+            XCTAssertEqual(try denetle(paket(ad)).bulgular, [], ad)
+        }
+    }
+
+    func testSabotajKurallari() throws {
+        var p = try paket("ped.kvs.konjenital")
+        var levhalar = p["levhalar"] as! [[String: Any]]
+        levhalar[0]["sabotajlar"] = [
+            ["tip": "baglanti_ters", "hedef": ["f1", "f9"], "dogrusu": "x"],      // bağlantı yok
+            ["tip": "hucre_takas", "hedef": ["f1", "f2"], "dogrusu": "x"],        // tip uygun değil
+            ["tip": "renk_degistir", "hedef": ["f1"], "dogrusu": "x"],            // yanlis_renk eksik
+            ["tip": "uydurma", "hedef": ["f1"], "dogrusu": "x"],
+        ]
+        levhalar[1]["sabotajlar"] = []
+        p["levhalar"] = levhalar
+        let s = try denetle(p)
+        XCTAssertFalse(s.engelleyiciVar, "sabotaj hataları içe aktarmayı durdurmaz")
+        XCTAssertTrue(s.hatalar.contains { $0.mesaj.contains("arasında bağlantı yok") })
+        XCTAssertTrue(s.hatalar.contains { $0.mesaj.contains("uygulanamaz") })
+        XCTAssertTrue(s.hatalar.contains { $0.mesaj.contains("yanlis_renk zorunlu") })
+        XCTAssertTrue(s.hatalar.contains { $0.mesaj.contains("geçersiz tip") })
+        XCTAssertEqual(s.uyarilar.count, 1)
+        XCTAssertTrue(s.uyarilar[0].mesaj.contains("üretilmiş ile idare edilir"))
+    }
+
+    func testZamanOlayiEksenDisindaVeBilinmeyenSerit() throws {
+        var p = try paket("ped.gelisim.basamaklar")
+        var levhalar = p["levhalar"] as! [[String: Any]]
+        var olaylar = levhalar[0]["olaylar"] as! [[String: Any]]
+        olaylar[0]["bas"] = 40
+        olaylar[1]["serit"] = "s9"
+        olaylar[2]["bit"] = 5
+        levhalar[0]["olaylar"] = olaylar
+        p["levhalar"] = levhalar
+        let h = try denetle(p).hatalar
+        XCTAssertTrue(h.contains { $0.yer.hasSuffix("e1.bas") && $0.engelleyici })
+        XCTAssertTrue(h.contains { $0.yer.hasSuffix("e2.serit") && $0.engelleyici })
+        XCTAssertTrue(h.contains { $0.yer.hasSuffix("e3.bit") && $0.mesaj.contains("küçük olamaz") })
+    }
+
+    func testBilinmeyenVucutBolgesiVeBaglantiTipi() throws {
+        var p = try paket("ped.genetik.sendromlar")
+        var levhalar = p["levhalar"] as! [[String: Any]]
+        var bolgeler = levhalar[0]["bolgeler"] as! [[String: Any]]
+        bolgeler[0]["bolge"] = "kuyruk"
+        levhalar[0]["bolgeler"] = bolgeler
+        p["levhalar"] = levhalar
+        let s = try denetle(p)
+        XCTAssertNil(s.paket)
+        XCTAssertTrue(s.bulgular[0].mesaj.contains("kuyruk"))
+
+        var k = try paket("ped.kvs.konjenital")
+        var kl = k["levhalar"] as! [[String: Any]]
+        var b = kl[0]["baglantilar"] as! [[String: Any]]
+        b[0]["tip"] = "zayiflatir"
+        kl[0]["baglantilar"] = b
+        k["levhalar"] = kl
+        XCTAssertTrue(try denetle(k).bulgular[0].yer.contains("baglantilar[0].tip"))
+    }
+}

@@ -1,0 +1,785 @@
+{
+  "sema_surumu": 2,
+  "paket_id": "ped.gelisim.basamaklar",
+  "ders": "Pediatri",
+  "bolum": "Büyüme ve gelişme",
+  "alt_konu": "Gelişim basamakları",
+  "levhalar": [
+    {
+      "id": "ped.gelisim.basamaklar.zaman",
+      "tip": "zaman_cizelgesi",
+      "baslik": "Gelişim basamakları 0–36 ay",
+      "akilda_kalan": "Oturma 6 · yürüme 12 · iki kelime 24 · daire 36 (ay)",
+      "eksen": {
+        "min": 0,
+        "max": 36,
+        "birim": "ay"
+      },
+      "seritler": [
+        {
+          "id": "s1",
+          "ad": "Kaba motor"
+        },
+        {
+          "id": "s2",
+          "ad": "İnce motor"
+        },
+        {
+          "id": "s3",
+          "ad": "Dil"
+        },
+        {
+          "id": "s4",
+          "ad": "Sosyal"
+        }
+      ],
+      "olaylar": [
+        {
+          "id": "e1",
+          "serit": "s1",
+          "bas": 4,
+          "etiket": "Baş kontrolü",
+          "renk": "yesil",
+          "tus": true,
+          "not": "Bebek 3–4. ayda başını dik tutar; 4. ayda baş kontrolü tamdır. Çekerek oturtmada belirgin baş gecikmesinin 4–6. aydan sonra sürmesi hipotoniyi düşündürür."
+        },
+        {
+          "id": "e2",
+          "serit": "s1",
+          "bas": 6,
+          "etiket": "Desteksiz oturur",
+          "renk": "yesil",
+          "tus": true,
+          "not": "Bebek 6. ay civarında kısa süre, 7–8. ayda sağlam biçimde desteksiz oturur. 9. ayda hâlâ oturamıyorsa gelişim gecikmesi açısından değerlendirilir."
+        },
+        {
+          "id": "e3",
+          "serit": "s1",
+          "bas": 12,
+          "etiket": "Bağımsız yürür",
+          "renk": "yesil",
+          "tus": true,
+          "not": "Bağımsız yürüme ortalama 12. ayda (12–15 ay) kazanılır. 18. aya kadar yürümeyen çocuk ayrıntılı nörogelişimsel değerlendirme gerektirir."
+        },
+        {
+          "id": "e4",
+          "serit": "s1",
+          "bas": 18,
+          "etiket": "Koşar",
+          "renk": "yesil",
+          "tus": false,
+          "not": "Koşma 18. ay civarında başlar; başlangıçta sert ve dengesizdir. Koşmayla birlikte top tekmeleme ve merdiven çıkma gibi beceriler gelişir."
+        },
+        {
+          "id": "e5",
+          "serit": "s1",
+          "bas": 36,
+          "etiket": "Üç tekerlekli bisiklet",
+          "renk": "yesil",
+          "tus": true,
+          "not": "Üç yaşında üç tekerlekli bisiklete biner ve merdiveni ayak değiştirerek çıkar. Tek ayak üstünde sekme 4 yaş civarındadır."
+        },
+        {
+          "id": "e6",
+          "serit": "s2",
+          "bas": 4,
+          "etiket": "Elleri orta hatta",
+          "renk": "yesil",
+          "tus": false,
+          "not": "3–4. ayda ellerini orta hatta birleştirir ve nesneye uzanmaya başlar. Avuç içi yakalama refleksi bu dönemde kaybolur."
+        },
+        {
+          "id": "e7",
+          "serit": "s2",
+          "bas": 6,
+          "etiket": "Elden ele geçirir",
+          "renk": "yesil",
+          "tus": false,
+          "not": "6. ayda nesneyi bir elinden diğerine geçirir (transfer). Bu beceri desteksiz oturmayla aynı döneme denk gelir."
+        },
+        {
+          "id": "e8",
+          "serit": "s2",
+          "bas": 9,
+          "etiket": "Pens kavrama",
+          "renk": "sari",
+          "tus": true,
+          "not": "Başparmak ve işaret parmağıyla küçük nesneyi tutma (pens) 9–10. ayda başlar, 12. ayda olgunlaşır. Sık tuzak: 4. ay ellerin orta hatta birleştiği dönemdir, pens değil."
+        },
+        {
+          "id": "e9",
+          "serit": "s2",
+          "bas": 36,
+          "etiket": "Daire kopyalar",
+          "renk": "sari",
+          "tus": true,
+          "not": "Üç yaşında daire kopyalar; kare ve artı 4 yaş, üçgen 5 yaş civarındadır. Şekil sırası TUS'ta sık sorulur."
+        },
+        {
+          "id": "e10",
+          "serit": "s3",
+          "bas": 2,
+          "etiket": "Agular",
+          "renk": "yesil",
+          "tus": false,
+          "not": "2. ay civarında agulama (sesli harflerle ses çıkarma) başlar. Bebek seslere yönelir ve sesle tepki verir."
+        },
+        {
+          "id": "e11",
+          "serit": "s3",
+          "bas": 6,
+          "etiket": "Babıldar (ba-ba)",
+          "renk": "yesil",
+          "tus": false,
+          "not": "6. ay civarında hece tekrarları (ba-ba, da-da) başlar; bu dönemde anlamsızdır. Heceleme hiç başlamazsa işitme değerlendirilir."
+        },
+        {
+          "id": "e12",
+          "serit": "s3",
+          "bas": 12,
+          "etiket": "İlk anlamlı kelime",
+          "renk": "yesil",
+          "tus": true,
+          "not": "İlk anlamlı kelime yaklaşık 12. ayda söylenir. 'Anne' ve 'baba'yı doğru kişi için anlamlı kullanma 10–12. aydadır."
+        },
+        {
+          "id": "e13",
+          "serit": "s3",
+          "bas": 24,
+          "etiket": "İki kelimelik cümle",
+          "renk": "yesil",
+          "tus": true,
+          "not": "2 yaşında iki kelimeli cümle kurar. 24. ayda iki kelimeyi birleştiremeyen çocuk dil gecikmesi açısından değerlendirilir; önce işitme testi yapılır."
+        },
+        {
+          "id": "e14",
+          "serit": "s3",
+          "bas": 36,
+          "etiket": "Üç kelimelik cümle",
+          "renk": "yesil",
+          "tus": false,
+          "not": "3 yaşında üç kelimelik cümle kurar ve konuşmasının çoğu yabancılarca anlaşılır. 'Ne, nerede' soruları bu dönemde artar."
+        },
+        {
+          "id": "e15",
+          "serit": "s4",
+          "bas": 2,
+          "etiket": "Sosyal gülümseme",
+          "renk": "yesil",
+          "tus": true,
+          "not": "Sosyal gülümseme 6–8. haftada (yaklaşık 2. ay) ortaya çıkar. Belirgin gecikmesi görme, işitme ve gelişim açısından değerlendirme gerektirir."
+        },
+        {
+          "id": "e16",
+          "serit": "s4",
+          "bas": 8,
+          "etiket": "Yabancı kaygısı",
+          "renk": "sari",
+          "tus": true,
+          "not": "6–9. aylar arasında yabancıyı ayırt edip kaygı gösterir ('8. ay kaygısı'). Bu, normal bağlanmanın göstergesidir; hastalık belirtisi değildir."
+        },
+        {
+          "id": "e17",
+          "serit": "s4",
+          "bas": 24,
+          "etiket": "Paralel oyun",
+          "renk": "yesil",
+          "tus": true,
+          "not": "2 yaşında çocuklar yan yana ama birbirinden bağımsız oynar (paralel oyun). İşbirlikli oyun ve sıra bekleme 3–4 yaşında belirginleşir."
+        }
+      ],
+      "ortme_sirasi": [
+        "e2",
+        "e13",
+        "e8",
+        "e12",
+        "e15",
+        "e9"
+      ],
+      "sabotajlar": [
+        {
+          "tip": "sira_boz",
+          "hedef": [
+            "e3",
+            "e4"
+          ],
+          "dogrusu": "Bağımsız yürüme 12. ayda, koşma 18. ayda kazanılır."
+        },
+        {
+          "tip": "deger_kaydir",
+          "hedef": [
+            "e8"
+          ],
+          "yanlis_deger": 4,
+          "dogrusu": "Pens kavrama 9–10. ayda başlar; 4. ayda eller orta hatta birleşir."
+        }
+      ]
+    },
+    {
+      "id": "ped.gelisim.basamaklar.refleks",
+      "tip": "zaman_cizelgesi",
+      "baslik": "İlkel refleksler: çıkış ve kayboluş",
+      "akilda_kalan": "İlkel refleks geç kaybolursa → SSS; paraşüt ömür boyu kalır",
+      "eksen": {
+        "min": 0,
+        "max": 18,
+        "birim": "ay"
+      },
+      "seritler": [
+        {
+          "id": "s1",
+          "ad": "Doğumda var, kaybolur"
+        },
+        {
+          "id": "s2",
+          "ad": "Sonradan çıkar"
+        }
+      ],
+      "olaylar": [
+        {
+          "id": "r1",
+          "serit": "s1",
+          "bas": 0,
+          "bit": 6,
+          "etiket": "Moro",
+          "renk": "mavi",
+          "tus": true,
+          "not": "Ani baş düşmesi ya da sesle kollar açılır, sonra kapanır. 4–6. ayda kaybolur; daha uzun sürmesi santral sinir sistemi patolojisini, asimetrik olması brakiyal pleksus hasarını ya da klavikula kırığını düşündürür."
+        },
+        {
+          "id": "r2",
+          "serit": "s1",
+          "bas": 0,
+          "bit": 4,
+          "etiket": "Arama (rooting)",
+          "renk": "mavi",
+          "tus": false,
+          "not": "Yanağa dokununca baş o tarafa döner ve ağız açılır. 3–4. ayda kaybolur."
+        },
+        {
+          "id": "r3",
+          "serit": "s1",
+          "bas": 0,
+          "bit": 4,
+          "etiket": "Avuç içi yakalama",
+          "renk": "mavi",
+          "tus": false,
+          "not": "Avuç içine konan parmağı kavrar; 3–4. ayda kaybolur (bazı kaynaklar 6 aya kadar verir, kaynağa bak). İstemli kavrama geliştikçe yerini ona bırakır."
+        },
+        {
+          "id": "r4",
+          "serit": "s1",
+          "bas": 0,
+          "bit": 12,
+          "etiket": "Plantar yakalama",
+          "renk": "mavi",
+          "tus": false,
+          "not": "Ayak tabanına basınca parmaklar fleksiyona gelir. Yürüme öncesine kadar sürer, 9–12. ayda kaybolur."
+        },
+        {
+          "id": "r5",
+          "serit": "s1",
+          "bas": 0,
+          "bit": 6,
+          "etiket": "ATNR (asimetrik tonik boyun)",
+          "renk": "mavi",
+          "tus": true,
+          "not": "Baş bir yana çevrilince aynı taraf kol ve bacak ekstansiyona, karşı taraf fleksiyona gelir ('eskrimci' duruşu). 4–6. ayda kaybolur; zorunlu ve kalıcı olması serebral palsiyi düşündürür."
+        },
+        {
+          "id": "r6",
+          "serit": "s1",
+          "bas": 0,
+          "bit": 2,
+          "etiket": "Adım atma",
+          "renk": "mavi",
+          "tus": false,
+          "not": "Ayakta tutulan bebek, tabanı yüzeye değince adım atar gibi hareket eder. Yaklaşık 2. ayda kaybolur."
+        },
+        {
+          "id": "r7",
+          "serit": "s2",
+          "bas": 3,
+          "bit": 18,
+          "etiket": "Landau",
+          "renk": "yesil",
+          "tus": true,
+          "not": "Yüzüstü havada tutulan bebek baş, gövde ve bacaklarını ekstansiyona getirir. 3. ayda ortaya çıkar, 12–24. aylarda kaybolur (çubuk eksenin sonunda sürer)."
+        },
+        {
+          "id": "r8",
+          "serit": "s2",
+          "bas": 8,
+          "bit": 18,
+          "etiket": "Paraşüt",
+          "renk": "yesil",
+          "tus": true,
+          "not": "Bebek havada öne doğru düşürülür gibi yapılınca kollarını öne uzatır. 8–9. ayda ortaya çıkar ve ömür boyu kalır; asimetrik olması hemipareziyi düşündürür."
+        }
+      ],
+      "ortme_sirasi": [
+        "r1",
+        "r8",
+        "r5",
+        "r7",
+        "r6"
+      ],
+      "sabotajlar": [
+        {
+          "tip": "sira_boz",
+          "hedef": [
+            "r7",
+            "r8"
+          ],
+          "dogrusu": "Landau refleksi 3. ayda, paraşüt refleksi 8–9. ayda ortaya çıkar."
+        },
+        {
+          "tip": "deger_kaydir",
+          "hedef": [
+            "r8"
+          ],
+          "yanlis_deger": 3,
+          "dogrusu": "Paraşüt refleksi 8–9. ayda ortaya çıkar ve ömür boyu kalır."
+        }
+      ]
+    },
+    {
+      "id": "ped.gelisim.basamaklar.cetvel",
+      "tip": "sayi_cetveli",
+      "baslik": "Kilo ve boy kilometre taşları",
+      "akilda_kalan": "Kilo: 5 ay ×2, 1 yaş ×3 · Boy: 1 yaş ×1,5, 4 yaş ×2",
+      "eksen": {
+        "min": 0,
+        "max": 60,
+        "birim": "ay"
+      },
+      "isaretler": [
+        {
+          "id": "m1",
+          "deger": 0.5,
+          "etiket": "Doğum kilosuna döner",
+          "renk": "gri",
+          "tus": false,
+          "not": "Term yenidoğan ilk günlerde doğum ağırlığının %10'una kadar kaybedebilir (fizyolojik); 10–14. günde doğum ağırlığına döner. Daha fazla kayıp ya da gecikme beslenme sorunu açısından değerlendirilir."
+        },
+        {
+          "id": "m2",
+          "deger": 5,
+          "etiket": "Doğum kilosu ×2",
+          "renk": "yesil",
+          "tus": false,
+          "not": "Doğum ağırlığı 4–6. ayda (ortalama 5. ay) iki katına çıkar. İlk aylarda kilo alımı en hızlı dönemdedir."
+        },
+        {
+          "id": "m3",
+          "deger": 12,
+          "etiket": "Doğum kilosu ×3",
+          "renk": "yesil",
+          "tus": true,
+          "not": "Doğum ağırlığı 1 yaşında üç katına çıkar. Bu, kilo alımını değerlendirmede en çok kullanılan kaba kuraldır."
+        },
+        {
+          "id": "m4",
+          "etiket": "Doğum kilosu ×4",
+          "renk": "yesil",
+          "tus": false,
+          "not": "Kaynaklar dört kat için 2 ile 2,5 yaş arasında farklı değerler veriyor; kaynağa bak. Bu yüzden cetvelde sabit bir sayıya bağlanmadı."
+        },
+        {
+          "id": "m5",
+          "deger": 12,
+          "etiket": "Boy ×1,5 (~75 cm)",
+          "renk": "mavi",
+          "tus": true,
+          "not": "Doğum boyu (~50 cm) 1 yaşında yaklaşık 1,5 katına (~75 cm) çıkar; ilk yılda yaklaşık 25 cm uzar. Sonraki yıllarda büyüme hızı belirgin azalır."
+        },
+        {
+          "id": "m6",
+          "deger": 24,
+          "etiket": "Boy: erişkinin yarısı",
+          "renk": "mavi",
+          "tus": true,
+          "not": "2 yaşındaki boy, erişkin boyunun yaklaşık yarısıdır. Kaba tahmin için 2 yaş boyu ikiyle çarpılır."
+        },
+        {
+          "id": "m7",
+          "deger": 48,
+          "etiket": "Doğum boyu ×2 (~100 cm)",
+          "renk": "mavi",
+          "tus": true,
+          "not": "Doğum boyu 4 yaşında iki katına (~100 cm) çıkar. Bu, boy değerlendirmesinde sık sorulan bir kilometre taşıdır."
+        }
+      ],
+      "ortme_sirasi": [
+        "m3",
+        "m7",
+        "m6",
+        "m2"
+      ],
+      "sabotajlar": [
+        {
+          "tip": "deger_kaydir",
+          "hedef": [
+            "m3"
+          ],
+          "yanlis_deger": 24,
+          "dogrusu": "Doğum ağırlığı 1 yaşında (12. ay) üç katına çıkar."
+        },
+        {
+          "tip": "deger_kaydir",
+          "hedef": [
+            "m7"
+          ],
+          "yanlis_deger": 36,
+          "dogrusu": "Doğum boyu 4 yaşında (48. ay) iki katına çıkar."
+        }
+      ]
+    }
+  ],
+  "sorular": [
+    {
+      "id": "q1",
+      "levha": "ped.gelisim.basamaklar.zaman",
+      "dugumler": [
+        "e2",
+        "e7",
+        "e11"
+      ],
+      "kok": "Kontrole getirilen sağlıklı bebek desteksiz oturabiliyor, oyuncağı bir elinden diğerine geçiriyor ve 'ba-ba' gibi heceler çıkarıyor. Henüz emeklemiyor ve küçük nesneleri başparmak ile işaret parmağı arasında tutamıyor. Bu bebeğin gelişimi en çok hangi yaşla uyumludur?",
+      "secenekler": [
+        "2 ay",
+        "4 ay",
+        "6 ay",
+        "12 ay",
+        "18 ay"
+      ],
+      "dogru": 2,
+      "aciklama": "Desteksiz oturma, elden ele geçirme ve hece tekrarı 6. ayın becerileridir. Pens kavrama 9–10. ayda başladığından henüz beklenmez.",
+      "aciklama_yolu": [
+        "e2",
+        "e7",
+        "e11"
+      ],
+      "celdirici_dugum": {
+        "1": "e6",
+        "3": "e12"
+      }
+    },
+    {
+      "id": "q2",
+      "levha": "ped.gelisim.basamaklar.zaman",
+      "dugumler": [
+        "e13"
+      ],
+      "kok": "Annesi iki yaşındaki çocuğunun yaşıtlarına göre az konuştuğunu düşünüyor. Fizik muayene ve işitme testi normal. İki yaşındaki sağlıklı bir çocukta aşağıdaki dil becerilerinden hangisinin olması beklenir?",
+      "secenekler": [
+        "Yalnızca agulama",
+        "Anlamsız hece tekrarı (ba-ba)",
+        "İki kelimelik cümle kurma",
+        "Dört-beş kelimelik karmaşık cümleler",
+        "Geçmiş zaman eklerini hatasız kullanma"
+      ],
+      "dogru": 2,
+      "aciklama": "2 yaşında iki kelimelik cümle beklenir; üç kelimelik cümle 3 yaşındadır. 24. ayda iki kelimeyi birleştiremeyen çocuk dil gecikmesi açısından değerlendirilir.",
+      "aciklama_yolu": [
+        "e12",
+        "e13",
+        "e14"
+      ],
+      "celdirici_dugum": {
+        "0": "e10",
+        "1": "e11",
+        "3": "e14"
+      }
+    },
+    {
+      "id": "q3",
+      "levha": "ped.gelisim.basamaklar.zaman",
+      "dugumler": [
+        "e3"
+      ],
+      "kok": "On sekiz aylık erkek çocuk henüz bağımsız yürüyemiyor; tutunarak ayağa kalkabiliyor. Diğer gelişim alanları yaşıyla uyumlu. Bu çocuk için en uygun yaklaşım aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "Normaldir; 3 yaşına kadar beklenir",
+        "Ayrıntılı nörogelişimsel değerlendirme yapılmalıdır",
+        "Yalnızca D vitamini başlanır",
+        "Yürüteç kullanımı önerilir",
+        "Altı ay sonra kontrole çağrılır"
+      ],
+      "dogru": 1,
+      "aciklama": "Bağımsız yürüme ortalama 12. ayda kazanılır; 18. ayda hâlâ yürümeyen çocuk kırmızı bayraktır ve ayrıntılı değerlendirme gerektirir (kas hastalığı, serebral palsi vb.).",
+      "aciklama_yolu": [
+        "e3",
+        "e4"
+      ],
+      "celdirici_dugum": {
+        "0": "e3",
+        "4": "e3"
+      }
+    },
+    {
+      "id": "q4",
+      "levha": "ped.gelisim.basamaklar.zaman",
+      "dugumler": [
+        "e9"
+      ],
+      "kok": "Üç yaşındaki çocuk rutin kontrol için getiriliyor; annesi çocuğunun ince motor becerilerini soruyor. Aşağıdaki becerilerden hangisinin bu yaşta yapılması beklenir?",
+      "secenekler": [
+        "Kare kopyalama",
+        "Üçgen kopyalama",
+        "Daire kopyalama",
+        "Ayakkabı bağcığını bağlama",
+        "Harfleri düzgün yazma"
+      ],
+      "dogru": 2,
+      "aciklama": "Üç yaşında daire kopyalanır; kare ve artı 4 yaş, üçgen 5 yaş civarındadır. Ayakkabı bağlama ve harf yazma daha ileri yaşlarda beklenir.",
+      "aciklama_yolu": [
+        "e9"
+      ],
+      "celdirici_dugum": {
+        "0": "e9",
+        "1": "e9"
+      }
+    },
+    {
+      "id": "q5",
+      "levha": "ped.gelisim.basamaklar.zaman",
+      "dugumler": [
+        "e15"
+      ],
+      "kok": "Annesi üç haftalık bebeğinin kendisine bakınca henüz gülümsemediğini söylüyor; bebeğin emmesi ve kilo alımı normal. Sosyal gülümsemenin ortaya çıkması normalde hangi dönemde beklenir?",
+      "secenekler": [
+        "Doğumda",
+        "6–8. hafta",
+        "4–5. ay",
+        "8–9. ay",
+        "12. ay"
+      ],
+      "dogru": 1,
+      "aciklama": "Sosyal gülümseme 6–8. haftada başlar; üç haftalık bebekte görülmemesi normaldir. 8–9. ay yabancı kaygısının görüldüğü dönemdir.",
+      "aciklama_yolu": [
+        "e15"
+      ],
+      "celdirici_dugum": {
+        "3": "e16"
+      }
+    },
+    {
+      "id": "q6",
+      "levha": "ped.gelisim.basamaklar.refleks",
+      "dugumler": [
+        "r8"
+      ],
+      "kok": "Dokuz aylık bebek rutin kontrole getiriliyor; motor gelişimi yaşıyla uyumlu. Bu bebekte aşağıdaki reflekslerden hangisinin alınması normaldir?",
+      "secenekler": [
+        "Moro refleksi",
+        "Asimetrik tonik boyun refleksi",
+        "Adım atma refleksi",
+        "Paraşüt refleksi",
+        "Arama refleksi"
+      ],
+      "dogru": 3,
+      "aciklama": "Paraşüt refleksi 8–9. ayda ortaya çıkar ve ömür boyu kalır. Moro ve ATNR 4–6. ayda, adım atma yaklaşık 2. ayda, arama refleksi 3–4. ayda kaybolur.",
+      "aciklama_yolu": [
+        "r8"
+      ],
+      "celdirici_dugum": {
+        "0": "r1",
+        "1": "r5",
+        "2": "r6",
+        "4": "r2"
+      }
+    },
+    {
+      "id": "q7",
+      "levha": "ped.gelisim.basamaklar.refleks",
+      "dugumler": [
+        "r1"
+      ],
+      "kok": "Makrozomik olarak, omuz distosisiyle doğan yenidoğanın muayenesinde Moro refleksi sağ kolda alınamıyor; sağ kol addüksiyon ve iç rotasyonda, dirsek ekstansiyonda duruyor ('garson bahşişi' pozisyonu). En olası tanı aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "Erb-Duchenne felci",
+        "Hipoksik iskemik ensefalopati",
+        "Spinal müsküler atrofi",
+        "Kernikterus",
+        "Hipoglisemi"
+      ],
+      "dogru": 0,
+      "aciklama": "Tek taraflı Moro yokluğu ve 'garson bahşişi' pozisyonu C5–C6 kök hasarına bağlı Erb-Duchenne felcini gösterir. Klavikula kırığı da asimetrik Moro yapabilir; santral nedenler genellikle iki tarafı birlikte etkiler.",
+      "aciklama_yolu": [
+        "r1"
+      ],
+      "celdirici_dugum": {
+        "1": "r1",
+        "2": "r1"
+      }
+    },
+    {
+      "id": "q8",
+      "levha": "ped.gelisim.basamaklar.refleks",
+      "dugumler": [
+        "r5"
+      ],
+      "kok": "Sekiz aylık bebekte başı sağa çevrildiğinde sağ kol ve bacak ekstansiyona, sol taraf fleksiyona geliyor ve bu duruş zorunlu olarak sürüyor. Bebek desteksiz oturamıyor ve nesneleri elden ele geçiremiyor. Bu bulgular en çok hangisini düşündürür?",
+      "secenekler": [
+        "Normal gelişim varyantı",
+        "Serebral palsi",
+        "Erb-Duchenne felci",
+        "Konjenital hipotiroidi",
+        "Benign konjenital hipotoni"
+      ],
+      "dogru": 1,
+      "aciklama": "ATNR 4–6. ayda kaybolur; 8. ayda zorunlu ve kalıcı olması motor gecikmeyle birlikte serebral palsiyi düşündürür. İlkel reflekslerin beklenen yaşta kaybolmaması santral motor bozukluğun ipucudur.",
+      "aciklama_yolu": [
+        "r5"
+      ],
+      "celdirici_dugum": {
+        "0": "r5",
+        "2": "r1"
+      }
+    },
+    {
+      "id": "q9",
+      "levha": "ped.gelisim.basamaklar.refleks",
+      "dugumler": [
+        "r7"
+      ],
+      "kok": "Üç aylık bebek yüzüstü pozisyonda karnından desteklenerek havada tutulduğunda başını kaldırıyor, sırtını ve bacaklarını ekstansiyona getiriyor. Değerlendirilen refleks aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "Moro",
+        "Landau",
+        "Paraşüt",
+        "Asimetrik tonik boyun",
+        "Galant"
+      ],
+      "dogru": 1,
+      "aciklama": "Landau refleksi 3. ayda ortaya çıkar ve 12–24. aylarda kaybolur. Paraşüt refleksi ise 8–9. ayda çıkar ve bebek öne doğru düşürülürken kollarını uzatır.",
+      "aciklama_yolu": [
+        "r7"
+      ],
+      "celdirici_dugum": {
+        "0": "r1",
+        "2": "r8",
+        "3": "r5"
+      }
+    },
+    {
+      "id": "q10",
+      "levha": "ped.gelisim.basamaklar.cetvel",
+      "dugumler": [
+        "m3"
+      ],
+      "kok": "Doğum ağırlığı 3200 g olan ve büyümesi düzenli seyreden sağlıklı bebek 12. ay kontrolüne getiriliyor. Bu bebek için beklenen yaklaşık ağırlık aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "6400 g",
+        "8000 g",
+        "9600 g",
+        "12.800 g",
+        "16.000 g"
+      ],
+      "dogru": 2,
+      "aciklama": "Doğum ağırlığı 1 yaşında üç katına çıkar: 3200 × 3 ≈ 9600 g. İki kat (6400 g) 4–6. aya aittir.",
+      "aciklama_yolu": [
+        "m2",
+        "m3"
+      ],
+      "celdirici_dugum": {
+        "0": "m2",
+        "3": "m4"
+      }
+    },
+    {
+      "id": "q11",
+      "levha": "ped.gelisim.basamaklar.cetvel",
+      "dugumler": [
+        "m7"
+      ],
+      "kok": "Doğum boyu 50 cm olan sağlıklı bir çocuğun annesi, çocuğunun 4 yaşındaki boyunun ne olması gerektiğini soruyor. Beklenen yaklaşık boy aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "75 cm",
+        "87 cm",
+        "100 cm",
+        "115 cm",
+        "125 cm"
+      ],
+      "dogru": 2,
+      "aciklama": "Doğum boyu 1 yaşında yaklaşık 1,5 katına (~75 cm), 4 yaşında iki katına (~100 cm) çıkar.",
+      "aciklama_yolu": [
+        "m5",
+        "m7"
+      ],
+      "celdirici_dugum": {
+        "0": "m5"
+      }
+    },
+    {
+      "id": "q12",
+      "levha": "ped.gelisim.basamaklar.cetvel",
+      "dugumler": [
+        "m1"
+      ],
+      "kok": "Doğumdan sonraki 3. günde doğum ağırlığının %7'sini kaybettiği saptanan, iyi emen ve idrar çıkışı normal olan term bebeğin annesi endişeli. Bebeğin doğum ağırlığına yeniden ulaşması normalde ne zaman beklenir?",
+      "secenekler": [
+        "2–3. gün",
+        "10–14. gün",
+        "4–6. hafta",
+        "3. ay",
+        "6. ay"
+      ],
+      "dogru": 1,
+      "aciklama": "İlk günlerde %10'a kadar kilo kaybı fizyolojiktir; term bebek 10–14. günde doğum ağırlığına döner. İyi emen, idrarı normal bebekte izlem yeterlidir.",
+      "aciklama_yolu": [
+        "m1"
+      ],
+      "celdirici_dugum": {
+        "3": "m2"
+      }
+    },
+    {
+      "id": "q13",
+      "levha": "ped.gelisim.basamaklar.cetvel",
+      "dugumler": [
+        "m2"
+      ],
+      "kok": "Doğum ağırlığı 3 kg olan sağlıklı bebeğin annesi, bebeğinin ne zaman 6 kg olmasının beklendiğini soruyor. Doğum ağırlığının iki katına çıkması normalde hangi dönemdedir?",
+      "secenekler": [
+        "1. ay",
+        "4–5. ay",
+        "9. ay",
+        "12. ay",
+        "24. ay"
+      ],
+      "dogru": 1,
+      "aciklama": "Doğum ağırlığı 4–6. ayda (ortalama 5. ay) iki katına, 1 yaşında üç katına çıkar.",
+      "aciklama_yolu": [
+        "m2"
+      ],
+      "celdirici_dugum": {
+        "3": "m3"
+      }
+    },
+    {
+      "id": "q14",
+      "levha": "ped.gelisim.basamaklar.cetvel",
+      "dugumler": [
+        "m6"
+      ],
+      "kok": "İki yaşındaki sağlıklı erkek çocuğun boyu 88 cm ölçülüyor. Basit kaba tahmin yöntemine göre bu çocuğun yaklaşık erişkin boyu hangisidir?",
+      "secenekler": [
+        "132 cm",
+        "150 cm",
+        "176 cm",
+        "190 cm",
+        "200 cm"
+      ],
+      "dogru": 2,
+      "aciklama": "2 yaşındaki boy erişkin boyunun yaklaşık yarısıdır; kaba tahmin için ikiyle çarpılır (88 × 2 ≈ 176 cm). Bu yöntem ebeveyn boyu hesabının yerini tutmaz.",
+      "aciklama_yolu": [
+        "m6"
+      ],
+      "celdirici_dugum": {
+        "0": "m7"
+      }
+    }
+  ]
+}

@@ -7,35 +7,56 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		05D0E8ABA135DFE049D5526E /* Zamanlayici.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B6C1FEBED789128A96986BD /* Zamanlayici.swift */; };
 		09EF829A3A1676141CAA6BB8 /* LevhaLint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086ED309033F9C4E76B79FB7 /* LevhaLint.swift */; };
+		0D9766ED24E340736416D43E /* TurPlanlayici.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF42B1F60D3AE27B7D52CF8E /* TurPlanlayici.swift */; };
 		13F2208ACD3F92398912DF93 /* BugunView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45F4D6118D8C13D134D6152C /* BugunView.swift */; };
 		2983308B0B69A38B605458E2 /* PaketIceAktarici.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7166D37488535310D59C4C4 /* PaketIceAktarici.swift */; };
+		2C2CFA00BC13981F0C4238E6 /* SoruSekmesi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4F99F7E86FB66DA117A52AE2 /* SoruSekmesi.swift */; };
 		34770AC66A750BF48566BF49 /* LevhaApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2CA3710B6CDF93370CFF39A /* LevhaApp.swift */; };
 		352508771227D68FB0389EE9 /* SayiCetveliCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC1C080CA23A06025BC7E618 /* SayiCetveliCanvas.swift */; };
 		3DC4D0A91A82CE27F01A716F /* Tema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59EDB97EBA134790E87609A8 /* Tema.swift */; };
+		417259EC431D95C34EA14CCD /* ped.kvs.konjenital.json in Resources */ = {isa = PBXBuildFile; fileRef = D5E494BA459238FB01D5FDC9 /* ped.kvs.konjenital.json */; };
+		57E728F0A20D087DF94A5727 /* ped.gelisim.basamaklar.json in Resources */ = {isa = PBXBuildFile; fileRef = 40998F95F591DFABF199A29F /* ped.gelisim.basamaklar.json */; };
 		669A6DA4A6607EF00CF154DE /* MatrisCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61EC349922B1B554B91E686 /* MatrisCanvas.swift */; };
 		754A3CC73267CAB15CDA89AF /* LevhaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F716D6E9B946B2EF159301A9 /* LevhaView.swift */; };
 		7B4175F839595F2EC7A7DA59 /* LevhaSekmesi.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB02A4F90DF7C1F5FF068CAE /* LevhaSekmesi.swift */; };
+		83AB9BA0B29663CEBB366572 /* MutasyonMotoru.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6166F540F476431B204B3338 /* MutasyonMotoru.swift */; };
+		88C5D5C74FB9F5BFFE07F2F2 /* VucutHaritasiCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811A8EBF71FA4A0405DF0D9B /* VucutHaritasiCanvas.swift */; };
 		8A24682A56DFFCBB485D59D3 /* ped.neo.sarilik.json in Resources */ = {isa = PBXBuildFile; fileRef = 19EBA0CC81EDDC85B29BA6C3 /* ped.neo.sarilik.json */; };
+		8EBAC27DEAA6A7899017F24B /* YolakCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 494154ADEAE87EA1EBA3F574 /* YolakCanvas.swift */; };
 		931C01F0D9AD353FE12A7631 /* PaketKlasoru.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70CC0C0F2C9F79BC1A64D32B /* PaketKlasoru.swift */; };
+		9C50E8C00FD7D35644639805 /* AgacCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9BD09716B8168356C1C895CA /* AgacCanvas.swift */; };
+		A6036F87446C23A361BF73A2 /* ZamanCizelgesiCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 802B9DA6F68ADAFC00D38373 /* ZamanCizelgesiCanvas.swift */; };
 		BA5EB838BA319A6505B7639A /* AlgoritmaCanvas.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9CE64A650C4187FA0543E953 /* AlgoritmaCanvas.swift */; };
 		D7F8A246FC726D3660B2ADC2 /* RootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D98253F4DA2FF23305BD4055 /* RootView.swift */; };
+		DBFBBDDABF85CF59D633534A /* ped.genetik.sendromlar.json in Resources */ = {isa = PBXBuildFile; fileRef = 6F1A57C8EE4B37453C7F99D2 /* ped.genetik.sendromlar.json */; };
 		F27D94B590330EB76CCEA912 /* LevhaSayfasi.swift in Sources */ = {isa = PBXBuildFile; fileRef = AD3A7B37CF15C73C0302EBCA /* LevhaSayfasi.swift */; };
 		F2BADEDCC7BBE8C729A6C771 /* IcerikView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 07E43DE18A1811513A80BEE6 /* IcerikView.swift */; };
 		F2EF42D01F36F5F25976EEFA /* Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = A326F20B205747EC2F1137A7 /* Models.swift */; };
 		F414DB3DA825B5D7C35837C9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B2A81C8A5593C98DD2586E5D /* Assets.xcassets */; };
 		F97BF840A622E1FFA96C9AAE /* PaketJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B7A6ED05001662CB8BBFF9 /* PaketJSON.swift */; };
+		FB1C1ECACE872C37FEAC17C1 /* DurumServisi.swift in Sources */ = {isa = PBXBuildFile; fileRef = D67DD527696E80612D86A2C7 /* DurumServisi.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		07E43DE18A1811513A80BEE6 /* IcerikView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IcerikView.swift; sourceTree = "<group>"; };
 		086ED309033F9C4E76B79FB7 /* LevhaLint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevhaLint.swift; sourceTree = "<group>"; };
 		19EBA0CC81EDDC85B29BA6C3 /* ped.neo.sarilik.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ped.neo.sarilik.json; sourceTree = "<group>"; };
+		40998F95F591DFABF199A29F /* ped.gelisim.basamaklar.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ped.gelisim.basamaklar.json; sourceTree = "<group>"; };
 		45F4D6118D8C13D134D6152C /* BugunView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BugunView.swift; sourceTree = "<group>"; };
+		494154ADEAE87EA1EBA3F574 /* YolakCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YolakCanvas.swift; sourceTree = "<group>"; };
 		4CA47953E105A8D79B76C5E3 /* Levha.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Levha.entitlements; sourceTree = "<group>"; };
+		4F99F7E86FB66DA117A52AE2 /* SoruSekmesi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoruSekmesi.swift; sourceTree = "<group>"; };
 		59EDB97EBA134790E87609A8 /* Tema.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tema.swift; sourceTree = "<group>"; };
+		6166F540F476431B204B3338 /* MutasyonMotoru.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutasyonMotoru.swift; sourceTree = "<group>"; };
+		6B6C1FEBED789128A96986BD /* Zamanlayici.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Zamanlayici.swift; sourceTree = "<group>"; };
+		6F1A57C8EE4B37453C7F99D2 /* ped.genetik.sendromlar.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ped.genetik.sendromlar.json; sourceTree = "<group>"; };
 		70CC0C0F2C9F79BC1A64D32B /* PaketKlasoru.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaketKlasoru.swift; sourceTree = "<group>"; };
+		802B9DA6F68ADAFC00D38373 /* ZamanCizelgesiCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZamanCizelgesiCanvas.swift; sourceTree = "<group>"; };
+		811A8EBF71FA4A0405DF0D9B /* VucutHaritasiCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VucutHaritasiCanvas.swift; sourceTree = "<group>"; };
 		8D9BBD186F0B3E41894E7DED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		9BD09716B8168356C1C895CA /* AgacCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgacCanvas.swift; sourceTree = "<group>"; };
 		9CE64A650C4187FA0543E953 /* AlgoritmaCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlgoritmaCanvas.swift; sourceTree = "<group>"; };
 		A2CA3710B6CDF93370CFF39A /* LevhaApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevhaApp.swift; sourceTree = "<group>"; };
 		A326F20B205747EC2F1137A7 /* Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Models.swift; sourceTree = "<group>"; };
@@ -44,10 +65,13 @@
 		B6B7A6ED05001662CB8BBFF9 /* PaketJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaketJSON.swift; sourceTree = "<group>"; };
 		CB02A4F90DF7C1F5FF068CAE /* LevhaSekmesi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevhaSekmesi.swift; sourceTree = "<group>"; };
 		CC1C080CA23A06025BC7E618 /* SayiCetveliCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SayiCetveliCanvas.swift; sourceTree = "<group>"; };
+		D5E494BA459238FB01D5FDC9 /* ped.kvs.konjenital.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = ped.kvs.konjenital.json; sourceTree = "<group>"; };
+		D67DD527696E80612D86A2C7 /* DurumServisi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurumServisi.swift; sourceTree = "<group>"; };
 		D98253F4DA2FF23305BD4055 /* RootView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootView.swift; sourceTree = "<group>"; };
 		DEFB666D6D5A13D20D7B9425 /* Levha.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Levha.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E61EC349922B1B554B91E686 /* MatrisCanvas.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatrisCanvas.swift; sourceTree = "<group>"; };
 		E7166D37488535310D59C4C4 /* PaketIceAktarici.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaketIceAktarici.swift; sourceTree = "<group>"; };
+		EF42B1F60D3AE27B7D52CF8E /* TurPlanlayici.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TurPlanlayici.swift; sourceTree = "<group>"; };
 		F716D6E9B946B2EF159301A9 /* LevhaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevhaView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -98,8 +122,10 @@
 		2DB22904BA10DB5DA13D4FFB /* Import */ = {
 			isa = PBXGroup;
 			children = (
+				D67DD527696E80612D86A2C7 /* DurumServisi.swift */,
 				E7166D37488535310D59C4C4 /* PaketIceAktarici.swift */,
 				70CC0C0F2C9F79BC1A64D32B /* PaketKlasoru.swift */,
+				EF42B1F60D3AE27B7D52CF8E /* TurPlanlayici.swift */,
 			);
 			path = Import;
 			sourceTree = "<group>";
@@ -131,10 +157,15 @@
 		74EE66AAF083D70EC8DDE051 /* Render */ = {
 			isa = PBXGroup;
 			children = (
+				9BD09716B8168356C1C895CA /* AgacCanvas.swift */,
 				9CE64A650C4187FA0543E953 /* AlgoritmaCanvas.swift */,
 				F716D6E9B946B2EF159301A9 /* LevhaView.swift */,
 				E61EC349922B1B554B91E686 /* MatrisCanvas.swift */,
+				6166F540F476431B204B3338 /* MutasyonMotoru.swift */,
 				CC1C080CA23A06025BC7E618 /* SayiCetveliCanvas.swift */,
+				811A8EBF71FA4A0405DF0D9B /* VucutHaritasiCanvas.swift */,
+				494154ADEAE87EA1EBA3F574 /* YolakCanvas.swift */,
+				802B9DA6F68ADAFC00D38373 /* ZamanCizelgesiCanvas.swift */,
 			);
 			path = Render;
 			sourceTree = "<group>";
@@ -142,6 +173,9 @@
 		8A88951CD00261A9E9D49F41 /* SamplePackages */ = {
 			isa = PBXGroup;
 			children = (
+				40998F95F591DFABF199A29F /* ped.gelisim.basamaklar.json */,
+				6F1A57C8EE4B37453C7F99D2 /* ped.genetik.sendromlar.json */,
+				D5E494BA459238FB01D5FDC9 /* ped.kvs.konjenital.json */,
 				19EBA0CC81EDDC85B29BA6C3 /* ped.neo.sarilik.json */,
 			);
 			path = SamplePackages;
@@ -150,6 +184,7 @@
 		ABA15E3FB24279D1928FCAD7 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				D318699D81A577F2DAFC0E9A /* LevhaCekirdek */,
 				175C4194059764A449B5C542 /* LevhaSema */,
 			);
 			path = Sources;
@@ -163,8 +198,17 @@
 				AD3A7B37CF15C73C0302EBCA /* LevhaSayfasi.swift */,
 				CB02A4F90DF7C1F5FF068CAE /* LevhaSekmesi.swift */,
 				D98253F4DA2FF23305BD4055 /* RootView.swift */,
+				4F99F7E86FB66DA117A52AE2 /* SoruSekmesi.swift */,
 			);
 			path = Screens;
+			sourceTree = "<group>";
+		};
+		D318699D81A577F2DAFC0E9A /* LevhaCekirdek */ = {
+			isa = PBXGroup;
+			children = (
+				6B6C1FEBED789128A96986BD /* Zamanlayici.swift */,
+			);
+			path = LevhaCekirdek;
 			sourceTree = "<group>";
 		};
 		FDE5FCD9B426B2B7AA4AC950 /* Tools */ = {
@@ -235,6 +279,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				F414DB3DA825B5D7C35837C9 /* Assets.xcassets in Resources */,
+				57E728F0A20D087DF94A5727 /* ped.gelisim.basamaklar.json in Resources */,
+				DBFBBDDABF85CF59D633534A /* ped.genetik.sendromlar.json in Resources */,
+				417259EC431D95C34EA14CCD /* ped.kvs.konjenital.json in Resources */,
 				8A24682A56DFFCBB485D59D3 /* ped.neo.sarilik.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -246,8 +293,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9C50E8C00FD7D35644639805 /* AgacCanvas.swift in Sources */,
 				BA5EB838BA319A6505B7639A /* AlgoritmaCanvas.swift in Sources */,
 				13F2208ACD3F92398912DF93 /* BugunView.swift in Sources */,
+				FB1C1ECACE872C37FEAC17C1 /* DurumServisi.swift in Sources */,
 				F2BADEDCC7BBE8C729A6C771 /* IcerikView.swift in Sources */,
 				34770AC66A750BF48566BF49 /* LevhaApp.swift in Sources */,
 				09EF829A3A1676141CAA6BB8 /* LevhaLint.swift in Sources */,
@@ -256,12 +305,19 @@
 				754A3CC73267CAB15CDA89AF /* LevhaView.swift in Sources */,
 				669A6DA4A6607EF00CF154DE /* MatrisCanvas.swift in Sources */,
 				F2EF42D01F36F5F25976EEFA /* Models.swift in Sources */,
+				83AB9BA0B29663CEBB366572 /* MutasyonMotoru.swift in Sources */,
 				2983308B0B69A38B605458E2 /* PaketIceAktarici.swift in Sources */,
 				F97BF840A622E1FFA96C9AAE /* PaketJSON.swift in Sources */,
 				931C01F0D9AD353FE12A7631 /* PaketKlasoru.swift in Sources */,
 				D7F8A246FC726D3660B2ADC2 /* RootView.swift in Sources */,
 				352508771227D68FB0389EE9 /* SayiCetveliCanvas.swift in Sources */,
+				2C2CFA00BC13981F0C4238E6 /* SoruSekmesi.swift in Sources */,
 				3DC4D0A91A82CE27F01A716F /* Tema.swift in Sources */,
+				0D9766ED24E340736416D43E /* TurPlanlayici.swift in Sources */,
+				88C5D5C74FB9F5BFFE07F2F2 /* VucutHaritasiCanvas.swift in Sources */,
+				8EBAC27DEAA6A7899017F24B /* YolakCanvas.swift in Sources */,
+				A6036F87446C23A361BF73A2 /* ZamanCizelgesiCanvas.swift in Sources */,
+				05D0E8ABA135DFE049D5526E /* Zamanlayici.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

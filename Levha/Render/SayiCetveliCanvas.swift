@@ -62,21 +62,7 @@ struct CetvelGeometri {
         return sonuc
     }
 
-    var adim: Double {
-        let aralik = cizim.eksenMax - cizim.eksenMin
-        for s in [0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 25, 50, 100, 200, 500, 1000] where aralik / s <= 8 { return s }
-        return aralik / 5
-    }
-
-    var cizgiler: [Double] {
-        var sonuc: [Double] = []
-        var v = (cizim.eksenMin / adim).rounded(.up) * adim
-        while v <= cizim.eksenMax + adim * 0.001 {
-            sonuc.append(v)
-            v += adim
-        }
-        return sonuc
-    }
+    var cizgiler: [Double] { EksenAdimi.cizgiler(min: cizim.eksenMin, max: cizim.eksenMax, birim: cizim.birim) }
 
     func eksenCiz(_ ctx: inout GraphicsContext) {
         var eksen = Path()
@@ -171,7 +157,7 @@ struct SayiCetveliCanvas: View {
                 .katmanda(durum.katman >= 3)
 
             if !g.nomogramlar.isEmpty {
-                Text("SABİT SAYI YOK · EŞİK İÇİN NOMOGRAMA BAK")
+                Text("SABİT SAYI YOK · NOTUNA BAK")
                     .font(.system(size: 9, weight: .heavy))
                     .tracking(0.5)
                     .foregroundStyle(Tema.ikincil)
@@ -187,7 +173,7 @@ struct SayiCetveliCanvas: View {
                                 .font(Sigdir.font(d.etiket, temel: 11, genislik: f.width - 12, agirlik: .semibold))
                                 .lineLimit(2)
                                 .minimumScaleFactor(0.8)
-                            Text(d.deger.map { "\(Bicim.sayi($0)) \(cizim.birim)" } ?? "nomogram")
+                            Text(d.deger.map { "\(Bicim.sayi($0)) \(cizim.birim)" } ?? "sabit değil")
                                 .font(.system(size: 11.5, weight: .heavy).monospacedDigit())
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.8)
@@ -200,10 +186,10 @@ struct SayiCetveliCanvas: View {
                         .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
-                    .allowsHitTesting(durum.dugumlerDokunulabilir)
+                    .allowsHitTesting(durum.dokunulabilir)
                     .position(x: f.midX, y: f.midY)
                     .accessibilityLabel(d.etiket)
-                    .accessibilityValue(d.deger.map { "\(Bicim.sayi($0)) \(cizim.birim)" } ?? "nomograma bağlı")
+                    .accessibilityValue(d.deger.map { "\(Bicim.sayi($0)) \(cizim.birim)" } ?? "sabit sayı yok")
                 }
             }
 

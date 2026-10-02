@@ -108,7 +108,7 @@ struct MatrisCanvas: View {
                 }
                 .buttonStyle(.plain)
                 .katmanda(durum.katman >= 2)
-                .allowsHitTesting(durum.dugumlerDokunulabilir)
+                .allowsHitTesting(durum.dokunulabilir)
                 .position(x: f.midX, y: f.midY)
                 .accessibilityLabel("\(satirAdi(d)), \(sutunAdi(d)): \(d.etiket)")
                 .accessibilityValue(d.tus ? "TUS'un sevdiği hücre" : "")

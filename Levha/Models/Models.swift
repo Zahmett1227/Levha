@@ -48,7 +48,10 @@ final class Levha {
     var eksenMin: Double
     var eksenMax: Double
     var eksenBirim: String
-    /// Sabotajlar ham JSON (Part 2'de yorumlanacak).
+    /// Zaman çizelgesi şeritleri (sıralı).
+    var seritIdleri: [String]?
+    var seritAdlari: [String]?
+    /// Yazılmış sabotajlar, `[SabotajJSON]` olarak JSON.
     var sabotajlar: Data?
     /// Levhanın içe aktarılan ham JSON'u (Part 2 tiplerinin ek alanları dahil).
     var hamJSON: Data
@@ -78,6 +81,9 @@ final class Levha {
     var tipAdi: String { levhaTipi?.ad ?? tip }
     var siraliDugumler: [Dugum] { dugumler.sorted { $0.sira < $1.sira } }
     var siraliBaglantilar: [Baglanti] { baglantilar.sorted { $0.sira < $1.sira } }
+    var yazilmisSabotajlar: [SabotajJSON] {
+        sabotajlar.flatMap { try? JSONDecoder().decode([SabotajJSON].self, from: $0) } ?? []
+    }
 }
 
 @Model
@@ -91,8 +97,13 @@ final class Dugum {
     var konum: [Int]
     var tus: Bool
     var not: String
-    /// Sayı cetveli işaret değeri; nil ise "nomograma bağlı".
+    /// Sayı cetveli işaret değeri (nil ise "sabit sayı yok"); zaman çizelgesinde olayın başlangıcı.
     var deger: Double?
+    /// Zaman çizelgesi: aralığın sonu (nil → nokta), şerit id'si.
+    var bit: Double?
+    var serit: String?
+    /// Vücut haritası bölgesi (`VucutBolgesi` ham değeri).
+    var bolge: String?
     var sira: Int
     var levha: Levha?
 
@@ -114,13 +125,16 @@ final class Baglanti {
     var from: String
     var to: String
     var etiket: String
+    /// `BaglantiTipi` ham değeri; nil → normal.
+    var tip: String?
     var sira: Int
     var levha: Levha?
 
-    init(from: String, to: String, etiket: String, sira: Int) {
+    init(from: String, to: String, etiket: String, tip: String?, sira: Int) {
         self.from = from
         self.to = to
         self.etiket = etiket
+        self.tip = tip
         self.sira = sira
     }
 }
@@ -128,6 +142,8 @@ final class Baglanti {
 @Model
 final class Soru {
     var id: String
+    /// paket_id + "." + id — paketler arası tekil.
+    var globalId: String?
     /// Sorunun bağlı olduğu levhanın id'si.
     var levha: String
     var dugumler: [String]
@@ -141,8 +157,9 @@ final class Soru {
     var sira: Int
     var paket: Paket?
 
-    init(_ j: SoruJSON, sira: Int) {
+    init(_ j: SoruJSON, paketId: String, sira: Int) {
         id = j.id
+        globalId = "\(paketId).\(j.id)"
         levha = j.levha
         dugumler = j.dugumler ?? []
         kok = j.kok
@@ -152,6 +169,12 @@ final class Soru {
         aciklama_yolu = j.aciklama_yolu ?? []
         celdirici_dugum = try? JSONEncoder().encode(j.celdirici_dugum ?? [:])
         self.sira = sira
+    }
+
+    var kimlik: String { globalId ?? "\(paket?.paket_id ?? "").\(id)" }
+    var celdiriciler: [Int: String] {
+        let ham = celdirici_dugum.flatMap { try? JSONDecoder().decode([String: String].self, from: $0) } ?? [:]
+        return Dictionary(uniqueKeysWithValues: ham.compactMap { k, v in Int(k).map { ($0, v) } })
     }
 }
 
@@ -171,8 +194,106 @@ final class OrtmeOlayi {
     }
 }
 
+@Model
+final class SabotajOlayi {
+    var levhaId: String
+    var sabotajTipi: String
+    var bulundu: Bool
+    var denemeSayisi: Int
+    var tarih: Date
+
+    init(levhaId: String, sabotajTipi: String, bulundu: Bool, denemeSayisi: Int, tarih: Date) {
+        self.levhaId = levhaId
+        self.sabotajTipi = sabotajTipi
+        self.bulundu = bulundu
+        self.denemeSayisi = denemeSayisi
+        self.tarih = tarih
+    }
+}
+
+@Model
+final class SoruOlayi {
+    var soruGlobalId: String
+    var levhaId: String
+    var secilen: Int
+    var dogruMu: Bool
+    var sureSaniye: Double
+    var tarih: Date
+
+    init(soruGlobalId: String, levhaId: String, secilen: Int, dogruMu: Bool, sureSaniye: Double, tarih: Date) {
+        self.soruGlobalId = soruGlobalId
+        self.levhaId = levhaId
+        self.secilen = secilen
+        self.dogruMu = dogruMu
+        self.sureSaniye = sureSaniye
+        self.tarih = tarih
+    }
+}
+
+/// Soru yanlışlarının düğüm başına sayacı; Örtme maske sırasını belirler.
+@Model
+final class DugumZayiflik {
+    var levhaId: String
+    var dugumId: String
+    var sayac: Int
+
+    init(levhaId: String, dugumId: String, sayac: Int) {
+        self.levhaId = levhaId
+        self.dugumId = dugumId
+        self.sayac = sayac
+    }
+}
+
+/// Zamanlayıcı durumunun kalıcı karşılığı (`ZamanDurumu`).
+@Model
+final class LevhaDurumu {
+    @Attribute(.unique) var levhaId: String
+    var kutu: Int
+    var sonrakiTarih: Date?
+    var saglamlik: Double
+    var sonGorulme: Date?
+
+    init(levhaId: String) {
+        self.levhaId = levhaId
+        kutu = 0
+        saglamlik = 0
+    }
+
+    var deger: ZamanDurumu {
+        get { ZamanDurumu(levhaId: levhaId, kutu: kutu, sonrakiTarih: sonrakiTarih, saglamlik: saglamlik, sonGorulme: sonGorulme) }
+        set {
+            kutu = newValue.kutu
+            sonrakiTarih = newValue.sonrakiTarih
+            saglamlik = newValue.saglamlik
+            sonGorulme = newValue.sonGorulme
+        }
+    }
+}
+
+/// Günlük turun o güne ait kaydı (gün 04:00'te döner).
+@Model
+final class TurDurumu {
+    @Attribute(.unique) var gun: String
+    var calismaYeri: String
+    var altKonuPaketId: String?
+    var kisa: Bool
+    var tamamlananlar: [String]
+    /// `TurKuyrugu` JSON'u.
+    var kuyruk: Data?
+
+    init(gun: String, calismaYeri: String) {
+        self.gun = gun
+        self.calismaYeri = calismaYeri
+        kisa = false
+        tamamlananlar = []
+    }
+}
+
 enum Depo {
-    static let modeller: [any PersistentModel.Type] = [Paket.self, Levha.self, Dugum.self, Baglanti.self, Soru.self, OrtmeOlayi.self]
+    static let modeller: [any PersistentModel.Type] = [
+        Paket.self, Levha.self, Dugum.self, Baglanti.self, Soru.self, OrtmeOlayi.self,
+        SabotajOlayi.self, SoruOlayi.self, DugumZayiflik.self, LevhaDurumu.self, TurDurumu.self,
+    ]
 
     /// Disk deposu açılamadıysa dolu; İçerik ekranında kırmızı uyarı olarak görünür.
     private(set) static var hata: String?

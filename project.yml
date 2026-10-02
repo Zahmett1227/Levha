@@ -20,6 +20,7 @@ targets:
         excludes:
           - "Schema/**"
       - path: Tools/levha-lint/Sources/LevhaSema
+      - path: Tools/levha-lint/Sources/LevhaCekirdek
       - path: SamplePackages
         buildPhase: resources
     info:
