@@ -7,8 +7,10 @@ struct IcerikView: View {
     @Environment(\.modelContext) private var context
     @Query(sort: [SortDescriptor(\Paket.ders), SortDescriptor(\Paket.bolum), SortDescriptor(\Paket.alt_konu)])
     private var paketler: [Paket]
+    @Query(sort: \Taslak.tarih, order: .reverse) private var taslaklar: [Taslak]
     @State private var dosyaSeciliyor = false
     @State private var sonuclar: [PaketIceAktarici.Sonuc] = []
+    @State private var taslakHatalari: [PersistentIdentifier: [String]] = [:]
 
     var body: some View {
         NavigationStack {
@@ -49,6 +51,24 @@ struct IcerikView: View {
                     }
                 }
 
+                if !taslaklar.isEmpty {
+                    Section {
+                        ForEach(taslaklar) { t in
+                            TaslakSatiri(taslak: t, levha: levha(t.levhaId), hatalar: taslakHatalari[t.persistentModelID]) {
+                                taslakHatalari[t.persistentModelID] = TaslakServisi.uygula(t, context)
+                            }
+                        }
+                        .onDelete { indeksler in
+                            for i in indeksler { context.delete(taslaklar[i]) }
+                            try? context.save()
+                        }
+                    } header: {
+                        Text("Taslaklar")
+                    } footer: {
+                        Text("\"Bu levhayı genişlet\" yanıtları. Eklenen düğümler yerel düzendir: paketin revizyonu artarsa paket kazanır.")
+                    }
+                }
+
                 Section("Klasördeki dosyalar") {
                     if klasor.dosyalar.isEmpty {
                         Text("Klasörde .json dosyası yok.")
@@ -76,7 +96,7 @@ struct IcerikView: View {
                 } header: {
                     Text("İçe aktarılmış paketler")
                 } footer: {
-                    Text("Aynı id'li levha yeniden içe aktarılınca düzen korunur; yalnız etiket, not ve sorular güncellenir. Düzeni sıfırlamak için paketi sola kaydırıp sil, sonra yeniden içe aktar.")
+                    Text("Aynı id'li levha yeniden içe aktarılınca düzen ve taslaktan eklenen düğümler korunur; paketteki revizyon daha büyükse paketin düzeni kazanır. Notların (Notum) hiçbir durumda silinmez.")
                 }
             }
             .scrollContentBackground(.hidden)
@@ -88,6 +108,10 @@ struct IcerikView: View {
                 if case .success(let urller) = sonuc { seciliDosyalariAktar(urller) }
             }
         }
+    }
+
+    private func levha(_ id: String) -> Levha? {
+        try? context.fetch(FetchDescriptor<Levha>(predicate: #Predicate { $0.id == id })).first
     }
 
     private var gecerliDosyalar: [PaketKlasoru.Dosya] {
@@ -228,5 +252,61 @@ private struct BulguListesi: View {
                 }
             }
         }
+    }
+}
+
+
+private struct TaslakSatiri: View {
+    let taslak: Taslak
+    let levha: Levha?
+    let hatalar: [String]?
+    let ekle: () -> Void
+    @State private var hamAcik = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 5) {
+            HStack {
+                Image(systemName: taslak.gecerli ? "plus.square.dashed" : "exclamationmark.triangle.fill")
+                    .foregroundStyle(taslak.gecerli ? RenkSeti.mavi.kenar : RenkSeti.kirmizi.kenar)
+                Text(levha?.baslik ?? taslak.levhaId)
+                    .font(.system(size: 14.5, weight: .semibold))
+                    .lineLimit(1)
+                Spacer()
+                Text(Bicim.tarih(taslak.tarih)).font(.system(size: 12)).foregroundStyle(Tema.ikincil)
+            }
+            if let ek = taslak.genisletme, taslak.gecerli {
+                Text("\(ek.dugumler.count) düğüm · \((ek.baglantilar ?? []).count) bağlantı: " + ek.dugumler.map(\.etiket).joined(separator: ", "))
+                    .font(.system(size: 12.5))
+                    .foregroundStyle(Tema.ikincil)
+                if taslak.eklendi {
+                    Label("Levhaya eklendi", systemImage: "checkmark.circle.fill")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundStyle(RenkSeti.yesil.yazi)
+                } else {
+                    Button(action: ekle) {
+                        Label("Levhaya ekle", systemImage: "plus.circle.fill")
+                            .font(.system(size: 14, weight: .bold))
+                    }
+                    .buttonStyle(.borderless)
+                    .tint(Tema.metin)
+                }
+                ForEach(hatalar ?? [], id: \.self) {
+                    Text("• \($0)").font(.system(size: 12)).foregroundStyle(RenkSeti.kirmizi.yazi)
+                }
+            } else {
+                Text("Şemaya uymadı — ham metin")
+                    .font(.system(size: 12.5, weight: .bold))
+                    .foregroundStyle(RenkSeti.kirmizi.yazi)
+                ForEach(taslak.hatalar.prefix(4), id: \.self) {
+                    Text("• \($0)").font(.system(size: 12)).foregroundStyle(RenkSeti.kirmizi.yazi)
+                }
+                Text(taslak.ham)
+                    .font(.system(size: 11.5, design: .monospaced))
+                    .foregroundStyle(Tema.metin)
+                    .lineLimit(hamAcik ? nil : 4)
+                    .onTapGesture { hamAcik.toggle() }
+            }
+        }
+        .padding(.vertical, 2)
     }
 }

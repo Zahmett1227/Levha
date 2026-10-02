@@ -45,6 +45,8 @@ struct LevhaSayfasi: View {
     @State private var hataliMaske: String?
     @State private var sallama = 0
     @State private var insaDeneme = 0
+    // Modele sor
+    @State private var sorAcik = false
 
     enum OrtmeAsamasi: Equatable {
         case aciliyor
@@ -76,6 +78,8 @@ struct LevhaSayfasi: View {
         case .kesif:
             return LevhaGorunumDurumu(mod: .kesif, katman: katman, secili: secili,
                                       dokunulabilir: katman >= LevhaGorunumDurumu.katmanSayisi)
+        case .editor:
+            return LevhaGorunumDurumu(mod: .kesif, katman: LevhaGorunumDurumu.katmanSayisi)
         case .insa:
             var d = LevhaGorunumDurumu(mod: .insa, katman: LevhaGorunumDurumu.katmanSayisi,
                                        gizli: Set(insaHedefler).subtracting(yerlesen))
@@ -110,12 +114,24 @@ struct LevhaSayfasi: View {
 
     var body: some View {
         VStack(spacing: 10) {
-            Text(levha.baslik)
-                .font(.system(size: 20, weight: .bold))
-                .foregroundStyle(Tema.metin)
-                .lineLimit(1)
-                .minimumScaleFactor(0.75)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            HStack(spacing: 8) {
+                Text(levha.baslik)
+                    .font(.system(size: 20, weight: .bold))
+                    .foregroundStyle(Tema.metin)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.75)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                Button { sorAcik = true } label: {
+                    Image(systemName: "bubble.left.and.text.bubble.right")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(Tema.metin)
+                        .frame(width: 36, height: 30)
+                        .background(Color.white, in: RoundedRectangle(cornerRadius: 9, style: .continuous))
+                        .overlay(RoundedRectangle(cornerRadius: 9, style: .continuous).strokeBorder(Tema.kartKenar, lineWidth: 1))
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Modele sor")
+            }
 
             AkildaKalanSeridi(metin: levha.akilda_kalan)
 
@@ -123,25 +139,34 @@ struct LevhaSayfasi: View {
                 ModSecici(mod: $mod, izinli: izinliModlar)
             }
 
-            LevhaView(levha: levha, mode: durum, cizim: mod == .sabotaj ? senaryo?.cizim : nil, dokun: dugumeDokun)
-                .padding(4)
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .levhaKarti()
-                .contentShape(RoundedRectangle(cornerRadius: Tema.kartKose))
-                .onTapGesture(perform: kartaDokun)
-                .accessibilityAction(named: "Sonraki katman", kartaDokun)
+            if mod == .editor {
+                EditorView(levha: levha)
+            } else {
+                LevhaView(levha: levha, mode: durum, cizim: mod == .sabotaj ? senaryo?.cizim : nil, dokun: dugumeDokun)
+                    .padding(4)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .levhaKarti()
+                    .contentShape(RoundedRectangle(cornerRadius: Tema.kartKose))
+                    .onTapGesture(perform: kartaDokun)
+                    .accessibilityAction(named: "Sonraki katman", kartaDokun)
 
-            NotPaneli(kenar: panelKenari) {
-                switch mod {
-                case .kesif: kesifPaneli
-                case .ortme: ortmePaneli
-                case .sabotaj: sabotajPaneli
-                case .insa: insaPaneli
+                NotPaneli(kenar: panelKenari) {
+                    switch mod {
+                    case .kesif, .editor: kesifPaneli
+                    case .ortme: ortmePaneli
+                    case .sabotaj: sabotajPaneli
+                    case .insa: insaPaneli
+                    }
                 }
             }
         }
         .padding(.horizontal, 16)
         .padding(.bottom, 10)
+        .sheet(isPresented: $sorAcik) {
+            SorView(levha: levha, seciliDugumId: mod == .kesif ? secili : nil)
+                .presentationDetents([.medium, .large])
+                .presentationDragIndicator(.visible)
+        }
         .sensoryFeedback(.selection, trigger: katman)
         .sensoryFeedback(.impact(weight: .light), trigger: acilan.count)
         .sensoryFeedback(.error, trigger: sallama)
@@ -230,6 +255,8 @@ struct LevhaSayfasi: View {
             }
         case .insa:
             insaYerlestir(id)
+        case .editor:
+            break
         case .sabotaj:
             guard let s = senaryo, case .ariyor(let yanlis) = sabotajAsama else { return }
             if s.hedef.contains(id) {
@@ -530,8 +557,16 @@ struct LevhaSayfasi: View {
 
 // MARK: - Parçalar
 
+/// Paket notu, altında kullanıcının "Notum" kayıtları (paket güncellemesinde silinmez).
 struct NotIcerigi: View {
     let dugum: Dugum
+    @Query private var notlar: [DugumNotu]
+
+    init(dugum: Dugum) {
+        self.dugum = dugum
+        let (l, d) = (dugum.levha?.id ?? "", dugum.id)
+        _notlar = Query(filter: #Predicate<DugumNotu> { $0.levhaId == l && $0.dugumId == d }, sort: \.tarih)
+    }
 
     var body: some View {
         Text(dugum.etiket)
@@ -540,10 +575,27 @@ struct NotIcerigi: View {
             .lineLimit(1)
             .minimumScaleFactor(0.8)
         ScrollView {
-            Text(dugum.not.isEmpty ? "Bu düğüm için not yok." : dugum.not)
-                .font(.system(size: 13))
-                .foregroundStyle(Tema.metin)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            VStack(alignment: .leading, spacing: 6) {
+                Text(dugum.not.isEmpty ? "Bu düğüm için not yok." : dugum.not)
+                    .font(.system(size: 13))
+                    .foregroundStyle(Tema.metin)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                if !notlar.isEmpty {
+                    Text("NOTUM")
+                        .font(.system(size: 9.5, weight: .heavy))
+                        .tracking(0.7)
+                        .foregroundStyle(RenkSeti.mavi.yazi)
+                        .padding(.top, 2)
+                    ForEach(notlar) { n in
+                        Text(n.metin)
+                            .font(.system(size: 12.5))
+                            .foregroundStyle(Tema.metin)
+                            .padding(8)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .background(RenkSeti.mavi.zemin, in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+                    }
+                }
+            }
         }
         .scrollIndicators(.visible)
     }

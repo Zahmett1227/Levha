@@ -18,6 +18,13 @@ yerleri ve `Ortak/WidgetAnligi.swift`'teki grup adını da güncelle.
 **Widget:** Ana ekranda uzun bas › + › "Levha": orta boy (maskeli levha, dokununca Örtme'de açar) ve
 küçük boy (bugünün turu). Kısayollar uygulamasında "Levha turu" eylemi uygulamayı Bugün'de açar.
 
+**Model:** Bu sürümde ağ çağrısı yok. "Modele sor", levha genişletme, Editör değerlendirmesi ve kitap sayfası
+önerisi sahte (çevrimdışı) istemciyle çalışır; Ölçüm › ⚙︎ Ayarlar'daki API alanları yalnız saklanır (anahtar Keychain'de).
+
+**Kitap sayfası (Bugün):** Kamera izni ilk kullanımda sorulur; metin cihazda okunur. Simülatörde kamera yoktur:
+`xcrun simctl addmedia booted SamplePackages/test-sayfa.jpg` ile test sayfasını galeriye ekle ya da ekrandaki
+**Örnek sayfayla dene**'ye dokun.
+
 Projeye dosya eklersen: `xcodegen generate` (proje `project.yml`'den üretilir).
 
 ## Paketler nereye konur
@@ -29,11 +36,12 @@ Uygulamada **İçerik** sekmesi klasördeki tüm `.json` dosyalarını listeler 
 levha/hangi alan olduğu yazar). **Hepsini içe aktar** ya da **Dosya seç…**. `SamplePackages/` içindeki örnek
 paketler uygulamayla gelir; yeni ya da değişmiş olanlar açılışta otomatik yüklenir.
 
-Şema sürümü 3'tür (`Levha/Schema/levha.schema.json`); sürüm 1–2 paketler okunmaya devam eder.
+Şema sürümü 4'tür (`Levha/Schema/levha.schema.json`); sürüm 1–3 paketler okunmaya devam eder.
 Ders ağırlıkları ve yanlış cezası paketten değil, Ölçüm › ⚙︎ Ayarlar'dan gelir.
 
-Aynı `id`'li levha yeniden içe aktarılınca **düzen korunur** (konumlar değişmez); etiket, not ve sorular güncellenir.
-Düzeni sıfırlamak için paketi İçerik'te sola kaydırıp sil, sonra yeniden içe aktar.
+Aynı `id`'li levha yeniden içe aktarılınca **düzen korunur** (konumlar ve taslaktan eklenen düğümler değişmez);
+etiket, not ve sorular güncellenir. Paketteki levhanın `revizyon`'u depodakinden büyükse **paket kazanır**:
+konumlar JSON'dan gelir, yerel eklemeler silinir. Kendi notların (Notum) hiçbir durumda silinmez.
 
 ## Lint
 
@@ -42,6 +50,7 @@ swift run levha-lint SamplePackages/ped.neo.sarilik.json
 ```
 
 Birden fazla dosya verilebilir (`swift run levha-lint SamplePackages/*.json`). Çıktı satır satır hata,
-sonda `OK` ya da `N hata`; yazılmış sabotajı olmayan levhalar "uyarı" olarak listelenir ama hata sayılmaz.
-Lint, zamanlayıcı, öncelik ve tahmini net testleri: `cd Tools/levha-lint && swift test`.
+sonda `OK` ya da `N hata`; uyarılar (sorusuz kazanım, ipucu sırası olmayan vaka sorusu, anahtar kelimesi olmayan
+levha...) listelenir ama hata sayılmaz. Lint, zamanlayıcı, öncelik, tahmini net, ipucu puanı ve sayfa eşleme
+testleri: `cd Tools/levha-lint && swift test`.
 Şema: `Levha/Schema/levha.schema.json`.

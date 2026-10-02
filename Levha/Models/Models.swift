@@ -29,6 +29,11 @@ final class Paket {
         iceAktarilma = .now
     }
 
+    /// Editör'de yazılan soruların paketi (dosyası yok, yalnız depoda).
+    static let kullaniciId = "kullanici.yazdiklarim"
+    static let kullaniciKaynak = "kullanici"
+    var kullaniciMi: Bool { paket_id == Paket.kullaniciId }
+
     var siraliLevhalar: [Levha] { levhalar.sorted { $0.sira < $1.sira } }
     var sonCalisma: Date? { levhalar.compactMap(\.sonCalisma).max() }
 
@@ -114,8 +119,12 @@ final class Levha {
     var sabotajlar: Data?
     /// İnşa'da boş bırakılacak düğümler (yoksa ortme_sirasi).
     var insa_sirasi: [String]?
-    /// `KaynakJSON` (Part 4'te kullanılacak).
+    /// `KaynakJSON`: kitap, baskı, anahtar kelimeler.
     var kaynak: Data?
+    /// v4: paketteki revizyon. Yeniden içe aktarmada paketinki büyükse paket düzeni kazanır.
+    var revizyon: Int?
+    /// Uygulama içi değişiklik sayacı (taslaktan eklenen düğümler).
+    var yerelRevizyon: Int?
     /// Levhanın içe aktarılan ham JSON'u (Part 2 tiplerinin ek alanları dahil).
     var hamJSON: Data
     var sonCalisma: Date?
@@ -147,6 +156,23 @@ final class Levha {
     var yazilmisSabotajlar: [SabotajJSON] {
         sabotajlar.flatMap { try? JSONDecoder().decode([SabotajJSON].self, from: $0) } ?? []
     }
+    var kaynakBilgisi: KaynakJSON? { kaynak.flatMap { try? JSONDecoder().decode(KaynakJSON.self, from: $0) } }
+    var anahtarKelimeler: [String] { kaynakBilgisi?.anahtar_kelimeler ?? [] }
+
+    /// Izgara levhasının o anki hâli (yerel eklemeler dahil) şema nesnesi olarak; genişletme denetimi için.
+    var izgaraJSON: LevhaJSON? {
+        guard let t = levhaTipi, t.izgaraTabanli else { return nil }
+        return LevhaJSON(
+            id: id, tip: t, baslik: baslik, akilda_kalan: akilda_kalan, duzen: DuzenJSON(izgara: izgara, sabit: nil),
+            dugumler: siraliDugumler.map {
+                DugumJSON(id: $0.id, etiket: $0.etiket, sekil: DugumSekli(rawValue: $0.sekil), renk: RenkAdi(rawValue: $0.renk),
+                          konum: $0.konum, tus: $0.tus, not: $0.not, ebeveyn: nil)
+            },
+            baglantilar: siraliBaglantilar.map {
+                BaglantiJSON(from: $0.from, to: $0.to, etiket: $0.etiket.isEmpty ? nil : $0.etiket, tip: $0.tip.flatMap(BaglantiTipi.init(rawValue:)))
+            },
+            ortme_sirasi: ortme_sirasi)
+    }
 }
 
 @Model
@@ -167,6 +193,8 @@ final class Dugum {
     var serit: String?
     /// Vücut haritası bölgesi (`VucutBolgesi` ham değeri).
     var bolge: String?
+    /// Taslaktan uygulamada eklendi (paket güncellemesinde revizyon kuralına tabi).
+    var yerel: Bool?
     var sira: Int
     var levha: Levha?
 
@@ -190,6 +218,7 @@ final class Baglanti {
     var etiket: String
     /// `BaglantiTipi` ham değeri; nil → normal.
     var tip: String?
+    var yerel: Bool?
     var sira: Int
     var levha: Levha?
 
@@ -225,6 +254,14 @@ final class Soru {
     var zorluk: Int?
     /// {"şık": "aile üyesi"} — JSON.
     var secenek_aile: Data?
+    // v4
+    /// `[IpucuJSON]`, JSON.
+    var ipucu_sirasi: Data?
+    /// `[KirilimJSON]`, JSON.
+    var kirilimlar: Data?
+    /// "kullanici" → Editör'de yazıldı; konu paketi `levhaPaketId`.
+    var kaynakTuru: String?
+    var levhaPaketId: String?
 
     init(_ j: SoruJSON, paketId: String, sira: Int) {
         id = j.id
@@ -242,13 +279,32 @@ final class Soru {
         kalip = j.kalip
         zorluk = j.zorluk
         secenek_aile = j.secenek_aile.flatMap { try? JSONEncoder().encode($0) }
+        ipucu_sirasi = j.ipucu_sirasi.flatMap { $0.isEmpty ? nil : try? JSONEncoder().encode($0) }
+        kirilimlar = j.kirilimlar.flatMap { $0.isEmpty ? nil : try? JSONEncoder().encode($0) }
+    }
+
+    var kullaniciSorusu: Bool { kaynakTuru == Paket.kullaniciKaynak }
+
+    /// Ders, kazanım ve aile bilgisinin geldiği paket: kullanıcı sorusunda levhanın paketi.
+    var konuPaketi: Paket? {
+        guard kullaniciSorusu, let pid = levhaPaketId, let ctx = modelContext else { return paket }
+        return (try? ctx.fetch(FetchDescriptor<Paket>(predicate: #Predicate { $0.paket_id == pid })).first) ?? paket
     }
 
     /// Kazanımın sorulabilirliği (1–5); kazanımı yoksa nil.
     var sorulabilirlik: Int? {
         guard let kid = kazanim else { return nil }
-        return paket?.kazanimlar.first { $0.id == kid }?.sorulabilirlik
+        return konuPaketi?.kazanimlar.first { $0.id == kid }?.sorulabilirlik
     }
+
+    /// Sorunun kalıbı; soruda yoksa kazanımınki.
+    var kalipTipi: KalipTipi? {
+        if let k = kalip.flatMap(KalipTipi.init(rawValue:)) { return k }
+        return kazanim.flatMap { kid in konuPaketi?.kazanimlar.first { $0.id == kid }?.kalipTipi }
+    }
+
+    var ipuclari: [IpucuJSON] { ipucu_sirasi.flatMap { try? JSONDecoder().decode([IpucuJSON].self, from: $0) } ?? [] }
+    var kirilimListesi: [KirilimJSON] { kirilimlar.flatMap { try? JSONDecoder().decode([KirilimJSON].self, from: $0) } ?? [] }
 
     var secenekAileleri: [Int: String] {
         let ham = secenek_aile.flatMap { try? JSONDecoder().decode([String: String].self, from: $0) } ?? [:]
@@ -303,10 +359,14 @@ final class SoruOlayi {
     var dogruMu: Bool
     var sureSaniye: Double
     var tarih: Date
-    /// 1 Eminim · 2 Sanırım · 3 Tahmin (Part 2 kayıtlarında boş).
+    /// 1 Eminim · 2 Sanırım · 3 Tahmin (Part 2 kayıtlarında ve İpucu avında boş).
     var guven: Int?
+    // Soru kırma (Part 4): seçilen kalıp (`KalipTipi` ham değeri), seçilen ipucu indeksi, kilit açılana kadar geçen süre.
+    var kalipTahmini: String?
+    var ipucuTahminiIndeks: Int?
+    var kirmaSuresi: Double?
 
-    init(soruGlobalId: String, levhaId: String, secilen: Int, dogruMu: Bool, sureSaniye: Double, tarih: Date, guven: Int) {
+    init(soruGlobalId: String, levhaId: String, secilen: Int, dogruMu: Bool, sureSaniye: Double, tarih: Date, guven: Int?) {
         self.soruGlobalId = soruGlobalId
         self.levhaId = levhaId
         self.secilen = secilen
@@ -336,6 +396,103 @@ final class InsaOlayi {
 
     /// İlk denemede doğru yerleştirilen oranı (0–1).
     var oran: Double { toplam > 0 ? Double(max(0, toplam - hataSayisi)) / Double(toplam) : 0 }
+}
+
+/// İpucu avında bir soru.
+@Model
+final class IpucuOlayi {
+    var soruGlobalId: String
+    /// "Tanıyı biliyorum" denildiğinde açık kart sayısı (1…toplam).
+    var ipucuIndeks: Int
+    var toplamIpucu: Int
+    var dogru: Bool
+    var puan: Int
+    var tarih: Date
+
+    init(soruGlobalId: String, ipucuIndeks: Int, toplamIpucu: Int, dogru: Bool, puan: Int, tarih: Date) {
+        self.soruGlobalId = soruGlobalId
+        self.ipucuIndeks = ipucuIndeks
+        self.toplamIpucu = toplamIpucu
+        self.dogru = dogru
+        self.puan = puan
+        self.tarih = tarih
+    }
+
+    /// 0–1: düşük = erken tanıdı.
+    var gecikme: Double { toplamIpucu > 0 ? Double(ipucuIndeks) / Double(toplamIpucu) : 1 }
+}
+
+/// "Modele sor" geçmişi.
+@Model
+final class SorKaydi {
+    var levhaId: String
+    var dugumId: String?
+    var soru: String
+    var cevap: String
+    var tarih: Date
+
+    init(levhaId: String, dugumId: String?, soru: String, cevap: String, tarih: Date) {
+        self.levhaId = levhaId
+        self.dugumId = dugumId
+        self.soru = soru
+        self.cevap = cevap
+        self.tarih = tarih
+    }
+}
+
+/// Kullanıcının düğüme eklediği not; paket güncellemesinde silinmez.
+@Model
+final class DugumNotu {
+    var levhaId: String
+    var dugumId: String
+    var metin: String
+    var tarih: Date
+
+    init(levhaId: String, dugumId: String, metin: String, tarih: Date) {
+        self.levhaId = levhaId
+        self.dugumId = dugumId
+        self.metin = metin
+        self.tarih = tarih
+    }
+}
+
+/// "Bu levhayı genişlet" yanıtı. Geçerliyse `json` dolu (`GenisletmeJSON`), değilse ham metin ve hatalar.
+@Model
+final class Taslak {
+    var levhaId: String
+    var tarih: Date
+    var ham: String
+    var json: Data?
+    var hatalar: [String]
+    var eklendi: Bool
+
+    init(levhaId: String, tarih: Date, ham: String, json: Data?, hatalar: [String]) {
+        self.levhaId = levhaId
+        self.tarih = tarih
+        self.ham = ham
+        self.json = json
+        self.hatalar = hatalar
+        eklendi = false
+    }
+
+    var gecerli: Bool { json != nil && hatalar.isEmpty }
+    var genisletme: GenisletmeJSON? { json.flatMap { try? JSONDecoder().decode(GenisletmeJSON.self, from: $0) } }
+}
+
+/// Editör'de bir değerlendirme ya da kayıt.
+@Model
+final class EditorOlayi {
+    var levhaId: String
+    var puan: Int?
+    var kaydedildi: Bool
+    var tarih: Date
+
+    init(levhaId: String, puan: Int?, kaydedildi: Bool, tarih: Date) {
+        self.levhaId = levhaId
+        self.puan = puan
+        self.kaydedildi = kaydedildi
+        self.tarih = tarih
+    }
 }
 
 /// Uygulamanın ön planda geçirdiği süre (günlük).
@@ -414,6 +571,7 @@ enum Depo {
         Paket.self, Levha.self, Dugum.self, Baglanti.self, Soru.self, OrtmeOlayi.self,
         SabotajOlayi.self, SoruOlayi.self, DugumZayiflik.self, LevhaDurumu.self, TurDurumu.self,
         Kazanim.self, Aile.self, InsaOlayi.self, KullanimKaydi.self,
+        IpucuOlayi.self, SorKaydi.self, DugumNotu.self, Taslak.self, EditorOlayi.self,
     ]
 
     /// Depo App Group container'ında durur (widget ve Part 4+ eklentileri erişebilsin). App Group yoksa

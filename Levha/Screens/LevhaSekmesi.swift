@@ -12,11 +12,12 @@ struct LevhaSekmesi: View {
     var body: some View {
         NavigationStack {
             Group {
-                if let paket = paketler.first(where: { $0.paket_id == aktifPaketId }) ?? paketler.first {
+                let icerik = paketler.filter { !$0.kullaniciMi }
+                if let paket = icerik.first(where: { $0.paket_id == aktifPaketId }) ?? icerik.first {
                     LevhaPager(levhalar: paket.siraliLevhalar, mod: $mod, onek: paket.bolum,
                                baslangicId: yonlendirici.hedefLevhaId) {
                         Menu {
-                            ForEach(paketler) { p in
+                            ForEach(icerik) { p in
                                 Button {
                                     aktifPaketId = p.paket_id
                                 } label: {

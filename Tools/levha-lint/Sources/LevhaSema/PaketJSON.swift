@@ -1,6 +1,6 @@
 import Foundation
 
-// Şema v3'ün Codable karşılığı (v1–v2 paketler de okunur). Alan adları JSON anahtarlarıyla birebir aynıdır.
+// Şema v4'ün Codable karşılığı (v1–v3 paketler de okunur). Alan adları JSON anahtarlarıyla birebir aynıdır.
 // Bu dosya hem levha-lint'te hem de iOS uygulamasında derlenir.
 
 public enum LevhaTipi: String, Codable, CaseIterable {
@@ -127,6 +127,22 @@ public enum KalipTipi: String, Codable, CaseIterable {
     }
 }
 
+/// İpucu türleri (v4, `ipucu_sirasi.tur`).
+public enum IpucuTuru: String, Codable, CaseIterable {
+    case zaman, lab, fizik, oyku, goruntu, ilac
+
+    public var ad: String {
+        switch self {
+        case .zaman: return "zaman"
+        case .lab: return "laboratuvar"
+        case .fizik: return "fizik muayene"
+        case .oyku: return "öykü"
+        case .goruntu: return "görüntüleme"
+        case .ilac: return "ilaç"
+        }
+    }
+}
+
 public enum ZamanBirimi: String, CaseIterable {
     case gun, hafta, ay, yil
     public var ad: String {
@@ -185,8 +201,13 @@ public struct AileJSON: Codable {
 }
 
 public struct KaynakJSON: Codable {
-    public var kitap: String
+    /// v4'te isteğe bağlı (yalnız anahtar kelime veren kaynak olabilir).
+    public var kitap: String?
     public var sayfa: [Int]?
+    // v4
+    public var baski: String?
+    /// Kitap sayfası eşlemesinde ×3 ağırlıklı kelimeler.
+    public var anahtar_kelimeler: [String]?
 }
 
 public struct DuzenJSON: Codable {
@@ -308,6 +329,8 @@ public struct LevhaJSON: Codable {
     // v3
     public var insa_sirasi: [String]?
     public var kaynak: KaynakJSON?
+    // v4: paket güncellemesiyle artar; büyükse paketteki düzen yerel düzenin önüne geçer.
+    public var revizyon: Int?
 }
 
 public struct SoruJSON: Codable {
@@ -327,6 +350,50 @@ public struct SoruJSON: Codable {
     public var zorluk: Int?
     /// Şık indeksi → aile üyesi (doğru şık dahil).
     public var secenek_aile: [String: String]?
+    // v4
+    public var ipucu_sirasi: [IpucuJSON]?
+    public var kirilimlar: [KirilimJSON]?
+}
+
+/// Kökte birebir geçen ipucu (v4). `tur` ham metin: enum dışı değer lint'te hata olur, decode'u bozmaz.
+public struct IpucuJSON: Codable, Equatable, Hashable {
+    public var metin: String
+    public var dugum: String?
+    public var tur: String
+    /// 0–3; 0 = belirleyici değil.
+    public var agirlik: Int?
+    /// Kırmızı ringa.
+    public var yaniltici: Bool?
+
+    public init(metin: String, dugum: String? = nil, tur: String, agirlik: Int? = nil, yaniltici: Bool? = nil) {
+        self.metin = metin
+        self.dugum = dugum
+        self.tur = tur
+        self.agirlik = agirlik
+        self.yaniltici = yaniltici
+    }
+
+    public var ipucuTuru: IpucuTuru? { IpucuTuru(rawValue: tur) }
+    public var yanilticiMi: Bool { yaniltici ?? false }
+}
+
+/// Soru kırma: `ipucu` indeksli ipucunun metni `yeni_metin` olursa doğru şık `yeni_dogru` olur.
+public struct KirilimJSON: Codable, Equatable, Hashable {
+    public var ipucu: Int
+    public var yeni_metin: String
+    public var yeni_dogru: Int
+    public var aciklama: String?
+}
+
+/// "Bu levhayı genişlet" yanıtı: eklenecek düğümler ve bağlantılar.
+public struct GenisletmeJSON: Codable {
+    public var dugumler: [DugumJSON]
+    public var baglantilar: [BaglantiJSON]?
+
+    public init(dugumler: [DugumJSON], baglantilar: [BaglantiJSON]?) {
+        self.dugumler = dugumler
+        self.baglantilar = baglantilar
+    }
 }
 
 /// Levhaların ham hâlini saklamak için.

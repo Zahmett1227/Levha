@@ -1,5 +1,5 @@
 {
-  "sema_surumu": 3,
+  "sema_surumu": 4,
   "paket_id": "ped.gelisim.basamaklar",
   "ders": "Pediatri",
   "bolum": "Büyüme ve gelişme",
@@ -223,7 +223,17 @@
         "e12",
         "e13",
         "e15"
-      ]
+      ],
+      "kaynak": {
+        "anahtar_kelimeler": [
+          "gelişim basamakları",
+          "kaba motor",
+          "ince motor",
+          "dil gelişimi",
+          "sosyal gelişim"
+        ]
+      },
+      "revizyon": 1
     },
     {
       "id": "ped.gelisim.basamaklar.refleks",
@@ -358,7 +368,17 @@
         "r6",
         "r7",
         "r8"
-      ]
+      ],
+      "kaynak": {
+        "anahtar_kelimeler": [
+          "ilkel refleks",
+          "Moro",
+          "Landau",
+          "paraşüt",
+          "ATNR"
+        ]
+      },
+      "revizyon": 1
     },
     {
       "id": "ped.gelisim.basamaklar.cetvel",
@@ -457,7 +477,17 @@
         "m5",
         "m6",
         "m7"
-      ]
+      ],
+      "kaynak": {
+        "anahtar_kelimeler": [
+          "büyüme",
+          "doğum ağırlığı",
+          "kilo",
+          "boy",
+          "erişkin boyu"
+        ]
+      },
+      "revizyon": 1
     }
   ],
   "sorular": [
@@ -469,7 +499,7 @@
         "e7",
         "e11"
       ],
-      "kok": "Kontrole getirilen sağlıklı bebek desteksiz oturabiliyor, oyuncağı bir elinden diğerine geçiriyor ve 'ba-ba' gibi heceler çıkarıyor. Henüz emeklemiyor ve küçük nesneleri başparmak ile işaret parmağı arasında tutamıyor. Bu bebeğin gelişimi en çok hangi yaşla uyumludur?",
+      "kok": "Kontrole getirilen sağlıklı bebek doğum ağırlığının iki katına ulaşmış; desteksiz oturabiliyor, oyuncağı bir elinden diğerine geçiriyor ve 'ba-ba' gibi heceler çıkarıyor. Henüz emeklemiyor ve küçük nesneleri başparmak ile işaret parmağı arasında tutamıyor. Bu bebeğin gelişimi en çok hangi yaşla uyumludur?",
       "secenekler": [
         "2 ay",
         "4 ay",
@@ -478,7 +508,7 @@
         "18 ay"
       ],
       "dogru": 2,
-      "aciklama": "Desteksiz oturma, elden ele geçirme ve hece tekrarı 6. ayın becerileridir. Pens kavrama 9–10. ayda başladığından henüz beklenmez.",
+      "aciklama": "Desteksiz oturma, elden ele geçirme ve hece tekrarı 6. ayın becerileridir. Pens kavrama 9–10. ayda başladığından henüz beklenmez. Ringa: «doğum ağırlığının iki katına ulaşmış» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "e2",
         "e7",
@@ -497,7 +527,47 @@
         "2": "6. ay",
         "3": "12. ay",
         "4": "18. ay"
-      }
+      },
+      "ipucu_sirasi": [
+        {
+          "metin": "desteksiz oturabiliyor",
+          "dugum": "e2",
+          "tur": "fizik",
+          "agirlik": 2
+        },
+        {
+          "metin": "oyuncağı bir elinden diğerine geçiriyor",
+          "dugum": "e7",
+          "tur": "fizik",
+          "agirlik": 2
+        },
+        {
+          "metin": "'ba-ba' gibi heceler çıkarıyor",
+          "dugum": "e11",
+          "tur": "oyku",
+          "agirlik": 2
+        },
+        {
+          "metin": "Henüz emeklemiyor ve küçük nesneleri başparmak ile işaret parmağı arasında tutamıyor",
+          "dugum": "e8",
+          "tur": "fizik",
+          "agirlik": 3
+        },
+        {
+          "metin": "doğum ağırlığının iki katına ulaşmış",
+          "tur": "fizik",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ],
+      "kirilimlar": [
+        {
+          "ipucu": 3,
+          "yeni_metin": "Bağımsız birkaç adım atıyor ve anlamlı ilk kelimelerini söylüyor",
+          "yeni_dogru": 3,
+          "aciklama": "Yaşı en ileri kazanılmış beceri belirler: bağımsız adım ve ilk anlamlı kelimeler 12. ay civarına uyar; oturma ve elden ele geçirme daha önce kazanılmıştır."
+        }
+      ]
     },
     {
       "id": "q2",
@@ -514,7 +584,7 @@
         "Geçmiş zaman eklerini hatasız kullanma"
       ],
       "dogru": 2,
-      "aciklama": "2 yaşında iki kelimelik cümle beklenir; üç kelimelik cümle 3 yaşındadır. 24. ayda iki kelimeyi birleştiremeyen çocuk dil gecikmesi açısından değerlendirilir.",
+      "aciklama": "2 yaşında iki kelimelik cümle beklenir; üç kelimelik cümle 3 yaşındadır. 24. ayda iki kelimeyi birleştiremeyen çocuk dil gecikmesi açısından değerlendirilir. Ringa: «az konuştuğunu düşünüyor» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "e12",
         "e13",
@@ -533,7 +603,26 @@
         "1": "6. ay",
         "2": "2 yaş",
         "3": "4 yaş"
-      }
+      },
+      "ipucu_sirasi": [
+        {
+          "metin": "iki yaşındaki",
+          "dugum": "e13",
+          "tur": "zaman",
+          "agirlik": 3
+        },
+        {
+          "metin": "işitme testi normal",
+          "tur": "lab",
+          "agirlik": 1
+        },
+        {
+          "metin": "az konuştuğunu düşünüyor",
+          "tur": "oyku",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
     },
     {
       "id": "q3",
@@ -550,7 +639,7 @@
         "Altı ay sonra kontrole çağrılır"
       ],
       "dogru": 1,
-      "aciklama": "Bağımsız yürüme ortalama 12. ayda kazanılır; 18. ayda hâlâ yürümeyen çocuk kırmızı bayraktır ve ayrıntılı değerlendirme gerektirir (kas hastalığı, serebral palsi vb.).",
+      "aciklama": "Bağımsız yürüme ortalama 12. ayda kazanılır; 18. ayda hâlâ yürümeyen çocuk kırmızı bayraktır ve ayrıntılı değerlendirme gerektirir (kas hastalığı, serebral palsi vb.). Ringa: «tutunarak ayağa kalkabiliyor» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "e3",
         "e4"
@@ -561,7 +650,32 @@
       },
       "kazanim": "k2",
       "kalip": "ilk_adim",
-      "zorluk": 1
+      "zorluk": 1,
+      "ipucu_sirasi": [
+        {
+          "metin": "On sekiz aylık",
+          "dugum": "e3",
+          "tur": "zaman",
+          "agirlik": 3
+        },
+        {
+          "metin": "henüz bağımsız yürüyemiyor",
+          "dugum": "e3",
+          "tur": "fizik",
+          "agirlik": 3
+        },
+        {
+          "metin": "Diğer gelişim alanları yaşıyla uyumlu",
+          "tur": "oyku",
+          "agirlik": 1
+        },
+        {
+          "metin": "tutunarak ayağa kalkabiliyor",
+          "tur": "fizik",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
     },
     {
       "id": "q4",
@@ -605,7 +719,7 @@
         "12. ay"
       ],
       "dogru": 1,
-      "aciklama": "Sosyal gülümseme 6–8. haftada başlar; üç haftalık bebekte görülmemesi normaldir. 8–9. ay yabancı kaygısının görüldüğü dönemdir.",
+      "aciklama": "Sosyal gülümseme 6–8. haftada başlar; üç haftalık bebekte görülmemesi normaldir. 8–9. ay yabancı kaygısının görüldüğü dönemdir. Ringa: «henüz gülümsemediğini söylüyor» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "e15"
       ],
@@ -620,7 +734,26 @@
         "2": "4. ay",
         "3": "9. ay",
         "4": "12. ay"
-      }
+      },
+      "ipucu_sirasi": [
+        {
+          "metin": "üç haftalık",
+          "dugum": "e15",
+          "tur": "zaman",
+          "agirlik": 3
+        },
+        {
+          "metin": "emmesi ve kilo alımı normal",
+          "tur": "oyku",
+          "agirlik": 1
+        },
+        {
+          "metin": "henüz gülümsemediğini söylüyor",
+          "tur": "oyku",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
     },
     {
       "id": "q6",
@@ -664,7 +797,7 @@
       "dugumler": [
         "r1"
       ],
-      "kok": "Makrozomik olarak, omuz distosisiyle doğan yenidoğanın muayenesinde Moro refleksi sağ kolda alınamıyor; sağ kol addüksiyon ve iç rotasyonda, dirsek ekstansiyonda duruyor ('garson bahşişi' pozisyonu). En olası tanı aşağıdakilerden hangisidir?",
+      "kok": "Annesi gestasyonel diyabetli olan, makrozomik olarak omuz distosisiyle doğan yenidoğanın muayenesinde Moro refleksi sağ kolda alınamıyor; sağ kol addüksiyon ve iç rotasyonda, dirsek ekstansiyonda duruyor ('garson bahşişi' pozisyonu). En olası tanı aşağıdakilerden hangisidir?",
       "secenekler": [
         "Erb-Duchenne felci",
         "Hipoksik iskemik ensefalopati",
@@ -673,7 +806,7 @@
         "Hipoglisemi"
       ],
       "dogru": 0,
-      "aciklama": "Tek taraflı Moro yokluğu ve 'garson bahşişi' pozisyonu C5–C6 kök hasarına bağlı Erb-Duchenne felcini gösterir. Klavikula kırığı da asimetrik Moro yapabilir; santral nedenler genellikle iki tarafı birlikte etkiler.",
+      "aciklama": "Tek taraflı Moro yokluğu ve 'garson bahşişi' pozisyonu C5–C6 kök hasarına bağlı Erb-Duchenne felcini gösterir. Klavikula kırığı da asimetrik Moro yapabilir; santral nedenler genellikle iki tarafı birlikte etkiler. Ringa: «Annesi gestasyonel diyabetli» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "r1"
       ],
@@ -683,7 +816,31 @@
       },
       "kazanim": "k12",
       "kalip": "en_olasi_tani",
-      "zorluk": 2
+      "zorluk": 2,
+      "ipucu_sirasi": [
+        {
+          "metin": "Moro refleksi sağ kolda alınamıyor",
+          "dugum": "r1",
+          "tur": "fizik",
+          "agirlik": 3
+        },
+        {
+          "metin": "addüksiyon ve iç rotasyonda, dirsek ekstansiyonda",
+          "tur": "fizik",
+          "agirlik": 3
+        },
+        {
+          "metin": "omuz distosisiyle doğan",
+          "tur": "oyku",
+          "agirlik": 2
+        },
+        {
+          "metin": "Annesi gestasyonel diyabetli",
+          "tur": "oyku",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
     },
     {
       "id": "q8",
@@ -691,7 +848,7 @@
       "dugumler": [
         "r5"
       ],
-      "kok": "Sekiz aylık bebekte başı sağa çevrildiğinde sağ kol ve bacak ekstansiyona, sol taraf fleksiyona geliyor ve bu duruş zorunlu olarak sürüyor. Bebek desteksiz oturamıyor ve nesneleri elden ele geçiremiyor. Bu bulgular en çok hangisini düşündürür?",
+      "kok": "Sekiz aylık bebekte başı sağa çevrildiğinde sağ kol ve bacak ekstansiyona, sol taraf fleksiyona geliyor ve bu duruş zorunlu olarak sürüyor. Bebek desteksiz oturamıyor ve nesneleri elden ele geçiremiyor. Doğumda omuz distosisi yaşandığı öğreniliyor. Bu bulgular en çok hangisini düşündürür?",
       "secenekler": [
         "Normal gelişim varyantı",
         "Serebral palsi",
@@ -700,7 +857,7 @@
         "Benign konjenital hipotoni"
       ],
       "dogru": 1,
-      "aciklama": "ATNR 4–6. ayda kaybolur; 8. ayda zorunlu ve kalıcı olması motor gecikmeyle birlikte serebral palsiyi düşündürür. İlkel reflekslerin beklenen yaşta kaybolmaması santral motor bozukluğun ipucudur.",
+      "aciklama": "ATNR 4–6. ayda kaybolur; 8. ayda zorunlu ve kalıcı olması motor gecikmeyle birlikte serebral palsiyi düşündürür. İlkel reflekslerin beklenen yaşta kaybolmaması santral motor bozukluğun ipucudur. Ringa: «Doğumda omuz distosisi yaşandığı» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "r5"
       ],
@@ -710,7 +867,32 @@
       },
       "kazanim": "k11",
       "kalip": "en_olasi_tani",
-      "zorluk": 3
+      "zorluk": 3,
+      "ipucu_sirasi": [
+        {
+          "metin": "bu duruş zorunlu olarak sürüyor",
+          "dugum": "r5",
+          "tur": "fizik",
+          "agirlik": 3
+        },
+        {
+          "metin": "Sekiz aylık",
+          "dugum": "r5",
+          "tur": "zaman",
+          "agirlik": 3
+        },
+        {
+          "metin": "desteksiz oturamıyor",
+          "tur": "fizik",
+          "agirlik": 2
+        },
+        {
+          "metin": "Doğumda omuz distosisi yaşandığı",
+          "tur": "oyku",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
     },
     {
       "id": "q9",
@@ -753,7 +935,7 @@
       "dugumler": [
         "m3"
       ],
-      "kok": "Doğum ağırlığı 3200 g olan ve büyümesi düzenli seyreden sağlıklı bebek 12. ay kontrolüne getiriliyor. Bu bebek için beklenen yaklaşık ağırlık aşağıdakilerden hangisidir?",
+      "kok": "Doğum ağırlığı 3200 g olan ve büyümesi düzenli seyreden sağlıklı bebek 12. ay kontrolüne getiriliyor; annesi bebeğin az yediğini düşünüyor. Bu bebek için beklenen yaklaşık ağırlık aşağıdakilerden hangisidir?",
       "secenekler": [
         "6400 g",
         "8000 g",
@@ -762,7 +944,7 @@
         "16.000 g"
       ],
       "dogru": 2,
-      "aciklama": "Doğum ağırlığı 1 yaşında üç katına çıkar: 3200 × 3 ≈ 9600 g. İki kat (6400 g) 4–6. aya aittir.",
+      "aciklama": "Doğum ağırlığı 1 yaşında üç katına çıkar: 3200 × 3 ≈ 9600 g. İki kat (6400 g) 4–6. aya aittir. Ringa: «annesi bebeğin az yediğini düşünüyor» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "m2",
         "m3"
@@ -773,7 +955,39 @@
       },
       "kazanim": "k16",
       "kalip": "esik_sayi",
-      "zorluk": 1
+      "zorluk": 1,
+      "ipucu_sirasi": [
+        {
+          "metin": "12. ay kontrolüne",
+          "dugum": "m3",
+          "tur": "zaman",
+          "agirlik": 3
+        },
+        {
+          "metin": "Doğum ağırlığı 3200 g",
+          "tur": "fizik",
+          "agirlik": 3
+        },
+        {
+          "metin": "büyümesi düzenli seyreden",
+          "tur": "oyku",
+          "agirlik": 1
+        },
+        {
+          "metin": "annesi bebeğin az yediğini düşünüyor",
+          "tur": "oyku",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ],
+      "kirilimlar": [
+        {
+          "ipucu": 0,
+          "yeni_metin": "5. ay kontrolüne",
+          "yeni_dogru": 0,
+          "aciklama": "Doğum ağırlığı 4–5. ayda iki katına çıkar: 3200 × 2 = 6400 g. 12. ayda üç katı (9600 g) beklenir."
+        }
+      ]
     },
     {
       "id": "q11",
@@ -817,7 +1031,7 @@
         "6. ay"
       ],
       "dogru": 1,
-      "aciklama": "İlk günlerde %10'a kadar kilo kaybı fizyolojiktir; term bebek 10–14. günde doğum ağırlığına döner. İyi emen, idrarı normal bebekte izlem yeterlidir.",
+      "aciklama": "İlk günlerde %10'a kadar kilo kaybı fizyolojiktir; term bebek 10–14. günde doğum ağırlığına döner. İyi emen, idrarı normal bebekte izlem yeterlidir. Ringa: «annesi endişeli» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "m1"
       ],
@@ -826,7 +1040,31 @@
       },
       "kazanim": "k19",
       "kalip": "esik_sayi",
-      "zorluk": 2
+      "zorluk": 2,
+      "ipucu_sirasi": [
+        {
+          "metin": "doğum ağırlığının %7'sini kaybettiği",
+          "dugum": "m1",
+          "tur": "fizik",
+          "agirlik": 2
+        },
+        {
+          "metin": "iyi emen ve idrar çıkışı normal",
+          "tur": "oyku",
+          "agirlik": 2
+        },
+        {
+          "metin": "3. günde",
+          "tur": "zaman",
+          "agirlik": 1
+        },
+        {
+          "metin": "annesi endişeli",
+          "tur": "oyku",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
     },
     {
       "id": "q13",

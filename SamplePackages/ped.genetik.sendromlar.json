@@ -1,5 +1,5 @@
 {
-  "sema_surumu": 3,
+  "sema_surumu": 4,
   "paket_id": "ped.genetik.sendromlar",
   "ders": "Pediatri",
   "bolum": "Genetik",
@@ -148,7 +148,17 @@
         "d10",
         "d12",
         "d13"
-      ]
+      ],
+      "kaynak": {
+        "anahtar_kelimeler": [
+          "Down sendromu",
+          "trizomi",
+          "AVSD",
+          "duodenal atrezi",
+          "hipotoni"
+        ]
+      },
+      "revizyon": 1
     },
     {
       "id": "ped.genetik.sendromlar.turner",
@@ -286,7 +296,17 @@
         "t9",
         "t10",
         "t11"
-      ]
+      ],
+      "kaynak": {
+        "anahtar_kelimeler": [
+          "Turner sendromu",
+          "koarktasyon",
+          "biküspit aort",
+          "kısa boy",
+          "lenfödem"
+        ]
+      },
+      "revizyon": 1
     },
     {
       "id": "ped.genetik.sendromlar.matris",
@@ -445,7 +465,18 @@
         "r1c1",
         "r2c1",
         "r3c1"
-      ]
+      ],
+      "kaynak": {
+        "anahtar_kelimeler": [
+          "Noonan",
+          "Williams",
+          "Turner",
+          "Down",
+          "karyotip",
+          "delesyon"
+        ]
+      },
+      "revizyon": 1
     }
   ],
   "sorular": [
@@ -455,7 +486,7 @@
       "dugumler": [
         "d7"
       ],
-      "kok": "Doğum sonrası muayenede hipotonik olan bebekte yukarı çekik göz, düz yüz profili ve tek palmar çizgi saptanıyor. Bu bebekte eşlik etmesi en olası kalp hastalığı aşağıdakilerden hangisidir?",
+      "kok": "Doğum sonrası muayenede hipotonik olan bebekte yukarı çekik göz, düz yüz profili ve tek palmar çizgi saptanıyor. Annesi 24 yaşında. Bu bebekte eşlik etmesi en olası kalp hastalığı aşağıdakilerden hangisidir?",
       "secenekler": [
         "Atriyoventriküler septal defekt",
         "Aort koarktasyonu",
@@ -464,7 +495,7 @@
         "Büyük arterlerin transpozisyonu"
       ],
       "dogru": 0,
-      "aciklama": "Bulgular Down sendromunu düşündürür; en karakteristik KKH AVSD'dir. Koarktasyon Turner, supravalvüler aort darlığı Williams, pulmoner stenoz Noonan sendromu ile ilişkilidir.",
+      "aciklama": "Bulgular Down sendromunu düşündürür; en karakteristik KKH AVSD'dir. Koarktasyon Turner, supravalvüler aort darlığı Williams, pulmoner stenoz Noonan sendromu ile ilişkilidir. Ringa: «Annesi 24 yaşında» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "d2",
         "d3",
@@ -481,7 +512,39 @@
         "2": "Supravalvüler aort darlığı",
         "3": "Pulmoner stenoz",
         "4": "Büyük arterlerin transpozisyonu"
-      }
+      },
+      "ipucu_sirasi": [
+        {
+          "metin": "yukarı çekik göz",
+          "dugum": "d2",
+          "tur": "fizik",
+          "agirlik": 2
+        },
+        {
+          "metin": "tek palmar çizgi",
+          "dugum": "d10",
+          "tur": "fizik",
+          "agirlik": 2
+        },
+        {
+          "metin": "hipotonik",
+          "dugum": "d13",
+          "tur": "fizik",
+          "agirlik": 2
+        },
+        {
+          "metin": "düz yüz profili",
+          "dugum": "d3",
+          "tur": "fizik",
+          "agirlik": 1
+        },
+        {
+          "metin": "Annesi 24 yaşında",
+          "tur": "oyku",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
     },
     {
       "id": "q2",
@@ -489,7 +552,7 @@
       "dugumler": [
         "d8"
       ],
-      "kok": "Down sendromlu yenidoğanda doğumdan sonraki ilk saatlerde safralı kusma başlıyor; belirgin karın distansiyonu yok. Direkt grafide 'çift balon' görünümü var, distalde gaz yok. En olası tanı aşağıdakilerden hangisidir?",
+      "kok": "Down sendromlu yenidoğanda doğumdan sonraki ilk saatlerde fışkırır tarzda safralı kusma başlıyor; belirgin karın distansiyonu yok. Direkt grafide 'çift balon' görünümü var, distalde gaz yok. En olası tanı aşağıdakilerden hangisidir?",
       "secenekler": [
         "Duodenal atrezi",
         "Hipertrofik pilor stenozu",
@@ -498,7 +561,7 @@
         "Nekrotizan enterokolit"
       ],
       "dogru": 0,
-      "aciklama": "İlk saatlerde safralı kusma, distansiyonun olmaması ve distal gazsız 'çift balon' duodenal atreziyi gösterir; Down sendromuyla güçlü ilişkilidir.",
+      "aciklama": "İlk saatlerde safralı kusma, distansiyonun olmaması ve distal gazsız 'çift balon' duodenal atreziyi gösterir; Down sendromuyla güçlü ilişkilidir. Ringa: «fışkırır tarzda» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "d8"
       ],
@@ -514,7 +577,36 @@
         "2": "Hirschsprung hastalığı",
         "3": "Mekonyum ileusu",
         "4": "Nekrotizan enterokolit"
-      }
+      },
+      "ipucu_sirasi": [
+        {
+          "metin": "'çift balon' görünümü",
+          "dugum": "d8",
+          "tur": "goruntu",
+          "agirlik": 3
+        },
+        {
+          "metin": "safralı kusma",
+          "tur": "fizik",
+          "agirlik": 2
+        },
+        {
+          "metin": "belirgin karın distansiyonu yok",
+          "tur": "fizik",
+          "agirlik": 2
+        },
+        {
+          "metin": "ilk saatlerde",
+          "tur": "zaman",
+          "agirlik": 1
+        },
+        {
+          "metin": "fışkırır tarzda",
+          "tur": "fizik",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
     },
     {
       "id": "q3",
@@ -522,7 +614,7 @@
       "dugumler": [
         "d12"
       ],
-      "kok": "Down sendromlu 7 yaşındaki çocuk birkaç haftadır boyun ağrısı, yürürken dengesizlik ve yeni başlayan idrar kaçırma ile getiriliyor. Derin tendon refleksleri artmış. En olası neden aşağıdakilerden hangisidir?",
+      "kok": "Down sendromlu 7 yaşındaki çocuk birkaç haftadır boyun ağrısı, yürürken dengesizlik ve yeni başlayan idrar kaçırma ile getiriliyor. Derin tendon refleksleri artmış. Son aylarda kilo aldığı öğreniliyor. En olası neden aşağıdakilerden hangisidir?",
       "secenekler": [
         "Atlantoaksiyel instabiliteye bağlı spinal kord basısı",
         "Hipotiroidi",
@@ -531,7 +623,7 @@
         "Moyamoya hastalığı"
       ],
       "dogru": 0,
-      "aciklama": "Boyun ağrısı, yürüme bozukluğu, idrar kontrolünde değişiklik ve hiperrefleksi üst motor nöron tutulumunu gösterir; Down sendromunda C1–C2 instabilitesine bağlı kord basısı acil değerlendirme gerektirir.",
+      "aciklama": "Boyun ağrısı, yürüme bozukluğu, idrar kontrolünde değişiklik ve hiperrefleksi üst motor nöron tutulumunu gösterir; Down sendromunda C1–C2 instabilitesine bağlı kord basısı acil değerlendirme gerektirir. Ringa: «kilo aldığı» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "d12"
       ],
@@ -540,7 +632,37 @@
       },
       "kazanim": "k3",
       "kalip": "en_olasi_tani",
-      "zorluk": 2
+      "zorluk": 2,
+      "ipucu_sirasi": [
+        {
+          "metin": "Derin tendon refleksleri artmış",
+          "dugum": "d12",
+          "tur": "fizik",
+          "agirlik": 3
+        },
+        {
+          "metin": "boyun ağrısı",
+          "dugum": "d12",
+          "tur": "oyku",
+          "agirlik": 2
+        },
+        {
+          "metin": "yeni başlayan idrar kaçırma",
+          "tur": "oyku",
+          "agirlik": 2
+        },
+        {
+          "metin": "yürürken dengesizlik",
+          "tur": "fizik",
+          "agirlik": 1
+        },
+        {
+          "metin": "kilo aldığı",
+          "tur": "oyku",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
     },
     {
       "id": "q4",
@@ -548,7 +670,7 @@
       "dugumler": [
         "d9"
       ],
-      "kok": "Down sendromlu yenidoğanda mekonyum çıkışı 48 saati geçiyor; karın distansiyonu ve kusma gelişiyor. Rektal tuşede rektum dar, parmak çekilince fışkırır tarzda gaita ve gaz çıkışı oluyor. En olası tanı aşağıdakilerden hangisidir?",
+      "kok": "Gebeliğinde polihidramniyoz saptanan annenin Down sendromlu yenidoğanında mekonyum çıkışı 48 saati geçiyor; karın distansiyonu ve kusma gelişiyor. Rektal tuşede rektum dar, parmak çekilince fışkırır tarzda gaita ve gaz çıkışı oluyor. En olası tanı aşağıdakilerden hangisidir?",
       "secenekler": [
         "Hirschsprung hastalığı",
         "Duodenal atrezi",
@@ -557,7 +679,7 @@
         "Anal atrezi"
       ],
       "dogru": 0,
-      "aciklama": "Gecikmiş mekonyum çıkışı ve rektal tuşe sonrası fışkırır tarzda boşalma Hirschsprung hastalığını düşündürür; Down sendromunda risk artmıştır. Tanı rektal biyopside ganglion hücresi yokluğuyla konur.",
+      "aciklama": "Gecikmiş mekonyum çıkışı ve rektal tuşe sonrası fışkırır tarzda boşalma Hirschsprung hastalığını düşündürür; Down sendromunda risk artmıştır. Tanı rektal biyopside ganglion hücresi yokluğuyla konur. Ringa: «polihidramniyoz» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "d9"
       ],
@@ -572,7 +694,32 @@
         "1": "Duodenal atrezi",
         "2": "Mekonyum ileusu",
         "4": "Anal atrezi"
-      }
+      },
+      "ipucu_sirasi": [
+        {
+          "metin": "parmak çekilince fışkırır tarzda gaita ve gaz çıkışı",
+          "dugum": "d9",
+          "tur": "fizik",
+          "agirlik": 3
+        },
+        {
+          "metin": "mekonyum çıkışı 48 saati geçiyor",
+          "dugum": "d9",
+          "tur": "zaman",
+          "agirlik": 2
+        },
+        {
+          "metin": "karın distansiyonu ve kusma",
+          "tur": "fizik",
+          "agirlik": 1
+        },
+        {
+          "metin": "polihidramniyoz",
+          "tur": "oyku",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
     },
     {
       "id": "q5",
@@ -581,7 +728,7 @@
         "t10",
         "t5"
       ],
-      "kok": "Yenidoğan kız bebekte el ve ayak sırtlarında ödem, ensede fazla deri saptanıyor. Femoral nabızlar brakiyal nabızlara göre zayıf. En olası tanı aşağıdakilerden hangisidir?",
+      "kok": "Kırk yaşındaki annenin yenidoğan kız bebeğinde el ve ayak sırtlarında ödem, ensede fazla deri saptanıyor. Femoral nabızlar brakiyal nabızlara göre zayıf. En olası tanı aşağıdakilerden hangisidir?",
       "secenekler": [
         "Down sendromu",
         "Turner sendromu",
@@ -590,7 +737,7 @@
         "Klinefelter sendromu"
       ],
       "dogru": 1,
-      "aciklama": "Kız yenidoğanda el-ayak lenfödemi ve fazla ense derisi Turner'ı düşündürür; zayıf femoral nabız aort koarktasyonunu gösterir. Noonan'da da lenfödem olabilir ancak tipik kalp lezyonu pulmoner stenozdur.",
+      "aciklama": "Kız yenidoğanda el-ayak lenfödemi ve fazla ense derisi Turner'ı düşündürür; zayıf femoral nabız aort koarktasyonunu gösterir. Noonan'da da lenfödem olabilir ancak tipik kalp lezyonu pulmoner stenozdur. Ringa: «Kırk yaşındaki annenin» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "t10",
         "t2",
@@ -606,7 +753,46 @@
         "2": "Noonan sendromu",
         "3": "Williams sendromu",
         "4": "Klinefelter sendromu"
-      }
+      },
+      "ipucu_sirasi": [
+        {
+          "metin": "el ve ayak sırtlarında ödem",
+          "dugum": "t10",
+          "tur": "fizik",
+          "agirlik": 3
+        },
+        {
+          "metin": "ensede fazla deri",
+          "dugum": "t2",
+          "tur": "fizik",
+          "agirlik": 2
+        },
+        {
+          "metin": "Femoral nabızlar brakiyal nabızlara göre zayıf",
+          "dugum": "t5",
+          "tur": "fizik",
+          "agirlik": 2
+        },
+        {
+          "metin": "kız bebeğinde",
+          "tur": "oyku",
+          "agirlik": 2
+        },
+        {
+          "metin": "Kırk yaşındaki annenin",
+          "tur": "oyku",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ],
+      "kirilimlar": [
+        {
+          "ipucu": 3,
+          "yeni_metin": "erkek bebeğinde",
+          "yeni_dogru": 2,
+          "aciklama": "Turner fenotipi (el-ayak lenfödemi, ense derisi) erkek bebekte görülürse Noonan sendromu düşünülür; Turner yalnız kızlarda olur. Annenin yaşı iki durumda da ringadır."
+        }
+      ]
     },
     {
       "id": "q6",
@@ -614,7 +800,7 @@
       "dugumler": [
         "t5"
       ],
-      "kok": "Karyotipi 45,X olan 6 yaşındaki kız çocuğu kardiyoloji değerlendirmesine yönlendiriliyor. Bu hastada en sık görülen kalp anomalisi aşağıdakilerden hangisidir?",
+      "kok": "Karyotipi 45,X olan 6 yaşındaki kız çocuğu, kardeşinde Fallot tetralojisi olduğu için kardiyoloji değerlendirmesine yönlendiriliyor. Bu hastada en sık görülen kalp anomalisi aşağıdakilerden hangisidir?",
       "secenekler": [
         "Biküspit aort kapağı",
         "Pulmoner stenoz",
@@ -623,7 +809,7 @@
         "Fallot tetralojisi"
       ],
       "dogru": 0,
-      "aciklama": "Turner sendromunda en sık kalp anomalisi biküspit aort kapağı, ikinci sıklıkta aort koarktasyonudur. Pulmoner stenoz Noonan, AVSD Down, supravalvüler aort darlığı Williams sendromunda tipiktir.",
+      "aciklama": "Turner sendromunda en sık kalp anomalisi biküspit aort kapağı, ikinci sıklıkta aort koarktasyonudur. Pulmoner stenoz Noonan, AVSD Down, supravalvüler aort darlığı Williams sendromunda tipiktir. Ringa: «kardeşinde Fallot tetralojisi olduğu» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "t5"
       ],
@@ -637,7 +823,34 @@
         "2": "AVSD",
         "3": "Supravalvüler aort darlığı",
         "4": "Fallot tetralojisi"
-      }
+      },
+      "ipucu_sirasi": [
+        {
+          "metin": "Karyotipi 45,X",
+          "dugum": "t5",
+          "tur": "lab",
+          "agirlik": 3
+        },
+        {
+          "metin": "6 yaşındaki kız çocuğu",
+          "tur": "oyku",
+          "agirlik": 1
+        },
+        {
+          "metin": "kardeşinde Fallot tetralojisi olduğu",
+          "tur": "oyku",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ],
+      "kirilimlar": [
+        {
+          "ipucu": 0,
+          "yeni_metin": "Karyotipi 47,XX,+21",
+          "yeni_dogru": 2,
+          "aciklama": "Karyotip sendromu, sendrom de kalp lezyonunu belirler: 45,X'te biküspit aort kapağı, trizomi 21'de atriyoventriküler septal defekt en sık lezyondur. Kardeşteki Fallot iki durumda da ringadır."
+        }
+      ]
     },
     {
       "id": "q7",
@@ -710,7 +923,7 @@
         "Klinefelter sendromu"
       ],
       "dogru": 1,
-      "aciklama": "Turner benzeri fenotip, pulmoner stenoz, erkek cinsiyet ve normal karyotip Noonan sendromunu gösterir.",
+      "aciklama": "Turner benzeri fenotip, pulmoner stenoz, erkek cinsiyet ve normal karyotip Noonan sendromunu gösterir. Ringa: «Yeleli boyun» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "r2c2",
         "r2c1",
@@ -730,7 +943,38 @@
         "2": "Down sendromu",
         "3": "Williams sendromu",
         "4": "Klinefelter sendromu"
-      }
+      },
+      "ipucu_sirasi": [
+        {
+          "metin": "Karyotip 46,XY",
+          "dugum": "r2c0",
+          "tur": "lab",
+          "agirlik": 3
+        },
+        {
+          "metin": "displastik pulmoner kapak darlığı",
+          "dugum": "r2c1",
+          "tur": "goruntu",
+          "agirlik": 3
+        },
+        {
+          "metin": "hipertelorizm ve aşağı çekik gözleri",
+          "dugum": "r2c2",
+          "tur": "fizik",
+          "agirlik": 2
+        },
+        {
+          "metin": "erkek çocuk",
+          "tur": "oyku",
+          "agirlik": 2
+        },
+        {
+          "metin": "Yeleli boyun",
+          "tur": "fizik",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
     },
     {
       "id": "q10",
@@ -739,7 +983,7 @@
         "r3c1",
         "r3c3"
       ],
-      "kok": "Üç yaşındaki çocukta supravalvüler aort darlığı, bebeklikte hiperkalsemi öyküsü ve aşırı sosyal, konuşkan bir kişilik saptanıyor. En olası tanı aşağıdakilerden hangisidir?",
+      "kok": "Üç yaşındaki, boyu kısa çocukta supravalvüler aort darlığı, bebeklikte hiperkalsemi öyküsü ve aşırı sosyal, konuşkan bir kişilik saptanıyor. En olası tanı aşağıdakilerden hangisidir?",
       "secenekler": [
         "Williams sendromu",
         "Noonan sendromu",
@@ -748,7 +992,7 @@
         "Down sendromu"
       ],
       "dogru": 0,
-      "aciklama": "Supravalvüler aort darlığı, infantil hiperkalsemi ve 'kokteyl parti' kişiliği Williams sendromunun klasik üçlüsüdür.",
+      "aciklama": "Supravalvüler aort darlığı, infantil hiperkalsemi ve 'kokteyl parti' kişiliği Williams sendromunun klasik üçlüsüdür. Ringa: «boyu kısa» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "r3c1",
         "r3c3"
@@ -767,7 +1011,32 @@
         "2": "DiGeorge sendromu",
         "3": "Turner sendromu",
         "4": "Down sendromu"
-      }
+      },
+      "ipucu_sirasi": [
+        {
+          "metin": "supravalvüler aort darlığı",
+          "dugum": "r3c1",
+          "tur": "goruntu",
+          "agirlik": 3
+        },
+        {
+          "metin": "bebeklikte hiperkalsemi öyküsü",
+          "tur": "lab",
+          "agirlik": 3
+        },
+        {
+          "metin": "aşırı sosyal, konuşkan bir kişilik",
+          "dugum": "r3c3",
+          "tur": "oyku",
+          "agirlik": 2
+        },
+        {
+          "metin": "boyu kısa",
+          "tur": "fizik",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
     },
     {
       "id": "q11",
@@ -812,7 +1081,7 @@
       "dugumler": [
         "r0c3"
       ],
-      "kok": "Down sendromlu 3 yaşındaki çocuk iki haftadır solukluk, ciltte peteşiler ve ateşle getiriliyor. Karaciğer ve dalak büyük; tam kan sayımında anemi ve trombositopeni var. En olası tanı aşağıdakilerden hangisidir?",
+      "kok": "Down sendromlu 3 yaşındaki çocuk iki haftadır solukluk, ciltte peteşiler ve ateşle getiriliyor; yakınmalar bir üst solunum yolu enfeksiyonunun ardından başlamış. Karaciğer ve dalak büyük; tam kan sayımında anemi ve trombositopeni var. En olası tanı aşağıdakilerden hangisidir?",
       "secenekler": [
         "Akut lösemi",
         "İmmün trombositopenik purpura",
@@ -821,7 +1090,7 @@
         "Hipotiroidi"
       ],
       "dogru": 0,
-      "aciklama": "Down sendromunda lösemi riski artmıştır. Solukluk, peteşi, ateş ve hepatosplenomegali ile birlikte iki seri sitopeni akut lösemiyi düşündürür; İTP'de organomegali beklenmez.",
+      "aciklama": "Down sendromunda lösemi riski artmıştır. Solukluk, peteşi, ateş ve hepatosplenomegali ile birlikte iki seri sitopeni akut lösemiyi düşündürür; İTP'de organomegali beklenmez. Ringa: «bir üst solunum yolu enfeksiyonunun ardından başlamış» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "r0c0",
         "r0c3"
@@ -835,7 +1104,31 @@
         "1": "İTP",
         "2": "Aplastik anemi",
         "3": "Demir eksikliği anemisi"
-      }
+      },
+      "ipucu_sirasi": [
+        {
+          "metin": "Karaciğer ve dalak büyük",
+          "dugum": "r0c3",
+          "tur": "fizik",
+          "agirlik": 3
+        },
+        {
+          "metin": "anemi ve trombositopeni",
+          "tur": "lab",
+          "agirlik": 2
+        },
+        {
+          "metin": "ciltte peteşiler",
+          "tur": "fizik",
+          "agirlik": 1
+        },
+        {
+          "metin": "bir üst solunum yolu enfeksiyonunun ardından başlamış",
+          "tur": "oyku",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
     }
   ],
   "kazanimlar": [

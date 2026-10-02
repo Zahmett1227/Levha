@@ -137,8 +137,8 @@ final class LevhaLintV2Tests: XCTestCase {
         for ad in ["ped.neo.sarilik", "ped.gelisim.basamaklar", "ped.kvs.konjenital", "ped.genetik.sendromlar"] {
             let s = try denetle(paket(ad))
             XCTAssertEqual(s.hatalar, [], ad)
-            // Uyarılar yalnız "sorusuz kazanım" (Ölçüm'de de görünür).
-            XCTAssertTrue(s.uyarilar.allSatisfy { $0.mesaj == "sorusuz kazanım" }, ad)
+            // Uyarılar yalnız "sorusuz kazanım" ve ipucu sırası verilmemiş vaka soruları.
+            XCTAssertTrue(s.uyarilar.allSatisfy { $0.mesaj == "sorusuz kazanım" || $0.mesaj == "klinik soruda ipucu_sirasi yok" }, ad)
         }
     }
 

@@ -37,6 +37,8 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Kitap sayfasını levhalarla eşlemek için fotoğraf çekilir; metin cihazda okunur.</string>
 	<key>NSUbiquitousContainers</key>
 	<dict>
 		<key>iCloud.tr.kisisel.levha</key>

@@ -1,5 +1,5 @@
 {
-  "sema_surumu": 3,
+  "sema_surumu": 4,
   "paket_id": "ped.neo.sarilik",
   "ders": "Pediatri",
   "bolum": "Neonatoloji",
@@ -220,7 +220,17 @@
         "n8",
         "n9",
         "n10"
-      ]
+      ],
+      "kaynak": {
+        "anahtar_kelimeler": [
+          "sarılık",
+          "bilirubin",
+          "Coombs",
+          "hemoliz",
+          "kolestaz"
+        ]
+      },
+      "revizyon": 1
     },
     {
       "id": "ped.neo.sarilik.matris",
@@ -353,7 +363,17 @@
         "r2c0",
         "r2c2",
         "r2c3"
-      ]
+      ],
+      "kaynak": {
+        "anahtar_kelimeler": [
+          "fizyolojik sarılık",
+          "patolojik sarılık",
+          "hemolitik",
+          "kolestatik",
+          "indirekt bilirubin"
+        ]
+      },
+      "revizyon": 1
     },
     {
       "id": "ped.neo.sarilik.cetvel",
@@ -443,7 +463,17 @@
         "m2",
         "m3",
         "m4"
-      ]
+      ],
+      "kaynak": {
+        "anahtar_kelimeler": [
+          "bilirubin",
+          "fototerapi",
+          "nomogram",
+          "kan değişimi",
+          "kernikterus"
+        ]
+      },
+      "revizyon": 1
     }
   ],
   "sorular": [
@@ -454,7 +484,7 @@
         "n2",
         "n8"
       ],
-      "kok": "Doğumdan 12 saat sonra sarılık fark edilen, annesi O Rh(+) olan term bebekte ilk istenmesi gereken tetkik aşağıdakilerden hangisidir?",
+      "kok": "Doğumdan 12 saat sonra sarılık fark edilen, emzirmeye yeni başlanmış, annesi O Rh(+) olan term bebekte ilk istenmesi gereken tetkik aşağıdakilerden hangisidir?",
       "secenekler": [
         "Karaciğer fonksiyon testleri",
         "Direkt Coombs testi",
@@ -463,7 +493,7 @@
         "Batın ultrasonografisi"
       ],
       "dogru": 1,
-      "aciklama": "İlk 24 saatte başlayan sarılık daima patolojiktir ve en sık neden hemolizdir. Anne O grubu olduğunda ABO uyuşmazlığı öncelikle düşünülür; immün hemolizi göstermek için direkt Coombs testi istenir.",
+      "aciklama": "İlk 24 saatte başlayan sarılık daima patolojiktir ve en sık neden hemolizdir. Anne O grubu olduğunda ABO uyuşmazlığı öncelikle düşünülür; immün hemolizi göstermek için direkt Coombs testi istenir. Ringa: «emzirmeye yeni başlanmış» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "n1",
         "n2",
@@ -485,7 +515,27 @@
         "2": "Sepsis",
         "3": "Konjenital hipotiroidi",
         "4": "Biliyer atrezi"
-      }
+      },
+      "ipucu_sirasi": [
+        {
+          "metin": "Doğumdan 12 saat sonra",
+          "dugum": "n2",
+          "tur": "zaman",
+          "agirlik": 3
+        },
+        {
+          "metin": "annesi O Rh(+)",
+          "dugum": "n8",
+          "tur": "oyku",
+          "agirlik": 2
+        },
+        {
+          "metin": "emzirmeye yeni başlanmış",
+          "tur": "oyku",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
     },
     {
       "id": "q2",
@@ -493,7 +543,7 @@
       "dugumler": [
         "n9"
       ],
-      "kok": "Doğumdan beri sarılığı olan 5 haftalık bebek, açık renkli dışkı ve koyu idrar nedeniyle getiriliyor. Karaciğer kot kavsini 3 cm geçiyor. Total bilirubin 9 mg/dL, direkt bilirubin 6 mg/dL bulunuyor. Bu hastada öncelikle dışlanması gereken tanı aşağıdakilerden hangisidir?",
+      "kok": "Doğumdan beri sarılığı olan, anne sütüyle beslenen 5 haftalık bebek, açık renkli dışkı ve koyu idrar nedeniyle getiriliyor. Karaciğer kot kavsini 3 cm geçiyor. Total bilirubin 9 mg/dL, direkt bilirubin 6 mg/dL bulunuyor. Bu hastada öncelikle dışlanması gereken tanı aşağıdakilerden hangisidir?",
       "secenekler": [
         "Anne sütü sarılığı",
         "Gilbert sendromu",
@@ -502,7 +552,7 @@
         "Fizyolojik sarılık"
       ],
       "dogru": 2,
-      "aciklama": "İki haftadan uzun süren sarılıkta direkt bilirubinin yüksek olması kolestaz demektir. Akolik dışkı ve koyu idrarla birlikte biliyer atrezi acil olarak dışlanmalıdır; diğer seçeneklerin tümü indirekt hiperbilirubinemi yapar.",
+      "aciklama": "İki haftadan uzun süren sarılıkta direkt bilirubinin yüksek olması kolestaz demektir. Akolik dışkı ve koyu idrarla birlikte biliyer atrezi acil olarak dışlanmalıdır; diğer seçeneklerin tümü indirekt hiperbilirubinemi yapar. Ringa: «anne sütüyle beslenen» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "n1",
         "n4",
@@ -524,7 +574,38 @@
         "2": "Biliyer atrezi",
         "3": "Crigler-Najjar sendromu",
         "4": "Fizyolojik sarılık"
-      }
+      },
+      "ipucu_sirasi": [
+        {
+          "metin": "direkt bilirubin 6 mg/dL",
+          "dugum": "n7",
+          "tur": "lab",
+          "agirlik": 3
+        },
+        {
+          "metin": "açık renkli dışkı ve koyu idrar",
+          "dugum": "n9",
+          "tur": "oyku",
+          "agirlik": 3
+        },
+        {
+          "metin": "5 haftalık",
+          "dugum": "n4",
+          "tur": "zaman",
+          "agirlik": 2
+        },
+        {
+          "metin": "Karaciğer kot kavsini 3 cm geçiyor",
+          "tur": "fizik",
+          "agirlik": 1
+        },
+        {
+          "metin": "anne sütüyle beslenen",
+          "tur": "oyku",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
     },
     {
       "id": "q3",
@@ -532,7 +613,7 @@
       "dugumler": [
         "n10"
       ],
-      "kok": "Term doğan, yalnızca anne sütüyle beslenen 3 haftalık bebek sarılık nedeniyle getiriliyor. Kilo alımı iyi, dışkısı sarı, idrarı açık renkli; fizik muayenesi sarılık dışında normal. Total bilirubin 14 mg/dL, direkt bilirubin 0,4 mg/dL; yenidoğan tarama sonuçları normal. En olası tanı aşağıdakilerden hangisidir?",
+      "kok": "Term doğan, yalnızca anne sütüyle beslenen 3 haftalık bebek sarılık nedeniyle getiriliyor. Kilo alımı iyi, dışkısı sarı, idrarı açık renkli; fizik muayenesi sarılık dışında normal, karaciğer kot kavsini 1 cm geçiyor. Total bilirubin 14 mg/dL, direkt bilirubin 0,4 mg/dL; yenidoğan tarama sonuçları normal. En olası tanı aşağıdakilerden hangisidir?",
       "secenekler": [
         "Biliyer atrezi",
         "Anne sütü sarılığı",
@@ -541,7 +622,7 @@
         "Rh uyuşmazlığı"
       ],
       "dogru": 1,
-      "aciklama": "Uzamış sarılıkta direkt bilirubin normalse indirekt hiperbilirubinemi vardır. İyi beslenen, kilo alan, sağlıklı bebekte en olası neden anne sütü sarılığıdır; tarama normal olduğundan hipotiroidi daha az olasıdır ve emzirme kesilmez.",
+      "aciklama": "Uzamış sarılıkta direkt bilirubin normalse indirekt hiperbilirubinemi vardır. İyi beslenen, kilo alan, sağlıklı bebekte en olası neden anne sütü sarılığıdır; tarama normal olduğundan hipotiroidi daha az olasıdır ve emzirme kesilmez. Ringa: «karaciğer kot kavsini 1 cm geçiyor» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "n1",
         "n4",
@@ -563,7 +644,53 @@
         "2": "Konjenital hipotiroidi",
         "3": "Neonatal hepatit",
         "4": "Rh uyuşmazlığı"
-      }
+      },
+      "ipucu_sirasi": [
+        {
+          "metin": "direkt bilirubin 0,4 mg/dL",
+          "dugum": "n7",
+          "tur": "lab",
+          "agirlik": 3
+        },
+        {
+          "metin": "3 haftalık",
+          "dugum": "n4",
+          "tur": "zaman",
+          "agirlik": 2
+        },
+        {
+          "metin": "yalnızca anne sütüyle beslenen",
+          "dugum": "n10",
+          "tur": "oyku",
+          "agirlik": 2
+        },
+        {
+          "metin": "dışkısı sarı, idrarı açık renkli",
+          "dugum": "n7",
+          "tur": "oyku",
+          "agirlik": 2
+        },
+        {
+          "metin": "karaciğer kot kavsini 1 cm geçiyor",
+          "tur": "fizik",
+          "agirlik": 0,
+          "yaniltici": true
+        },
+        {
+          "metin": "yenidoğan tarama sonuçları normal",
+          "dugum": "n10",
+          "tur": "lab",
+          "agirlik": 2
+        }
+      ],
+      "kirilimlar": [
+        {
+          "ipucu": 5,
+          "yeni_metin": "yenidoğan taramasında TSH yüksek bulunmuş",
+          "yeni_dogru": 2,
+          "aciklama": "Uzamış indirekt sarılıkta tarama TSH'si yüksekse tanı konjenital hipotiroididir; anne sütü sarılığı ancak hipotiroidi dışlandıktan sonra düşünülür."
+        }
+      ]
     },
     {
       "id": "q4",
@@ -571,7 +698,7 @@
       "dugumler": [
         "n6"
       ],
-      "kok": "Term doğan, sağlıklı görünen bebekte 3. günde sarılık fark ediliyor. Emmesi iyi, idrar ve dışkı rengi normal. Total bilirubin 9 mg/dL, direkt bilirubin 0,5 mg/dL; anne ve bebeğin kan grupları uyumlu. Bu bebekte en uygun yaklaşım aşağıdakilerden hangisidir?",
+      "kok": "Term doğan, sağlıklı görünen bebekte 3. günde sarılık fark ediliyor. Emmesi iyi, idrar ve dışkı rengi normal; annesi sütünün yetmediğinden endişeli. Total bilirubin 9 mg/dL, direkt bilirubin 0,5 mg/dL; anne ve bebeğin kan grupları uyumlu. Bu bebekte en uygun yaklaşım aşağıdakilerden hangisidir?",
       "secenekler": [
         "Acil kan değişimi",
         "Emzirmeyi kesip mama başlamak",
@@ -580,7 +707,7 @@
         "Fenobarbital başlamak"
       ],
       "dogru": 2,
-      "aciklama": "24 saatten sonra başlayan, indirekt ağırlıklı, düşük düzeyli sarılık fizyolojik sarılıkla uyumludur. Tedavi gerekmez; beslenme desteklenir ve bilirubin bebeğin saatine göre nomogramda izlenir.",
+      "aciklama": "24 saatten sonra başlayan, indirekt ağırlıklı, düşük düzeyli sarılık fizyolojik sarılıkla uyumludur. Tedavi gerekmez; beslenme desteklenir ve bilirubin bebeğin saatine göre nomogramda izlenir. Ringa: «annesi sütünün yetmediğinden endişeli» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "n1",
         "n3",
@@ -598,7 +725,39 @@
         "1": "Emzirmeye ara verme",
         "2": "İzlem ve beslenme desteği",
         "4": "Fenobarbital"
-      }
+      },
+      "ipucu_sirasi": [
+        {
+          "metin": "3. günde",
+          "dugum": "n3",
+          "tur": "zaman",
+          "agirlik": 3
+        },
+        {
+          "metin": "direkt bilirubin 0,5 mg/dL",
+          "dugum": "n7",
+          "tur": "lab",
+          "agirlik": 2
+        },
+        {
+          "metin": "anne ve bebeğin kan grupları uyumlu",
+          "dugum": "n8",
+          "tur": "lab",
+          "agirlik": 2
+        },
+        {
+          "metin": "sağlıklı görünen",
+          "dugum": "n6",
+          "tur": "fizik",
+          "agirlik": 1
+        },
+        {
+          "metin": "annesi sütünün yetmediğinden endişeli",
+          "tur": "oyku",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
     },
     {
       "id": "q5",
@@ -607,7 +766,7 @@
         "n5",
         "n8"
       ],
-      "kok": "Doğumdan 20 saat sonra sarılık gelişen term bebekte hemoglobin düşük, retikülosit yüksek bulunuyor. Anne ve bebeğin kan grubu A Rh(+), direkt Coombs testi negatif. Periferik yaymada sferositler görülüyor; babasına gençlikte splenektomi yapıldığı öğreniliyor. En olası tanı aşağıdakilerden hangisidir?",
+      "kok": "Doğumdan 20 saat sonra sarılık gelişen term bebekte hemoglobin düşük, retikülosit yüksek bulunuyor. Anne ve bebeğin kan grubu A Rh(+), direkt Coombs testi negatif; annesine önceki doğumundan sonra anti-D immünoglobulin yapılmamış. Periferik yaymada sferositler görülüyor; babasına gençlikte splenektomi yapıldığı öğreniliyor. En olası tanı aşağıdakilerden hangisidir?",
       "secenekler": [
         "ABO uyuşmazlığı",
         "Herediter sferositoz",
@@ -616,7 +775,7 @@
         "Fizyolojik sarılık"
       ],
       "dogru": 1,
-      "aciklama": "İlk 24 saatte başlayan sarılık hemolizi düşündürür. Kan grupları uyumlu ve direkt Coombs negatif olduğundan immün hemoliz dışlanır; sferositler ve babada splenektomi öyküsü otozomal dominant geçişli herediter sferositozu düşündürür.",
+      "aciklama": "İlk 24 saatte başlayan sarılık hemolizi düşündürür. Kan grupları uyumlu ve direkt Coombs negatif olduğundan immün hemoliz dışlanır; sferositler ve babada splenektomi öyküsü otozomal dominant geçişli herediter sferositozu düşündürür. Ringa: «annesine önceki doğumundan sonra anti-D immünoglobulin yapılmamış» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "n1",
         "n2",
@@ -638,7 +797,43 @@
         "2": "Rh uyuşmazlığı",
         "3": "Gilbert sendromu",
         "4": "Fizyolojik sarılık"
-      }
+      },
+      "ipucu_sirasi": [
+        {
+          "metin": "babasına gençlikte splenektomi yapıldığı",
+          "tur": "oyku",
+          "agirlik": 3
+        },
+        {
+          "metin": "direkt Coombs testi negatif",
+          "dugum": "n8",
+          "tur": "lab",
+          "agirlik": 3
+        },
+        {
+          "metin": "Doğumdan 20 saat sonra",
+          "dugum": "n2",
+          "tur": "zaman",
+          "agirlik": 2
+        },
+        {
+          "metin": "hemoglobin düşük, retikülosit yüksek",
+          "dugum": "n5",
+          "tur": "lab",
+          "agirlik": 2
+        },
+        {
+          "metin": "sferositler",
+          "tur": "lab",
+          "agirlik": 1
+        },
+        {
+          "metin": "annesine önceki doğumundan sonra anti-D immünoglobulin yapılmamış",
+          "tur": "oyku",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
     },
     {
       "id": "q6",
@@ -656,7 +851,7 @@
         "Direkt bilirubinin ölçülebilir düzeyde olması"
       ],
       "dogru": 1,
-      "aciklama": "Fizyolojik sarılık 24 saatten sonra başlar, indirekt bilirubin artışıyla seyreder, term bebekte 3–4. günde zirve yapar ve yaklaşık 1 haftada geriler. Başlama zamanı ve bilirubin tipi fizyolojik–patolojik ayrımının temelidir.",
+      "aciklama": "Fizyolojik sarılık 24 saatten sonra başlar, indirekt bilirubin artışıyla seyreder, term bebekte 3–4. günde zirve yapar ve yaklaşık 1 haftada geriler. Başlama zamanı ve bilirubin tipi fizyolojik–patolojik ayrımının temelidir. Ringa: «Total bilirubin 11 mg/dL» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "r0c0",
         "r0c1",
@@ -667,7 +862,32 @@
       },
       "kazanim": "k6",
       "kalip": "ayirici_cift",
-      "zorluk": 1
+      "zorluk": 1,
+      "ipucu_sirasi": [
+        {
+          "metin": "Sarılık 3. gün fark edilmiş",
+          "dugum": "r0c0",
+          "tur": "zaman",
+          "agirlik": 3
+        },
+        {
+          "metin": "direkt bilirubin 0,6 mg/dL",
+          "dugum": "r0c2",
+          "tur": "lab",
+          "agirlik": 3
+        },
+        {
+          "metin": "idrar ve dışkı rengi normal",
+          "tur": "oyku",
+          "agirlik": 1
+        },
+        {
+          "metin": "Total bilirubin 11 mg/dL",
+          "tur": "lab",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
     },
     {
       "id": "q7",
@@ -676,7 +896,7 @@
         "r1c0",
         "r1c1"
       ],
-      "kok": "Doğumdan 18 saat sonra sarılık fark edilen term bebeğin total bilirubini 8 mg/dL; 6 saat sonraki kontrolde 10 mg/dL bulunuyor. Anne O Rh(+), bebek A Rh(+). Bu tabloyu en iyi açıklayan durum aşağıdakilerden hangisidir?",
+      "kok": "Doğumdan 18 saat sonra sarılık fark edilen term bebeğin total bilirubini 8 mg/dL; 6 saat sonraki kontrolde 10 mg/dL bulunuyor. Bebek yalnızca anne sütü alıyor. Anne O Rh(+), bebek A Rh(+). Bu tabloyu en iyi açıklayan durum aşağıdakilerden hangisidir?",
       "secenekler": [
         "Fizyolojik sarılık",
         "Emzirme (yetersiz beslenme) sarılığı",
@@ -685,7 +905,7 @@
         "Konjenital hipotiroidi"
       ],
       "dogru": 2,
-      "aciklama": "İlk 24 saatte başlayan ve saatte yaklaşık 0,3 mg/dL hızla yükselen sarılık hemolizi düşündürür. Anne O, bebek A grubu olduğundan ABO uyuşmazlığı en olası nedendir; tanı için direkt Coombs testi istenir.",
+      "aciklama": "İlk 24 saatte başlayan ve saatte yaklaşık 0,3 mg/dL hızla yükselen sarılık hemolizi düşündürür. Anne O, bebek A grubu olduğundan ABO uyuşmazlığı en olası nedendir; tanı için direkt Coombs testi istenir. Ringa: «Bebek yalnızca anne sütü alıyor» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "r1c0",
         "r1c1",
@@ -706,7 +926,33 @@
         "2": "ABO uyuşmazlığı",
         "3": "Biliyer atrezi",
         "4": "Konjenital hipotiroidi"
-      }
+      },
+      "ipucu_sirasi": [
+        {
+          "metin": "Doğumdan 18 saat sonra",
+          "dugum": "r1c0",
+          "tur": "zaman",
+          "agirlik": 3
+        },
+        {
+          "metin": "Anne O Rh(+), bebek A Rh(+)",
+          "dugum": "r1c3",
+          "tur": "lab",
+          "agirlik": 3
+        },
+        {
+          "metin": "6 saat sonraki kontrolde 10 mg/dL",
+          "dugum": "r1c1",
+          "tur": "lab",
+          "agirlik": 2
+        },
+        {
+          "metin": "Bebek yalnızca anne sütü alıyor",
+          "tur": "oyku",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
     },
     {
       "id": "q8",
@@ -724,7 +970,7 @@
         "Retikülosit sayımı"
       ],
       "dogru": 1,
-      "aciklama": "Uzamış sarılıkta ilk adım total ve direkt bilirubini birlikte ölçmektir. Soluk dışkı ve koyu idrar kolestazı düşündürür; direkt hiperbilirubinemi saptanırsa biliyer atrezi açısından vakit kaybetmeden batın ultrasonografisiyle ilerlenir.",
+      "aciklama": "Uzamış sarılıkta ilk adım total ve direkt bilirubini birlikte ölçmektir. Soluk dışkı ve koyu idrar kolestazı düşündürür; direkt hiperbilirubinemi saptanırsa biliyer atrezi açısından vakit kaybetmeden batın ultrasonografisiyle ilerlenir. Ringa: «anne sütüyle beslenen» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "r2c0",
         "r2c2",
@@ -745,7 +991,33 @@
         "2": "Konjenital hipotiroidi",
         "3": "G6PD eksikliği",
         "4": "Herediter sferositoz"
-      }
+      },
+      "ipucu_sirasi": [
+        {
+          "metin": "dışkının son haftalarda açık renkli olduğunu",
+          "dugum": "r2c2",
+          "tur": "oyku",
+          "agirlik": 3
+        },
+        {
+          "metin": "idrarın bezde koyu sarı iz bıraktığını",
+          "dugum": "r2c2",
+          "tur": "oyku",
+          "agirlik": 2
+        },
+        {
+          "metin": "Altı haftalık",
+          "dugum": "r2c0",
+          "tur": "zaman",
+          "agirlik": 2
+        },
+        {
+          "metin": "anne sütüyle beslenen",
+          "tur": "oyku",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
     },
     {
       "id": "q9",
@@ -783,7 +1055,7 @@
         "r1c0",
         "r1c3"
       ],
-      "kok": "Annesi A Rh(−) olan ve önceki gebeliğinden sonra anti-D immünoglobulin yapılmadığı öğrenilen Rh(+) term bebekte doğumdan 6 saat sonra sarılık ve solukluk saptanıyor. Karaciğer ve dalak ele geliyor. Tanıyı doğrulamak için istenmesi gereken test aşağıdakilerden hangisidir?",
+      "kok": "Annesi A Rh(−) olan ve önceki gebeliğinden sonra anti-D immünoglobulin yapılmadığı öğrenilen Rh(+) term bebekte doğumdan 6 saat sonra sarılık ve solukluk saptanıyor. Karaciğer ve dalak ele geliyor. Annesi gebeliğin son haftasında idrar yolu enfeksiyonu nedeniyle antibiyotik almış. Tanıyı doğrulamak için istenmesi gereken test aşağıdakilerden hangisidir?",
       "secenekler": [
         "Direkt Coombs testi",
         "Batın ultrasonografisi",
@@ -792,7 +1064,7 @@
         "Kan kültürü"
       ],
       "dogru": 0,
-      "aciklama": "Rh(−) annenin önceki gebelikte duyarlanması sonraki Rh(+) bebekte immün hemolize yol açar. İlk saatlerde başlayan sarılık, anemi ve hepatosplenomegali Rh uyuşmazlığını düşündürür; bebek eritrositlerine bağlı antikor direkt Coombs testiyle gösterilir.",
+      "aciklama": "Rh(−) annenin önceki gebelikte duyarlanması sonraki Rh(+) bebekte immün hemolize yol açar. İlk saatlerde başlayan sarılık, anemi ve hepatosplenomegali Rh uyuşmazlığını düşündürür; bebek eritrositlerine bağlı antikor direkt Coombs testiyle gösterilir. Ringa: «idrar yolu enfeksiyonu nedeniyle antibiyotik almış» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "r1c0",
         "r1c3"
@@ -811,7 +1083,37 @@
         "2": "Konjenital hipotiroidi",
         "3": "Neonatal hepatit",
         "4": "Sepsis"
-      }
+      },
+      "ipucu_sirasi": [
+        {
+          "metin": "Annesi A Rh(−)",
+          "dugum": "r1c0",
+          "tur": "oyku",
+          "agirlik": 3
+        },
+        {
+          "metin": "doğumdan 6 saat sonra",
+          "dugum": "r1c0",
+          "tur": "zaman",
+          "agirlik": 3
+        },
+        {
+          "metin": "anti-D immünoglobulin yapılmadığı",
+          "tur": "oyku",
+          "agirlik": 2
+        },
+        {
+          "metin": "Karaciğer ve dalak ele geliyor",
+          "tur": "fizik",
+          "agirlik": 1
+        },
+        {
+          "metin": "idrar yolu enfeksiyonu nedeniyle antibiyotik almış",
+          "tur": "oyku",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
     },
     {
       "id": "q11",
@@ -862,7 +1164,7 @@
         "Genel durumu iyi olduğundan bilirubin düzeyinin önemi yoktur"
       ],
       "dogru": 2,
-      "aciklama": "Klasik ölçüte göre term bebekte total bilirubinin 12,9 mg/dL'yi aşması patolojik sarılık lehinedir ve nedeni araştırılır. Fototerapi kararı ise sabit bir sayıya değil, bebeğin saat cinsinden yaşı ve risk faktörlerine göre nomograma dayanır.",
+      "aciklama": "Klasik ölçüte göre term bebekte total bilirubinin 12,9 mg/dL'yi aşması patolojik sarılık lehinedir ve nedeni araştırılır. Fototerapi kararı ise sabit bir sayıya değil, bebeğin saat cinsinden yaşı ve risk faktörlerine göre nomograma dayanır. Ringa: «genel durumu iyi» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "m3",
         "m4",
@@ -880,7 +1182,41 @@
         "1": "Direkt bilirubin sınırı",
         "2": "Fizyolojik üst sınır",
         "3": "Fototerapi eşiği"
-      }
+      },
+      "ipucu_sirasi": [
+        {
+          "metin": "genel durumu iyi",
+          "tur": "fizik",
+          "agirlik": 0,
+          "yaniltici": true
+        },
+        {
+          "metin": "total bilirubin 15 mg/dL",
+          "dugum": "m4",
+          "tur": "lab",
+          "agirlik": 3
+        },
+        {
+          "metin": "5 günlük",
+          "dugum": "m3",
+          "tur": "zaman",
+          "agirlik": 1
+        },
+        {
+          "metin": "direkt bilirubin 0,8 mg/dL",
+          "dugum": "m1",
+          "tur": "lab",
+          "agirlik": 1
+        }
+      ],
+      "kirilimlar": [
+        {
+          "ipucu": 1,
+          "yeni_metin": "total bilirubin 10 mg/dL",
+          "yeni_dogru": 0,
+          "aciklama": "10 mg/dL, term bebekte klasik fizyolojik üst sınırın (12,9 mg/dL) altında kalır; direkt bilirubin düşük ve bebek iyi olduğundan izlem yeterlidir. Fototerapi kararı yine nomogramdan okunur."
+        }
+      ]
     },
     {
       "id": "q13",
@@ -897,7 +1233,7 @@
         "Taburcu edip ertesi gün kontrole çağırmak"
       ],
       "dogru": 2,
-      "aciklama": "Hipertoni, opistotonus ve tiz ağlama orta–ileri evre akut bilirubin ensefalopatisini gösterir. Bu bulgular varsa bilirubin düzeyinden bağımsız olarak acil kan değişimi yapılır; hazırlık süresince yoğun fototerapi verilir.",
+      "aciklama": "Hipertoni, opistotonus ve tiz ağlama orta–ileri evre akut bilirubin ensefalopatisini gösterir. Bu bulgular varsa bilirubin düzeyinden bağımsız olarak acil kan değişimi yapılır; hazırlık süresince yoğun fototerapi verilir. Ringa: «4. günde» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "m6"
       ],
@@ -914,7 +1250,32 @@
         "2": "Acil kan değişimi",
         "3": "Fenobarbital",
         "4": "İzlem ve beslenme desteği"
-      }
+      },
+      "ipucu_sirasi": [
+        {
+          "metin": "geriye doğru kasılma (opistotonus)",
+          "dugum": "m6",
+          "tur": "fizik",
+          "agirlik": 3
+        },
+        {
+          "metin": "letarji, emmede azalma",
+          "dugum": "m6",
+          "tur": "fizik",
+          "agirlik": 2
+        },
+        {
+          "metin": "tiz ağlama",
+          "tur": "fizik",
+          "agirlik": 2
+        },
+        {
+          "metin": "4. günde",
+          "tur": "zaman",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
     },
     {
       "id": "q14",
@@ -931,7 +1292,7 @@
         "Annenin kan grubu"
       ],
       "dogru": 1,
-      "aciklama": "Fototerapi ve kan değişimi eşikleri bebeğin saat cinsinden yaşına, gebelik haftasına ve nörotoksisite risk faktörlerine göre değişir; karar nomograma göre verilir. 12,9 mg/dL fizyolojik–patolojik ayrımı için klasik bir sınırdır, tedavi eşiği değildir.",
+      "aciklama": "Fototerapi ve kan değişimi eşikleri bebeğin saat cinsinden yaşına, gebelik haftasına ve nörotoksisite risk faktörlerine göre değişir; karar nomograma göre verilir. 12,9 mg/dL fizyolojik–patolojik ayrımı için klasik bir sınırdır, tedavi eşiği değildir. Ringa: «total bilirubin 11 mg/dL» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "m4",
         "m5"
@@ -949,7 +1310,26 @@
         "1": "Fototerapi eşiği",
         "2": "Yenidoğanda görünür sarılık",
         "3": "Direkt bilirubin sınırı"
-      }
+      },
+      "ipucu_sirasi": [
+        {
+          "metin": "36 saatlik",
+          "dugum": "m5",
+          "tur": "zaman",
+          "agirlik": 3
+        },
+        {
+          "metin": "Term doğan",
+          "tur": "oyku",
+          "agirlik": 2
+        },
+        {
+          "metin": "total bilirubin 11 mg/dL",
+          "tur": "lab",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
     }
   ],
   "kazanimlar": [

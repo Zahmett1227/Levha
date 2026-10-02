@@ -82,25 +82,42 @@ enum PaketIceAktarici {
     }
 
     /// Levhayı oluşturur ya da günceller. Eski düzen korunduysa true döner.
+    ///
+    /// Düzen kuralı (v4): paketteki `revizyon` depodakinden büyükse paket kazanır (konumlar JSON'dan, yerel
+    /// eklemeler silinir). Değilse aynı id'li ızgara levhasının yerleşimi ve taslaktan eklenen yerel düğümler korunur.
     private static func levhaYaz(_ lj: LevhaJSON, sira: Int, ham: Data, paket: Paket, context: ModelContext) -> Bool {
         let lid = lj.id
         let levha: Levha
         var eskiKonumlar: [String: [Int]] = [:]
         var eskiIzgara: [Int]?
         var eskiImza: String?
+        var yerelDugumler: [DugumTaslagi] = []
+        var yerelBaglantilar: [BaglantiJSON] = []
+        let yeniRevizyon = lj.revizyon ?? 0
 
         if let mevcut = try? context.fetch(FetchDescriptor<Levha>(predicate: #Predicate { $0.id == lid })).first {
             levha = mevcut
-            // Sabit konum kuralı: aynı id'li ızgara levhasının (algoritma, yolak, ağaç) yerleşimi değişmez.
-            if mevcut.tip == lj.tip.rawValue, lj.tip.izgaraTabanli {
+            let paketKazanir = yeniRevizyon > (mevcut.revizyon ?? 0)
+            if mevcut.tip == lj.tip.rawValue, lj.tip.izgaraTabanli, !paketKazanir {
                 for d in mevcut.dugumler { eskiKonumlar[d.id] = d.konum }
                 eskiIzgara = mevcut.izgara
                 eskiImza = mevcut.duzenImzasi
+                yerelDugumler = mevcut.siraliDugumler.filter { $0.yerel == true }.map {
+                    DugumTaslagi(id: $0.id, etiket: $0.etiket, sekil: $0.sekil, renk: $0.renk, konum: $0.konum,
+                                 tus: $0.tus, not: $0.not, deger: nil)
+                }
+                yerelBaglantilar = mevcut.siraliBaglantilar.filter { $0.yerel == true }.map {
+                    BaglantiJSON(from: $0.from, to: $0.to, etiket: $0.etiket.isEmpty ? nil : $0.etiket,
+                                 tip: $0.tip.flatMap(BaglantiTipi.init(rawValue:)))
+                }
             }
+            if paketKazanir { mevcut.yerelRevizyon = 0 }
+            levha.revizyon = max(yeniRevizyon, mevcut.revizyon ?? 0)
             for d in mevcut.dugumler { context.delete(d) }
             for b in mevcut.baglantilar { context.delete(b) }
         } else {
             levha = Levha(id: lj.id)
+            levha.revizyon = yeniRevizyon
             context.insert(levha)
         }
         levha.paket = paket
@@ -142,20 +159,41 @@ enum PaketIceAktarici {
         levha.izgara = izgara
         levha.duzenImzasi = duzenImzasi(tip: lj.tip, izgara: izgara, dugumler: dugumler, levha: lj)
 
+        // Yerel düğümler, paketle id ya da konum çakışmıyorsa geri eklenir.
+        let paketIdleri = Set(dugumler.map(\.id))
+        var doluKonum = Set(dugumler.map { $0.konum.map(String.init).joined(separator: ",") })
+        var yerelIdler = Set<String>()
+        for var d in yerelDugumler where !paketIdleri.contains(d.id) && doluKonum.insert(d.konum.map(String.init).joined(separator: ",")).inserted {
+            d.yerel = true
+            dugumler.append(d)
+            yerelIdler.insert(d.id)
+            if d.konum.count == 2 {
+                izgara[0] = max(izgara[0], d.konum[0] + 1)
+                izgara[1] = max(izgara[1], d.konum[1] + 1)
+            }
+        }
+        levha.izgara = izgara
+        let tumIdler = paketIdleri.union(yerelIdler)
+
         for (i, d) in dugumler.enumerated() {
             let dugum = Dugum(id: d.id, etiket: d.etiket, sekil: d.sekil, renk: d.renk, konum: d.konum,
                               tus: d.tus, not: d.not, deger: d.deger, sira: i)
             dugum.bit = d.bit
             dugum.serit = d.serit
             dugum.bolge = d.bolge
+            dugum.yerel = d.yerel ? true : nil
             context.insert(dugum)
             dugum.levha = levha
         }
-        for (i, b) in baglantiListesi(lj).enumerated() {
+        var baglantilar = baglantiListesi(lj).map { ($0, false) }
+        baglantilar += yerelBaglantilar.filter { tumIdler.contains($0.from) && tumIdler.contains($0.to) }.map { ($0, true) }
+        for (i, (b, yerel)) in baglantilar.enumerated() {
             let bag = Baglanti(from: b.from, to: b.to, etiket: b.etiket ?? "", tip: b.tip?.rawValue, sira: i)
+            bag.yerel = yerel ? true : nil
             context.insert(bag)
             bag.levha = levha
         }
+        if yerelIdler.isEmpty { levha.yerelRevizyon = 0 }
         return korundu
     }
 
@@ -171,6 +209,7 @@ enum PaketIceAktarici {
         var bit: Double?
         var serit: String?
         var bolge: String?
+        var yerel = false
     }
 
     /// Ağaçta bağlantısı verilmemiş her `ebeveyn` ilişkisi normal bir kenara dönüşür.

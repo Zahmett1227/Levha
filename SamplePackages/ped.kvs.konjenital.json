@@ -1,5 +1,5 @@
 {
-  "sema_surumu": 3,
+  "sema_surumu": 4,
   "paket_id": "ped.kvs.konjenital",
   "ders": "Pediatri",
   "bolum": "Kardiyoloji",
@@ -272,7 +272,17 @@
         "f10",
         "f11",
         "f12"
-      ]
+      ],
+      "kaynak": {
+        "anahtar_kelimeler": [
+          "fetal dolaşım",
+          "duktus arteriyozus",
+          "foramen ovale",
+          "duktus venozus",
+          "prostaglandin"
+        ]
+      },
+      "revizyon": 1
     },
     {
       "id": "ped.kvs.konjenital.siniflama",
@@ -456,7 +466,17 @@
         "a9",
         "a10",
         "a11"
-      ]
+      ],
+      "kaynak": {
+        "anahtar_kelimeler": [
+          "siyanotik",
+          "asiyanotik",
+          "akciğer kanlanması",
+          "konjenital kalp",
+          "şant"
+        ]
+      },
+      "revizyon": 1
     },
     {
       "id": "ped.kvs.konjenital.matris",
@@ -641,7 +661,17 @@
         "r0c3",
         "r1c3",
         "r4c3"
-      ]
+      ],
+      "kaynak": {
+        "anahtar_kelimeler": [
+          "Fallot",
+          "transpozisyon",
+          "triküspit atrezisi",
+          "trunkus",
+          "TAPVD"
+        ]
+      },
+      "revizyon": 1
     }
   ],
   "sorular": [
@@ -651,7 +681,7 @@
       "dugumler": [
         "f10"
       ],
-      "kok": "Doğumdan 6 saat sonra derin siyanoz gelişen term bebeğin ekokardiyografisinde pulmoner atrezi saptanıyor; pulmoner kan akımı duktus arteriyozusa bağımlı. Bu bebekte ilk yapılması gereken tedavi aşağıdakilerden hangisidir?",
+      "kok": "Doğumdan 6 saat sonra derin siyanoz gelişen term bebeğin karaciğeri kot kavsini 2 cm geçiyor. Ekokardiyografisinde pulmoner atrezi saptanıyor; pulmoner kan akımı duktus arteriyozusa bağımlı. Bu bebekte ilk yapılması gereken tedavi aşağıdakilerden hangisidir?",
       "secenekler": [
         "İndometasin",
         "Prostaglandin E₁ infüzyonu",
@@ -660,7 +690,7 @@
         "Furosemid"
       ],
       "dogru": 1,
-      "aciklama": "Duktusa bağımlı lezyonda duktusun kapanması ölümcüldür; PGE₁ infüzyonu duktusu açık tutar. İndometasin ve yüksek oksijen duktusun kapanmasını hızlandırır.",
+      "aciklama": "Duktusa bağımlı lezyonda duktusun kapanması ölümcüldür; PGE₁ infüzyonu duktusu açık tutar. İndometasin ve yüksek oksijen duktusun kapanmasını hızlandırır. Ringa: «karaciğeri kot kavsini 2 cm geçiyor» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "f6",
         "f7",
@@ -679,7 +709,32 @@
         "2": "Oksijen",
         "3": "Digoksin",
         "4": "Furosemid"
-      }
+      },
+      "ipucu_sirasi": [
+        {
+          "metin": "pulmoner kan akımı duktus arteriyozusa bağımlı",
+          "dugum": "f7",
+          "tur": "goruntu",
+          "agirlik": 3
+        },
+        {
+          "metin": "pulmoner atrezi",
+          "dugum": "f6",
+          "tur": "goruntu",
+          "agirlik": 2
+        },
+        {
+          "metin": "Doğumdan 6 saat sonra derin siyanoz",
+          "tur": "zaman",
+          "agirlik": 1
+        },
+        {
+          "metin": "karaciğeri kot kavsini 2 cm geçiyor",
+          "tur": "fizik",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
     },
     {
       "id": "q2",
@@ -688,7 +743,7 @@
         "f7",
         "f12"
       ],
-      "kok": "28 haftalık doğan prematüre bebekte 3. günde sol sternal kenarda sürekli üfürüm, sıçrayıcı nabızlar ve artan oksijen gereksinimi gelişiyor; ekokardiyografide hemodinamik olarak anlamlı açık duktus arteriyozus saptanıyor. Duktusun kapanmasını sağlamak için kullanılabilecek ilaç aşağıdakilerden hangisidir?",
+      "kok": "28 haftalık doğan prematüre bebekte 3. günde sol sternal kenarda sürekli üfürüm, sıçrayıcı nabızlar, monitörde taşikardi ve artan oksijen gereksinimi gelişiyor; ekokardiyografide hemodinamik olarak anlamlı açık duktus arteriyozus saptanıyor. Duktusun kapanmasını sağlamak için kullanılabilecek ilaç aşağıdakilerden hangisidir?",
       "secenekler": [
         "Prostaglandin E₁",
         "İbuprofen",
@@ -697,7 +752,7 @@
         "Adenozin"
       ],
       "dogru": 1,
-      "aciklama": "Prematürede açık duktusu kapatmak için prostaglandin sentezini baskılayan ibuprofen ya da indometasin (alternatif olarak parasetamol) kullanılır. PGE₁ tam tersine duktusu açık tutar.",
+      "aciklama": "Prematürede açık duktusu kapatmak için prostaglandin sentezini baskılayan ibuprofen ya da indometasin (alternatif olarak parasetamol) kullanılır. PGE₁ tam tersine duktusu açık tutar. Ringa: «monitörde taşikardi» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "f9",
         "f7",
@@ -714,7 +769,38 @@
         "1": "İndometasin / ibuprofen",
         "2": "Digoksin",
         "3": "Propranolol"
-      }
+      },
+      "ipucu_sirasi": [
+        {
+          "metin": "hemodinamik olarak anlamlı açık duktus arteriyozus",
+          "dugum": "f7",
+          "tur": "goruntu",
+          "agirlik": 3
+        },
+        {
+          "metin": "28 haftalık doğan prematüre",
+          "dugum": "f12",
+          "tur": "oyku",
+          "agirlik": 2
+        },
+        {
+          "metin": "sol sternal kenarda sürekli üfürüm",
+          "dugum": "f7",
+          "tur": "fizik",
+          "agirlik": 2
+        },
+        {
+          "metin": "sıçrayıcı nabızlar",
+          "tur": "fizik",
+          "agirlik": 2
+        },
+        {
+          "metin": "monitörde taşikardi",
+          "tur": "fizik",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
     },
     {
       "id": "q3",
@@ -824,7 +910,7 @@
       "dugumler": [
         "a11"
       ],
-      "kok": "Doğumdan birkaç saat sonra belirgin siyanoz gelişen term bebekte %100 oksijen verilmesine rağmen oksijen satürasyonu yükselmiyor. Göğüs grafisinde akciğer kanlanması artmış, kalp 'ipe asılı yumurta' görünümünde. En olası tanı aşağıdakilerden hangisidir?",
+      "kok": "Doğumdan birkaç saat sonra belirgin siyanoz gelişen term bebekte %100 oksijen verilmesine rağmen oksijen satürasyonu yükselmiyor. Göğüs grafisinde akciğer kanlanması artmış, kalp 'ipe asılı yumurta' görünümünde. Annesinde ventriküler septal defekt öyküsü var. En olası tanı aşağıdakilerden hangisidir?",
       "secenekler": [
         "Fallot tetralojisi",
         "Büyük arterlerin transpozisyonu",
@@ -833,7 +919,7 @@
         "Pulmoner stenoz"
       ],
       "dogru": 1,
-      "aciklama": "Siyanoz ve artmış akciğer kanlanması karışım lezyonlarını düşündürür; 'ipe asılı yumurta' BAT'a özgüdür ve BAT yenidoğan döneminin en sık siyanotik KKH'sidir.",
+      "aciklama": "Siyanoz ve artmış akciğer kanlanması karışım lezyonlarını düşündürür; 'ipe asılı yumurta' BAT'a özgüdür ve BAT yenidoğan döneminin en sık siyanotik KKH'sidir. Ringa: «Annesinde ventriküler septal defekt öyküsü var» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "a1",
         "a3",
@@ -855,7 +941,39 @@
         "2": "Triküspit atrezisi",
         "3": "VSD",
         "4": "Pulmoner stenoz"
-      }
+      },
+      "ipucu_sirasi": [
+        {
+          "metin": "kalp 'ipe asılı yumurta' görünümünde",
+          "dugum": "a11",
+          "tur": "goruntu",
+          "agirlik": 3
+        },
+        {
+          "metin": "akciğer kanlanması artmış",
+          "dugum": "a7",
+          "tur": "goruntu",
+          "agirlik": 2
+        },
+        {
+          "metin": "%100 oksijen verilmesine rağmen oksijen satürasyonu yükselmiyor",
+          "dugum": "a3",
+          "tur": "lab",
+          "agirlik": 2
+        },
+        {
+          "metin": "Doğumdan birkaç saat sonra belirgin siyanoz",
+          "dugum": "a3",
+          "tur": "zaman",
+          "agirlik": 2
+        },
+        {
+          "metin": "Annesinde ventriküler septal defekt öyküsü var",
+          "tur": "oyku",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
     },
     {
       "id": "q7",
@@ -863,7 +981,7 @@
       "dugumler": [
         "a10"
       ],
-      "kok": "Dört aylık bebek ağlarken dudaklarında morarma nedeniyle getiriliyor. Sol sternal kenarda ejeksiyon üfürümü, EKG'de sağ ventrikül hipertrofisi, göğüs grafisinde azalmış akciğer kanlanması ve 'çizme şeklinde' kalp saptanıyor. En olası tanı aşağıdakilerden hangisidir?",
+      "kok": "Dört aylık bebek ağlarken dudaklarında morarma nedeniyle getiriliyor; babasında atriyal septal defekt nedeniyle ameliyat öyküsü var. Sol sternal kenarda ejeksiyon üfürümü, EKG'de sağ ventrikül hipertrofisi, göğüs grafisinde azalmış akciğer kanlanması ve 'çizme şeklinde' kalp saptanıyor. En olası tanı aşağıdakilerden hangisidir?",
       "secenekler": [
         "Fallot tetralojisi",
         "TAPVD",
@@ -872,7 +990,7 @@
         "Atriyal septal defekt"
       ],
       "dogru": 0,
-      "aciklama": "Siyanoz, azalmış akciğer kanlanması, sağ ventrikül hipertrofisi ve çizme şeklinde kalp Fallot tetralojisini gösterir. TAPVD, BAT ve trunkusta kanlanma artmıştır.",
+      "aciklama": "Siyanoz, azalmış akciğer kanlanması, sağ ventrikül hipertrofisi ve çizme şeklinde kalp Fallot tetralojisini gösterir. TAPVD, BAT ve trunkusta kanlanma artmıştır. Ringa: «babasında atriyal septal defekt nedeniyle ameliyat öyküsü» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "a1",
         "a3",
@@ -894,7 +1012,38 @@
         "2": "Büyük arterlerin transpozisyonu",
         "3": "Trunkus arteriyozus",
         "4": "ASD"
-      }
+      },
+      "ipucu_sirasi": [
+        {
+          "metin": "'çizme şeklinde' kalp",
+          "dugum": "a10",
+          "tur": "goruntu",
+          "agirlik": 3
+        },
+        {
+          "metin": "azalmış akciğer kanlanması",
+          "dugum": "a6",
+          "tur": "goruntu",
+          "agirlik": 3
+        },
+        {
+          "metin": "ağlarken dudaklarında morarma",
+          "dugum": "a10",
+          "tur": "fizik",
+          "agirlik": 2
+        },
+        {
+          "metin": "EKG'de sağ ventrikül hipertrofisi",
+          "tur": "lab",
+          "agirlik": 2
+        },
+        {
+          "metin": "babasında atriyal septal defekt nedeniyle ameliyat öyküsü",
+          "tur": "oyku",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
     },
     {
       "id": "q8",
@@ -902,7 +1051,7 @@
       "dugumler": [
         "a8"
       ],
-      "kok": "Altı haftalık bebek beslenirken terleme, hızlı soluma ve kilo alamama ile getiriliyor. Siyanozu yok; sol alt sternal kenarda pansistolik üfürüm duyuluyor. Göğüs grafisinde kardiyomegali ve artmış akciğer kanlanması var. En olası tanı aşağıdakilerden hangisidir?",
+      "kok": "Altı haftalık bebek beslenirken terleme, hızlı soluma ve kilo alamama ile getiriliyor. Siyanozu yok; annesi ağlarken dudak çevresinin morardığını söylüyor; sol alt sternal kenarda pansistolik üfürüm duyuluyor. Göğüs grafisinde kardiyomegali ve artmış akciğer kanlanması var. En olası tanı aşağıdakilerden hangisidir?",
       "secenekler": [
         "Fallot tetralojisi",
         "Ventriküler septal defekt",
@@ -911,7 +1060,7 @@
         "Büyük arterlerin transpozisyonu"
       ],
       "dogru": 1,
-      "aciklama": "Asiyanotik, akciğer kanlanması artmış ve kalp yetmezliği bulguları olan bebekte soldan sağa şant düşünülür; pansistolik üfürüm VSD'yi gösterir.",
+      "aciklama": "Asiyanotik, akciğer kanlanması artmış ve kalp yetmezliği bulguları olan bebekte soldan sağa şant düşünülür; pansistolik üfürüm VSD'yi gösterir. Ringa: «annesi ağlarken dudak çevresinin morardığını söylüyor» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "a1",
         "a2",
@@ -933,7 +1082,39 @@
         "2": "Triküspit atrezisi",
         "3": "Aort koarktasyonu",
         "4": "Büyük arterlerin transpozisyonu"
-      }
+      },
+      "ipucu_sirasi": [
+        {
+          "metin": "sol alt sternal kenarda pansistolik üfürüm",
+          "dugum": "a8",
+          "tur": "fizik",
+          "agirlik": 3
+        },
+        {
+          "metin": "kardiyomegali ve artmış akciğer kanlanması",
+          "dugum": "a4",
+          "tur": "goruntu",
+          "agirlik": 2
+        },
+        {
+          "metin": "beslenirken terleme, hızlı soluma ve kilo alamama",
+          "dugum": "a4",
+          "tur": "oyku",
+          "agirlik": 2
+        },
+        {
+          "metin": "Siyanozu yok",
+          "dugum": "a2",
+          "tur": "fizik",
+          "agirlik": 2
+        },
+        {
+          "metin": "annesi ağlarken dudak çevresinin morardığını söylüyor",
+          "tur": "oyku",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
     },
     {
       "id": "q9",
@@ -980,7 +1161,7 @@
       "dugumler": [
         "r2c2"
       ],
-      "kok": "İki aylık bebek siyanoz nedeniyle getiriliyor. EKG'de sol aks sapması ve sol ventrikül hipertrofisi saptanıyor; göğüs grafisinde akciğer kanlanması azalmış. En olası tanı aşağıdakilerden hangisidir?",
+      "kok": "İki aylık bebek siyanoz nedeniyle getiriliyor; annesi ağladığında morarmasının arttığını söylüyor. EKG'de sol aks sapması ve sol ventrikül hipertrofisi saptanıyor; göğüs grafisinde akciğer kanlanması azalmış. En olası tanı aşağıdakilerden hangisidir?",
       "secenekler": [
         "Fallot tetralojisi",
         "Büyük arterlerin transpozisyonu",
@@ -989,7 +1170,7 @@
         "TAPVD"
       ],
       "dogru": 2,
-      "aciklama": "Siyanozlu bebekte sol aks sapması ve sol ventrikül hipertrofisi triküspit atrezisini düşündürür. TOF, BAT ve TAPVD'de sağ ventrikül baskındır; trunkusta biventriküler hipertrofi görülür.",
+      "aciklama": "Siyanozlu bebekte sol aks sapması ve sol ventrikül hipertrofisi triküspit atrezisini düşündürür. TOF, BAT ve TAPVD'de sağ ventrikül baskındır; trunkusta biventriküler hipertrofi görülür. Ringa: «ağladığında morarmasının arttığını» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "r2c0",
         "r2c2"
@@ -1009,7 +1190,40 @@
         "2": "Triküspit atrezisi",
         "3": "Trunkus arteriyozus",
         "4": "TAPVD"
-      }
+      },
+      "ipucu_sirasi": [
+        {
+          "metin": "EKG'de sol aks sapması ve sol ventrikül hipertrofisi",
+          "dugum": "r2c2",
+          "tur": "lab",
+          "agirlik": 3
+        },
+        {
+          "metin": "akciğer kanlanması azalmış",
+          "dugum": "r2c0",
+          "tur": "goruntu",
+          "agirlik": 2
+        },
+        {
+          "metin": "siyanoz nedeniyle getiriliyor",
+          "tur": "fizik",
+          "agirlik": 1
+        },
+        {
+          "metin": "ağladığında morarmasının arttığını",
+          "tur": "oyku",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ],
+      "kirilimlar": [
+        {
+          "ipucu": 0,
+          "yeni_metin": "EKG'de sağ aks sapması ve sağ ventrikül hipertrofisi",
+          "yeni_dogru": 0,
+          "aciklama": "Siyanoz ve azalmış akciğer kanlanmasında EKG ayırır: sol aks sapması ve sol ventrikül hipertrofisi triküspit atrezisini, sağ aks sapması ve sağ ventrikül hipertrofisi Fallot tetralojisini düşündürür."
+        }
+      ]
     },
     {
       "id": "q11",
@@ -1051,7 +1265,7 @@
       "dugumler": [
         "r4c1"
       ],
-      "kok": "Beş aylık bebek takipne, beslenme güçlüğü ve hafif siyanozla getiriliyor. Göğüs grafisinde kardiyomegali, artmış akciğer kanlanması ve 'kardan adam' görünümü var. En olası tanı aşağıdakilerden hangisidir?",
+      "kok": "Beş aylık bebek takipne, beslenme güçlüğü ve hafif siyanozla getiriliyor; annesi ağladığında morarmanın arttığını söylüyor. Göğüs grafisinde kardiyomegali, artmış akciğer kanlanması ve 'kardan adam' görünümü var. En olası tanı aşağıdakilerden hangisidir?",
       "secenekler": [
         "TAPVD (suprakardiyak)",
         "Fallot tetralojisi",
@@ -1060,7 +1274,7 @@
         "Aort koarktasyonu"
       ],
       "dogru": 0,
-      "aciklama": "'Kardan adam' görünümü suprakardiyak TAPVD'ye özgüdür; genişlemiş vertikal ven, innominat ven ve süperior vena kava bu gölgeyi oluşturur.",
+      "aciklama": "'Kardan adam' görünümü suprakardiyak TAPVD'ye özgüdür; genişlemiş vertikal ven, innominat ven ve süperior vena kava bu gölgeyi oluşturur. Ringa: «ağladığında morarmanın arttığını» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "r4c0",
         "r4c1"
@@ -1078,7 +1292,45 @@
         "2": "Triküspit atrezisi",
         "3": "Büyük arterlerin transpozisyonu",
         "4": "Aort koarktasyonu"
-      }
+      },
+      "ipucu_sirasi": [
+        {
+          "metin": "'kardan adam' görünümü",
+          "dugum": "r4c1",
+          "tur": "goruntu",
+          "agirlik": 3
+        },
+        {
+          "metin": "artmış akciğer kanlanması",
+          "dugum": "r4c0",
+          "tur": "goruntu",
+          "agirlik": 2
+        },
+        {
+          "metin": "hafif siyanozla",
+          "tur": "fizik",
+          "agirlik": 1
+        },
+        {
+          "metin": "takipne, beslenme güçlüğü",
+          "tur": "oyku",
+          "agirlik": 1
+        },
+        {
+          "metin": "ağladığında morarmanın arttığını",
+          "tur": "oyku",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ],
+      "kirilimlar": [
+        {
+          "ipucu": 0,
+          "yeni_metin": "'ipe asılı yumurta' görünümü",
+          "yeni_dogru": 3,
+          "aciklama": "Artmış akciğer kanlanmalı siyanotik tabloda grafi ayırır: 'kardan adam' suprakardiyak TAPVD'yi, 'ipe asılı yumurta' büyük arterlerin transpozisyonunu düşündürür."
+        }
+      ]
     },
     {
       "id": "q13",
@@ -1095,7 +1347,7 @@
         "Furosemid vermek"
       ],
       "dogru": 0,
-      "aciklama": "Hipersiyanotik atakta çıkış yolu spazmıyla pulmoner akım azalır ve üfürüm kısalır. Diz-göğüs pozisyonu sistemik direnci artırarak sağdan sola şantı azaltır; ardından oksijen, morfin, sıvı ve gerekirse fenilefrin verilir.",
+      "aciklama": "Hipersiyanotik atakta çıkış yolu spazmıyla pulmoner akım azalır ve üfürüm kısalır. Diz-göğüs pozisyonu sistemik direnci artırarak sağdan sola şantı azaltır; ardından oksijen, morfin, sıvı ve gerekirse fenilefrin verilir. Ringa: «hızlı soluma» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "r0c0",
         "r0c3"
@@ -1112,7 +1364,32 @@
         "2": "Prostaglandin E₁",
         "3": "İndometasin / ibuprofen",
         "4": "Furosemid"
-      }
+      },
+      "ipucu_sirasi": [
+        {
+          "metin": "ağlama sonrası giderek artan siyanoz",
+          "dugum": "r0c3",
+          "tur": "fizik",
+          "agirlik": 3
+        },
+        {
+          "metin": "üfürüm belirgin şekilde azalmış",
+          "tur": "fizik",
+          "agirlik": 3
+        },
+        {
+          "metin": "Fallot tetralojisi tanılı",
+          "dugum": "r0c0",
+          "tur": "oyku",
+          "agirlik": 2
+        },
+        {
+          "metin": "hızlı soluma",
+          "tur": "fizik",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
     },
     {
       "id": "q14",
@@ -1121,7 +1398,7 @@
         "r3c1",
         "r3c3"
       ],
-      "kok": "Trunkus arteriyozus tanısı alan yenidoğan nöbet geçiriyor; serum kalsiyumu düşük, göğüs grafisinde timus gölgesi seçilmiyor. Bu tabloya en sık eşlik eden genetik bozukluk aşağıdakilerden hangisidir?",
+      "kok": "Annesi ileri yaşta olan ve trunkus arteriyozus tanısı alan yenidoğan nöbet geçiriyor; serum kalsiyumu düşük, göğüs grafisinde timus gölgesi seçilmiyor. Bu tabloya en sık eşlik eden genetik bozukluk aşağıdakilerden hangisidir?",
       "secenekler": [
         "Trizomi 21",
         "22q11.2 delesyonu",
@@ -1130,7 +1407,7 @@
         "PTPN11 mutasyonu"
       ],
       "dogru": 1,
-      "aciklama": "Konotrunkal anomali, hipokalsemi ve timus hipoplazisi 22q11.2 delesyonunu (DiGeorge) düşündürür; trunkus arteriyozus bu sendromla sık birliktedir.",
+      "aciklama": "Konotrunkal anomali, hipokalsemi ve timus hipoplazisi 22q11.2 delesyonunu (DiGeorge) düşündürür; trunkus arteriyozus bu sendromla sık birliktedir. Ringa: «Annesi ileri yaşta» bu soruda belirleyici değil.",
       "aciklama_yolu": [
         "r3c1",
         "r3c3"
@@ -1138,7 +1415,31 @@
       "celdirici_dugum": {},
       "kazanim": "k17",
       "kalip": "esleme",
-      "zorluk": 2
+      "zorluk": 2,
+      "ipucu_sirasi": [
+        {
+          "metin": "timus gölgesi seçilmiyor",
+          "tur": "goruntu",
+          "agirlik": 3
+        },
+        {
+          "metin": "serum kalsiyumu düşük",
+          "tur": "lab",
+          "agirlik": 3
+        },
+        {
+          "metin": "trunkus arteriyozus",
+          "dugum": "r3c3",
+          "tur": "oyku",
+          "agirlik": 2
+        },
+        {
+          "metin": "Annesi ileri yaşta",
+          "tur": "oyku",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
     }
   ],
   "kazanimlar": [

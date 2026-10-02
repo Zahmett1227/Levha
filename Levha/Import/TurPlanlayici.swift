@@ -64,6 +64,10 @@ struct TurKuyrugu: Codable, Equatable {
     var pekistirme: [String]?
     /// İnşa (Kapanış). Part 2 kayıtlarında yok.
     var kapanis: [String]?
+    /// Soru bloğunda İpucu avı formatında gelecek sorular (`soru`nun alt kümesi). Part 3 kayıtlarında yok.
+    var ipucuAvi: [String]?
+    /// Kitap sayfası eşlemesinden seçilen levhalar; Yeni bloğuna girer (Kitaplı modda alt konunun yerine).
+    var kitap: [String]?
 }
 
 /// Günlük turun planı ve ilerlemesi. Gün 04:00'te döner (`Zamanlayici.gunAnahtari`).
@@ -72,10 +76,19 @@ enum TurPlanlayici {
     static func bugun(_ context: ModelContext) -> TurDurumu {
         let gun = DurumServisi.gunAnahtari()
         if let t = try? context.fetch(FetchDescriptor<TurDurumu>(predicate: #Predicate { $0.gun == gun })).first {
-            // Part 2'de oluşan kayıtta Kapanış kuyruğu yoktur; eksikse tamamlanır.
+            // Önceki sürümlerde oluşan kayıtta Kapanış / İpucu avı kuyruğu yoktur; eksikse tamamlanır.
             var k = kuyruk(t)
+            var degisti = false
             if k.kapanis == nil && !t.tamamlananlar.contains(TurBlogu.kapanis.rawValue) {
                 k.kapanis = kapanisSec(k, siraliLevhalar(context), context)
+                degisti = true
+            }
+            if k.ipucuAvi == nil && !t.tamamlananlar.contains(TurBlogu.soru.rawValue) {
+                let sorular = (try? context.fetch(FetchDescriptor<Soru>(sortBy: [SortDescriptor(\.sira)]))) ?? []
+                (k.soru, k.ipucuAvi) = SoruSecici.ipucuAviKarisimi(k.soru, havuz: sorular, sayi: 5, tohum: "ipucu|\(t.gun)")
+                degisti = true
+            }
+            if degisti {
                 t.kuyruk = try? JSONEncoder().encode(k)
                 try? context.save()
             }
@@ -133,21 +146,25 @@ enum TurPlanlayici {
 
         // Isınma dışındaki kuyruklar öncelik puanına göre sıralanır.
         if !bitti(.yeni) {
+            let kitap = (k.kitap ?? []).filter { id in levhalar.contains { $0.id == id } }
             switch CalismaYeri(rawValue: t.calismaYeri) ?? .kitapli {
             case .kitapli:
-                k.yeni = DurumServisi.oncelikSirala(levhalar.filter { $0.paket?.paket_id == t.altKonuPaketId }, context).map(\.id)
+                // Kitap sayfasından seçilen levhalar alt konu seçiminin yerine geçer.
+                k.yeni = !kitap.isEmpty ? kitap
+                    : DurumServisi.oncelikSirala(levhalar.filter { $0.paket?.paket_id == t.altKonuPaketId }, context).map(\.id)
             case .kitapsiz:
-                let adaylar = levhalar.filter { !ortulmus.contains($0.id) && DurumServisi.vadeliMi(durumlar[$0.id]) }
-                k.yeni = Array(DurumServisi.oncelikSirala(adaylar, context).map(\.id).prefix(6))
+                let adaylar = levhalar.filter { !ortulmus.contains($0.id) && DurumServisi.vadeliMi(durumlar[$0.id]) && !kitap.contains($0.id) }
+                k.yeni = kitap + Array(DurumServisi.oncelikSirala(adaylar, context).map(\.id).prefix(6))
             case .sadeceTekrar:
-                k.yeni = []
+                k.yeni = kitap
             }
         }
 
         if !bitti(.soru) {
             let sorular = (try? context.fetch(FetchDescriptor<Soru>(sortBy: [SortDescriptor(\.sira)]))) ?? []
-            k.soru = SoruSecici.tur(bugunLevhalari: Set(k.isinma + k.yeni), havuz: sorular, sayi: 15,
-                                    tohum: "tur|\(t.gun)|\(t.calismaYeri)", context)
+            let secilen = SoruSecici.tur(bugunLevhalari: Set(k.isinma + k.yeni), havuz: sorular, sayi: 15,
+                                         tohum: "tur|\(t.gun)|\(t.calismaYeri)", context)
+            (k.soru, k.ipucuAvi) = SoruSecici.ipucuAviKarisimi(secilen, havuz: sorular, sayi: 5, tohum: "ipucu|\(t.gun)")
             k.pekistirme = nil
         }
 
@@ -178,6 +195,38 @@ enum TurPlanlayici {
         }
         try? context.save()
         WidgetYazici.yaz(context)
+    }
+
+    /// Kitap sayfasından seçilen levhaları bugünkü Yeni bloğuna ekler. Blok bitmişse yeniden açılır;
+    /// Sadece tekrar modunda Yeni bloğu olmadığından Kitaplı'ya geçilir.
+    static func kitapEkle(_ idler: [String], _ t: TurDurumu, _ context: ModelContext) {
+        var k = kuyruk(t)
+        var kitap = k.kitap ?? []
+        for id in idler where !kitap.contains(id) { kitap.append(id) }
+        k.kitap = kitap
+        t.kuyruk = try? JSONEncoder().encode(k)
+        t.tamamlananlar.removeAll { $0 == TurBlogu.yeni.rawValue }
+        if t.calismaYeri == CalismaYeri.sadeceTekrar.rawValue { t.calismaYeri = CalismaYeri.kitapli.rawValue }
+        t.kisa = false
+        planla(t, context)
+    }
+
+    static func kitapTemizle(_ t: TurDurumu, _ context: ModelContext) {
+        var k = kuyruk(t)
+        k.kitap = nil
+        t.kuyruk = try? JSONEncoder().encode(k)
+        planla(t, context)
+    }
+
+    /// Editör'de kaydedilen soru, Soru bloğu bitmemişse bugünkü tura eklenir.
+    static func soruEkle(_ soruId: String, _ context: ModelContext) {
+        let t = bugun(context)
+        guard !t.tamamlananlar.contains(TurBlogu.soru.rawValue) else { return }
+        var k = kuyruk(t)
+        guard !k.soru.contains(soruId) else { return }
+        k.soru.append(soruId)
+        t.kuyruk = try? JSONEncoder().encode(k)
+        try? context.save()
     }
 
     /// Kapanış (İnşa): bugün çalışılan levhalardan önceliği en yüksek iki tanesi; yoksa tüm levhalardan.
@@ -251,6 +300,41 @@ enum SoruSecici {
         al(b, nb)
         al(c, sayi)
         return secilen
+    }
+
+    /// Tur listesinden en fazla `sayi` soru İpucu avı formatına alınır (yalnız ipucu sırası olanlar).
+    /// Listede yeterince yoksa sondaki ipucusuz sorular havuzdan ipuçlu sorularla değiştirilir.
+    static func ipucuAviKarisimi(_ liste: [String], havuz: [Soru], sayi: Int, tohum: String) -> (soru: [String], ipucuAvi: [String]) {
+        let ipuclu = havuz.filter { !$0.ipuclari.isEmpty }
+        let ipucluIdler = Set(ipuclu.map(\.kimlik))
+        var sonuc = liste
+        var avi = Array(sonuc.filter { ipucluIdler.contains($0) }.prefix(sayi))
+        if avi.count < sayi {
+            var rng = TohumluUretec(tohum: tohum)
+            let adaylar = agirlikliKaristir(ipuclu, rng: &rng).map(\.kimlik).filter { !sonuc.contains($0) }
+            var degistirilebilir = sonuc.indices.filter { !ipucluIdler.contains(sonuc[$0]) }
+            for id in adaylar where avi.count < sayi {
+                guard let i = degistirilebilir.popLast() else { break }
+                sonuc[i] = id
+                avi.append(id)
+            }
+        }
+        // İpucu avı soruları bloğa yayılır (15 soruda 5 → 2., 5., 8., 11., 14. sıra).
+        guard !avi.isEmpty else { return (sonuc, avi) }
+        let aviKume = Set(avi)
+        var digerleri = sonuc.filter { !aviKume.contains($0) }[...]
+        var aviSirali = sonuc.filter { aviKume.contains($0) }[...]
+        let adim = max(1, sonuc.count / aviSirali.count)
+        var yayilmis: [String] = []
+        for i in sonuc.indices {
+            let aviYeri = i % adim == adim / 2 && !aviSirali.isEmpty
+            if aviYeri || digerleri.isEmpty, let id = aviSirali.popFirst() {
+                yayilmis.append(id)
+            } else if let id = digerleri.popFirst() {
+                yayilmis.append(id)
+            }
+        }
+        return (yayilmis, avi)
     }
 
     private static func gecmis(_ context: ModelContext) -> (yanlis7: Set<String>, cozulen: Set<String>) {

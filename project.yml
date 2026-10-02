@@ -37,6 +37,7 @@ targets:
         UIApplicationSupportsIndirectInputEvents: true
         UIFileSharingEnabled: true
         LSSupportsOpeningDocumentsInPlace: true
+        NSCameraUsageDescription: Kitap sayfasını levhalarla eşlemek için fotoğraf çekilir; metin cihazda okunur.
         CFBundleURLTypes:
           - CFBundleURLName: tr.kisisel.levha
             CFBundleURLSchemes: [levha]

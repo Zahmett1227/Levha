@@ -25,6 +25,10 @@ struct BugunView: View {
     private var paketler: [Paket]
     @State private var tur: TurDurumu?
     @State private var acikBlok: TurBlogu?
+    @State private var kitapAcik = false
+
+    /// Editör'ün "Yazdıklarım" paketi alt konu sayılmaz.
+    private var icerikPaketleri: [Paket] { paketler.filter { !$0.kullaniciMi } }
 
     var body: some View {
         NavigationStack {
@@ -43,6 +47,9 @@ struct BugunView: View {
         .onChange(of: paketler.map(\.paket_id)) { if let tur { TurPlanlayici.planla(tur, context) } }
         .fullScreenCover(item: $acikBlok) { blok in
             if let tur { TurBlokView(blok: blok, tur: tur) }
+        }
+        .sheet(isPresented: $kitapAcik) {
+            if let tur { KitapSayfasiView(tur: tur) }
         }
     }
 
@@ -74,8 +81,15 @@ struct BugunView: View {
         }
 
         Section {
-            if tur.calismaYeri == CalismaYeri.kitapli.rawValue && !tur.kisa {
-                altKonuSecici(tur)
+            let kitapli = tur.calismaYeri == CalismaYeri.kitapli.rawValue
+            let kitap = TurPlanlayici.kuyruk(tur).kitap ?? []
+            if kitapli && !tur.kisa {
+                KitapSayfasiDugmesi(belirgin: true) { kitapAcik = true }
+                if kitap.isEmpty {
+                    altKonuSecici(tur)
+                } else {
+                    kitapOzeti(tur, kitap)
+                }
             }
             TurOzeti(tamamlanan: TurPlanlayici.tamamlananDakika(tur), planlanan: TurPlanlayici.planlananDakika(tur),
                      kisa: Binding(get: { tur.kisa }, set: { tur.kisa = $0; try? context.save() }))
@@ -90,6 +104,10 @@ struct BugunView: View {
                 .buttonStyle(.plain)
                 .disabled(!ayrinti.acik)
             }
+            if !kitapli || tur.kisa {
+                if !kitap.isEmpty { kitapOzeti(tur, kitap) }
+                KitapSayfasiDugmesi(belirgin: false) { kitapAcik = true }
+            }
         } header: {
             Text("Bugünün turu")
         }
@@ -100,7 +118,9 @@ struct BugunView: View {
         case .isinma:
             return ("\(blok.modAdi) · \(k.isinma.count) levha", !k.isinma.isEmpty)
         case .yeni:
-            if tur.calismaYeri == CalismaYeri.kitapli.rawValue && tur.altKonuPaketId == nil { return ("Önce alt konu seç", false) }
+            if tur.calismaYeri == CalismaYeri.kitapli.rawValue && tur.altKonuPaketId == nil && k.yeni.isEmpty {
+                return ("Önce alt konu seç ya da kitap sayfası tara", false)
+            }
             if k.yeni.isEmpty { return ("Uygun levha yok", false) }
             return ("\(blok.modAdi) · \(k.yeni.count) levha", true)
         case .soru:
@@ -115,12 +135,39 @@ struct BugunView: View {
         }
     }
 
+    /// Kitap sayfasından seçilen levhalar (Kitaplı modda alt konu seçicinin yerine geçer).
+    private func kitapOzeti(_ tur: TurDurumu, _ kitap: [String]) -> some View {
+        let basliklar = TurPlanlayici.levhalar(kitap, context).map(\.baslik)
+        return HStack(spacing: 10) {
+            Image(systemName: "book.pages")
+                .foregroundStyle(RenkSeti.mavi.kenar)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Kitap sayfasından · \(kitap.count) levha")
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundStyle(Tema.metin)
+                Text(basliklar.joined(separator: " · "))
+                    .font(.system(size: 12.5))
+                    .foregroundStyle(Tema.ikincil)
+                    .lineLimit(2)
+            }
+            Spacer()
+            Button {
+                TurPlanlayici.kitapTemizle(tur, context)
+            } label: {
+                Image(systemName: "xmark.circle.fill").foregroundStyle(Tema.cizgi)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Kitap sayfası seçimini kaldır")
+        }
+        .padding(.vertical, 2)
+    }
+
     private func altKonuSecici(_ tur: TurDurumu) -> some View {
         let secili = paketler.first { $0.paket_id == tur.altKonuPaketId }
         return Menu {
             ForEach(dersler, id: \.self) { ders in
                 Section(ders) {
-                    ForEach(paketler.filter { $0.ders == ders }) { p in
+                    ForEach(icerikPaketleri.filter { $0.ders == ders }) { p in
                         Button("\(p.bolum) › \(p.alt_konu)") {
                             tur.altKonuPaketId = p.paket_id
                             aktifPaketId = p.paket_id
@@ -150,11 +197,11 @@ struct BugunView: View {
 
     private var tumAltKonular: some View {
         Section {
-            if paketler.isEmpty {
+            if icerikPaketleri.isEmpty {
                 Text("Henüz paket yok. İçerik sekmesinden içe aktar.")
                     .foregroundStyle(Tema.ikincil)
             }
-            ForEach(paketler) { p in
+            ForEach(icerikPaketleri) { p in
                 Button {
                     aktifPaketId = p.paket_id
                     sekme = .levha
@@ -170,7 +217,40 @@ struct BugunView: View {
 
     private var dersler: [String] {
         var gorulen = Set<String>()
-        return paketler.map(\.ders).filter { gorulen.insert($0).inserted }
+        return icerikPaketleri.map(\.ders).filter { gorulen.insert($0).inserted }
+    }
+}
+
+/// Kitap sayfası eşlemesi; Kitaplı modda öne çıkar.
+struct KitapSayfasiDugmesi: View {
+    let belirgin: Bool
+    let action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: 12) {
+                Image(systemName: "camera.viewfinder")
+                    .font(.system(size: belirgin ? 20 : 17, weight: .semibold))
+                    .foregroundStyle(belirgin ? Color.white : Tema.metin)
+                    .frame(width: 28)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Kitap sayfası")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(belirgin ? Color.white : Tema.metin)
+                    Text("Sayfanın fotoğrafından levhayı bul")
+                        .font(.system(size: 12.5))
+                        .foregroundStyle(belirgin ? Color.white.opacity(0.75) : Tema.ikincil)
+                }
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(belirgin ? Color.white.opacity(0.7) : Tema.cizgi)
+            }
+            .padding(.vertical, belirgin ? 6 : 2)
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .listRowBackground(belirgin ? Tema.metin : Color.white)
     }
 }
 
@@ -302,7 +382,8 @@ struct TurBlokView: View {
         Group {
             if blok == .soru {
                 NavigationStack {
-                    SoruOturumuView(baslik: "Soru bloğu", soruIdleri: TurPlanlayici.kuyruk(tur).soru) {
+                    SoruOturumuView(baslik: "Soru bloğu", soruIdleri: TurPlanlayici.kuyruk(tur).soru,
+                                    ipucuAviIdleri: Set(TurPlanlayici.kuyruk(tur).ipucuAvi ?? [])) {
                         TurPlanlayici.tamamla(.soru, tur, context)
                         dismiss()
                     }

@@ -57,11 +57,25 @@ enum DurumServisi {
         WidgetYazici.yaz(context)
     }
 
+    /// Soru kırma sonucu: seçilen kalıp, seçilen ipucu, kilidin açılma süresi.
+    struct KirmaKaydi {
+        var kalip: KalipTipi?
+        var ipucu: Int?
+        var sure: TimeInterval
+    }
+
     /// Yanlış cevapta sorunun düğümleri ve seçilen şıkkın çeldirici düğümü zayıflık sayacına +1 yazılır.
-    static func soruKaydet(soru: Soru, secilen: Int, guven: Int, sure: TimeInterval, _ context: ModelContext) {
+    static func soruKaydet(soru: Soru, secilen: Int, guven: Int?, sure: TimeInterval, kirma: KirmaKaydi? = nil,
+                           _ context: ModelContext) {
         let dogru = secilen == soru.dogru
-        context.insert(SoruOlayi(soruGlobalId: soru.kimlik, levhaId: soru.levha, secilen: secilen, dogruMu: dogru,
-                                 sureSaniye: sure, tarih: .now, guven: guven))
+        let olay = SoruOlayi(soruGlobalId: soru.kimlik, levhaId: soru.levha, secilen: secilen, dogruMu: dogru,
+                             sureSaniye: sure, tarih: .now, guven: guven)
+        if let kirma {
+            olay.kalipTahmini = kirma.kalip?.rawValue
+            olay.ipucuTahminiIndeks = kirma.ipucu
+            olay.kirmaSuresi = kirma.sure
+        }
+        context.insert(olay)
         if !dogru {
             var dugumler = soru.dugumler
             if let c = soru.celdiriciler[secilen], !dugumler.contains(c) { dugumler.append(c) }
@@ -70,6 +84,18 @@ enum DurumServisi {
         saglamlikGuncelle(soru.levha, context)
         try? context.save()
         WidgetYazici.yaz(context)
+    }
+
+    /// İpucu avı: hem `IpucuOlayi` hem (güvensiz) `SoruOlayi` yazılır; sağlamlık ve Pekiştirme cevabı görür.
+    static func ipucuKaydet(soru: Soru, secilen: Int, acilan: Int, toplam: Int, puan: Int, sure: TimeInterval, _ context: ModelContext) {
+        context.insert(IpucuOlayi(soruGlobalId: soru.kimlik, ipucuIndeks: acilan, toplamIpucu: toplam,
+                                  dogru: secilen == soru.dogru, puan: puan, tarih: .now))
+        soruKaydet(soru: soru, secilen: secilen, guven: nil, sure: sure, context)
+    }
+
+    static func notEkle(levhaId: String, dugumId: String, metin: String, _ context: ModelContext) {
+        context.insert(DugumNotu(levhaId: levhaId, dugumId: dugumId, metin: metin, tarih: .now))
+        try? context.save()
     }
 
     private static func zayiflikArtir(levhaId: String, dugumId: String, _ context: ModelContext) {

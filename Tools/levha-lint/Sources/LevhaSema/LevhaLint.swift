@@ -27,13 +27,20 @@ public struct LintSonucu {
 }
 
 public enum LevhaLint {
-    public static let desteklenenSurumler = 1...3
+    public static let desteklenenSurumler = 1...4
     public static let etiketSiniri = 28
     public static let dugumAraligi = 6...20
     public static let hucreAraligi = 6...24
     public static let sutunAraligi = 2...4
     public static let satirAraligi = 2...6
     public static let seritSiniri = 4
+    /// `ipucu_sirasi` beklenen (klinik) dersler.
+    public static let klinikDersler: Set<String> = ["Pediatri", "Dahiliye", "Genel Cerrahi", "Kadın-Doğum", "Küçük Stajlar"]
+
+    /// Vaka kökü: en az 20 kelime (klinik tablo anlatır). Kısa bilgi sorularında ipucu sırası beklenmez.
+    public static func vakaKokuMu(_ kok: String) -> Bool {
+        kok.split(whereSeparator: { $0 == " " || $0 == "\n" }).count >= 20
+    }
 
     public static func denetle(veri: Data) -> LintSonucu {
         do {
@@ -64,7 +71,7 @@ public enum LevhaLint {
     public static func denetle(_ p: PaketJSON) -> [LintBulgusu] {
         var b: [LintBulgusu] = []
         if !desteklenenSurumler.contains(p.sema_surumu) {
-            b.append(.init("sema_surumu", "desteklenmeyen sürüm \(p.sema_surumu) (beklenen 1–3)"))
+            b.append(.init("sema_surumu", "desteklenmeyen sürüm \(p.sema_surumu) (beklenen 1–4)"))
         }
         for (ad, deger) in [("paket_id", p.paket_id), ("ders", p.ders), ("bolum", p.bolum), ("alt_konu", p.alt_konu)] where bos(deger) {
             b.append(.init(ad, "boş olamaz"))
@@ -78,6 +85,7 @@ public enum LevhaLint {
             b += levhaDenetle(l, yer: yer, surum: p.sema_surumu)
             levhaDugumleri[l.id] = Set(dugumKimlikleri(l))
         }
+        let v4 = p.sema_surumu >= 4
 
         let v3 = p.sema_surumu >= 3
         // Aileler ve kazanımlar (v3)
@@ -122,6 +130,7 @@ public enum LevhaLint {
             if s.secenekler.count != 5 { b.append(.init(yer + " › secenekler", "5 seçenek olmalı (\(s.secenekler.count) var)")) }
             if !(0...4).contains(s.dogru) { b.append(.init(yer + " › dogru", "0–4 arasında olmalı (\(s.dogru))")) }
             b += soruV3Denetle(s, yer: yer, v3: v3, kazanimlar: kazanimlar, aileler: aileler)
+            b += soruV4Denetle(s, yer: yer, v4: v4, klinik: klinikDersler.contains(p.ders), idler: levhaDugumleri[s.levha])
             guard let idler = levhaDugumleri[s.levha] else {
                 b.append(.init(yer + " › levha", "bilinmeyen levha \"\(s.levha)\""))
                 continue
@@ -144,6 +153,37 @@ public enum LevhaLint {
                     b.append(.init(yer + " › celdirici_dugum", "bilinmeyen düğüm \"\(dugum)\""))
                 }
             }
+        }
+        return b
+    }
+
+    /// v4: ipucu sırası ve kırılımlar.
+    static func soruV4Denetle(_ s: SoruJSON, yer: String, v4: Bool, klinik: Bool, idler: Set<String>?) -> [LintBulgusu] {
+        var b: [LintBulgusu] = []
+        let ipuclari = s.ipucu_sirasi ?? []
+        for (i, ip) in ipuclari.enumerated() {
+            let iyer = "\(yer) › ipucu_sirasi[\(i)]"
+            if bos(ip.metin) {
+                b.append(.init(iyer + ".metin", "boş olamaz"))
+            } else if !s.kok.contains(ip.metin) {
+                b.append(.init(iyer + ".metin", "kökte birebir geçmiyor: \"\(ip.metin)\""))
+            }
+            if ip.ipucuTuru == nil {
+                b.append(.init(iyer + ".tur", "geçersiz tür \"\(ip.tur)\" (izinli: \(IpucuTuru.allCases.map(\.rawValue).joined(separator: ", ")))"))
+            }
+            if let a = ip.agirlik, !(0...3).contains(a) { b.append(.init(iyer + ".agirlik", "0–3 olmalı (\(a))")) }
+            if let d = ip.dugum, let idler, !idler.contains(d) { b.append(.init(iyer + ".dugum", "bilinmeyen düğüm \"\(d)\"")) }
+        }
+        for (i, k) in (s.kirilimlar ?? []).enumerated() {
+            let kyer = "\(yer) › kirilimlar[\(i)]"
+            if !ipuclari.indices.contains(k.ipucu) {
+                b.append(.init(kyer + ".ipucu", "ipucu_sirasi indeksi dışında (\(k.ipucu); \(ipuclari.count) ipucu var)"))
+            }
+            if !(0...4).contains(k.yeni_dogru) { b.append(.init(kyer + ".yeni_dogru", "0–4 arasında olmalı (\(k.yeni_dogru))")) }
+            if bos(k.yeni_metin) { b.append(.init(kyer + ".yeni_metin", "boş olamaz")) }
+        }
+        if v4 && klinik && ipuclari.isEmpty && vakaKokuMu(s.kok) {
+            b.append(.init(yer + " › ipucu_sirasi", "klinik soruda ipucu_sirasi yok", uyari: true))
         }
         return b
     }
@@ -268,6 +308,11 @@ public enum LevhaLint {
         }
         if gorulen.count < 3 {
             b.append(.init(yer + " › ortme_sirasi", "en az 3 düğüm olmalı", engelleyici: false))
+        }
+
+        if let r = l.revizyon, r < 0 { b.append(.init(yer + " › revizyon", "negatif olamaz (\(r))")) }
+        if surum >= 4 && (l.kaynak?.anahtar_kelimeler ?? []).isEmpty {
+            b.append(.init(yer + " › kaynak.anahtar_kelimeler", "yok (kitap sayfası eşlemesi yalnız başlık ve etiketlerle yapılır)", uyari: true))
         }
 
         for id in l.insa_sirasi ?? [] where !idler.contains(id) {

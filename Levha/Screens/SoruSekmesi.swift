@@ -7,6 +7,8 @@ struct SoruOturumu: Identifiable, Hashable {
     let idler: [String]
     /// Günlük Tur'un Soru bloğu mu? (bitince blok tiklenir)
     let tur: Bool
+    /// Bu sorular İpucu avı formatında gelir.
+    var ipucuAvi: Set<String> = []
 }
 
 /// "Soru" sekmesi: Bugünün soruları ya da konu seçerek 10/15/20 soruluk oturum.
@@ -29,10 +31,11 @@ struct SoruSekmesi: View {
                         let k = TurPlanlayici.kuyruk(tur)
                         let bitti = tur.tamamlananlar.contains(TurBlogu.soru.rawValue)
                         Button {
-                            oturum = SoruOturumu(baslik: "Bugünün soruları", idler: k.soru, tur: true)
+                            oturum = SoruOturumu(baslik: "Bugünün soruları", idler: k.soru, tur: true, ipucuAvi: Set(k.ipucuAvi ?? []))
                         } label: {
                             HStack {
-                                Label("Günlük Tur · \(k.soru.count) soru", systemImage: "sun.max")
+                                Label("Günlük Tur · \(k.soru.count) soru" + ((k.ipucuAvi ?? []).isEmpty ? "" : " (\((k.ipucuAvi ?? []).count) İpucu avı)"),
+                                      systemImage: "sun.max")
                                 Spacer()
                                 if bitti {
                                     Image(systemName: "checkmark.circle.fill").foregroundStyle(RenkSeti.yesil.kenar)
@@ -43,11 +46,30 @@ struct SoruSekmesi: View {
                     }
                 }
 
+                Section {
+                    let ipuclu = ipucluSorular
+                    LabeledContent("İpucu sırası olan", value: "\(ipuclu.count) soru")
+                    Button {
+                        ipucuOturumuBaslat(ipuclu)
+                    } label: {
+                        Label("İpucu avı başlat (10 soru)", systemImage: "magnifyingglass")
+                            .font(.system(size: 16, weight: .semibold))
+                    }
+                    .disabled(ipuclu.isEmpty)
+                } header: {
+                    Text("İpucu avı")
+                } footer: {
+                    Text("İpuçları kökteki sırayla açılır; tanıyı ne kadar erken bilirsen o kadar çok puan.")
+                }
+
                 Section("Konu seç") {
                     Picker("Alt konu", selection: $seciliPaket) {
                         Text("Tümü").tag("")
-                        ForEach(paketler) { p in
+                        ForEach(paketler.filter { !$0.kullaniciMi }) { p in
                             Text("\(p.bolum) › \(p.alt_konu)").tag(p.paket_id)
+                        }
+                        if let k = paketler.first(where: \.kullaniciMi), !k.sorular.isEmpty {
+                            Text("Yazdıklarım (\(k.sorular.count))").tag(k.paket_id)
                         }
                     }
                     Picker("Soru sayısı", selection: $sayi) {
@@ -74,13 +96,23 @@ struct SoruSekmesi: View {
             .background(Tema.arkaPlan)
             .navigationTitle("Soru")
             .navigationDestination(item: $oturum) { o in
-                SoruOturumuView(baslik: o.baslik, soruIdleri: o.idler) {
+                SoruOturumuView(baslik: o.baslik, soruIdleri: o.idler, ipucuAviIdleri: o.ipucuAvi) {
                     if o.tur, let tur { TurPlanlayici.tamamla(.soru, tur, context) }
                     oturum = nil
                 }
             }
             .onAppear { tur = TurPlanlayici.bugun(context) }
         }
+    }
+
+    private var ipucluSorular: [Soru] {
+        ((try? context.fetch(FetchDescriptor<Soru>(sortBy: [SortDescriptor(\.sira)]))) ?? []).filter { !$0.ipuclari.isEmpty }
+    }
+
+    private func ipucuOturumuBaslat(_ havuz: [Soru]) {
+        oturumSayaci += 1
+        let idler = SoruSecici.konu(havuz, sayi: 10, tohum: "ipucu-avi|\(DurumServisi.gunAnahtari())|\(oturumSayaci)", context)
+        oturum = SoruOturumu(baslik: "İpucu avı", idler: idler, tur: false, ipucuAvi: Set(idler))
     }
 
     private func konuOturumuBaslat() {
@@ -104,6 +136,8 @@ struct LevhaGosterimi: Identifiable, Hashable {
 struct SoruOturumuView: View {
     let baslik: String
     let soruIdleri: [String]
+    /// Bu id'lerdeki (ipucu sırası olan) sorular İpucu avı formatında gelir.
+    var ipucuAviIdleri: Set<String> = []
     var bitince: () -> Void
 
     @Environment(\.modelContext) private var context
@@ -117,6 +151,14 @@ struct SoruOturumuView: View {
     @State private var yuklendi = false
     /// 1 Eminim · 2 Sanırım · 3 Tahmin; seçilmezse Sanırım.
     @State private var guven = 2
+    // Soru kırma
+    @State private var kirmaAcikMi = SoruKirmaAyari.acik
+    @State private var kirmaKalip: KalipTipi?
+    @State private var kirmaIpucu: Int?
+    @State private var kilitAcik = false
+    @State private var kirmaSure: Double?
+    @State private var kalan = SoruKirmaAyari.sure
+    @State private var kirilim: KirilimGosterimi?
 
     var body: some View {
         Group {
@@ -140,8 +182,18 @@ struct SoruOturumuView: View {
                 LevhaGosterimiView(levha: levha, yol: g.yol, celdirici: g.celdirici)
             }
         }
+        .navigationDestination(item: $kirilim) { k in
+            if let s = sorular.first(where: { $0.kimlik == k.soruId }), s.kirilimListesi.indices.contains(k.indeks) {
+                KirilimView(soru: s, kirilim: s.kirilimListesi[k.indeks], levha: levha(s.levha))
+            }
+        }
         .onAppear(perform: yukle)
     }
+
+    /// Kırma bu soruda çalışıyor mu (ayar açık, henüz cevaplanmadı, kilit kapalı)?
+    private var kirmaSuruyor: Bool { kirmaAcikMi && secilen == nil && !kilitAcik }
+
+    private func ipucuAviMi(_ s: Soru) -> Bool { ipucuAviIdleri.contains(s.kimlik) && !s.ipuclari.isEmpty }
 
     private func yukle() {
         guard !yuklendi else { return }
@@ -162,7 +214,24 @@ struct SoruOturumuView: View {
 
     // MARK: - Soru
 
+    @ViewBuilder
     private func soruEkrani(_ s: Soru) -> some View {
+        if ipucuAviMi(s) {
+            ScrollView {
+                IpucuAviKarti(soru: s, ust: "Soru \(indeks + 1)/\(sorular.count) · İpucu avı",
+                              sonIndeks: indeks + 1 >= sorular.count,
+                              cevaplandi: { if $0 { dogruSayisi += 1 } },
+                              levhaGoster: { gosterim = $0 },
+                              sonraki: sonraki)
+                    .padding(16)
+                    .id(s.kimlik)
+            }
+        } else {
+            normalSoru(s)
+        }
+    }
+
+    private func normalSoru(_ s: Soru) -> some View {
         let l = levha(s.levha)
         return ScrollViewReader { kaydirici in
             ScrollView {
@@ -186,21 +255,42 @@ struct SoruOturumuView: View {
                     }
                     .id("ust")
 
-                    Text(s.kok)
-                        .font(.system(size: 16))
-                        .foregroundStyle(Tema.metin)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(14)
-                        .levhaKarti()
+                    if kirmaSuruyor {
+                        KirmaPaneli(kalan: kalan, kalip: $kirmaKalip, ipucuGerekli: !s.ipuclari.isEmpty, ipucuSecildi: kirmaIpucu != nil)
+                            .transition(.opacity)
+                    }
+
+                    KokMetni(kok: s.kok, ipuclari: kirmaAcikMi ? s.ipuclari : [], dokunulabilir: kirmaSuruyor,
+                             secili: kirmaIpucu, renkli: secilen != nil) { i in
+                        withAnimation(.easeOut(duration: 0.15)) { kirmaIpucu = kirmaIpucu == i ? nil : i }
+                        kilitKontrol(s)
+                    }
+                    .padding(14)
+                    .levhaKarti()
 
                     GuvenSecici(guven: $guven)
                         .disabled(secilen != nil)
                         .opacity(secilen == nil ? 1 : 0.5)
 
-                    ForEach(s.secenekler.indices, id: \.self) { i in
-                        SecenekSatiri(harf: harf(i), metin: s.secenekler[i], durum: secenekDurumu(i, s))
-                            .onTapGesture { cevapla(i, s) }
-                            .accessibilityAddTraits(.isButton)
+                    VStack(spacing: 12) {
+                        ForEach(s.secenekler.indices, id: \.self) { i in
+                            SecenekSatiri(harf: harf(i), metin: s.secenekler[i], durum: secenekDurumu(i, s))
+                                .onTapGesture { cevapla(i, s) }
+                                .accessibilityAddTraits(.isButton)
+                        }
+                    }
+                    .opacity(kirmaSuruyor ? 0.35 : 1)
+                    .allowsHitTesting(!kirmaSuruyor)
+                    .overlay {
+                        if kirmaSuruyor {
+                            Label("Şıklar kilitli", systemImage: "lock.fill")
+                                .font(.system(size: 13, weight: .bold))
+                                .foregroundStyle(Tema.metin)
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 6)
+                                .background(Color.white, in: Capsule())
+                                .overlay(Capsule().strokeBorder(Tema.kartKenar, lineWidth: 1))
+                        }
                     }
 
                     if let secilen {
@@ -211,7 +301,34 @@ struct SoruOturumuView: View {
                 .padding(16)
             }
             .onChange(of: indeks) { kaydirici.scrollTo("ust", anchor: .top) }
+            .onChange(of: kirmaKalip) { kilitKontrol(s) }
+            .task(id: "\(s.kimlik)|\(kirmaSuruyor)") { await sayac(s) }
         }
+    }
+
+    /// 10 saniyelik halka; süre dolunca şıklar açılır.
+    private func sayac(_ s: Soru) async {
+        guard kirmaSuruyor else { return }
+        while !Task.isCancelled && kirmaSuruyor {
+            let gecen = Date.now.timeIntervalSince(baslangic)
+            kalan = max(0, SoruKirmaAyari.sure - gecen)
+            if kalan <= 0 {
+                kilidiAc()
+                return
+            }
+            try? await Task.sleep(for: .milliseconds(100))
+        }
+    }
+
+    /// Kalıp seçildi ve (ipucu sırası varsa) bir ipucu seçildiyse kilit açılır.
+    private func kilitKontrol(_ s: Soru) {
+        guard kirmaSuruyor, kirmaKalip != nil, s.ipuclari.isEmpty || kirmaIpucu != nil else { return }
+        kilidiAc()
+    }
+
+    private func kilidiAc() {
+        kirmaSure = min(Date.now.timeIntervalSince(baslangic), SoruKirmaAyari.sure)
+        withAnimation(.easeOut(duration: 0.25)) { kilitAcik = true }
     }
 
     private func harf(_ i: Int) -> String { ["A", "B", "C", "D", "E"][min(i, 4)] }
@@ -228,7 +345,8 @@ struct SoruOturumuView: View {
         let sure = Date.now.timeIntervalSince(baslangic)
         withAnimation(.easeOut(duration: 0.25)) { secilen = i }
         if i == s.dogru { dogruSayisi += 1 }
-        DurumServisi.soruKaydet(soru: s, secilen: i, guven: guven, sure: sure, context)
+        let kirma = kirmaAcikMi ? DurumServisi.KirmaKaydi(kalip: kirmaKalip, ipucu: kirmaIpucu, sure: kirmaSure ?? SoruKirmaAyari.sure) : nil
+        DurumServisi.soruKaydet(soru: s, secilen: i, guven: guven, sure: sure, kirma: kirma, context)
     }
 
     private func sonraki() {
@@ -237,6 +355,11 @@ struct SoruOturumuView: View {
                 indeks += 1
                 secilen = nil
                 guven = 2
+                kirmaKalip = nil
+                kirmaIpucu = nil
+                kilitAcik = false
+                kirmaSure = nil
+                kalan = SoruKirmaAyari.sure
             }
             baslangic = .now
         } else {
@@ -270,6 +393,22 @@ struct SoruOturumuView: View {
                     .padding(8)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(RenkSeti.sari.zemin, in: RoundedRectangle(cornerRadius: 8))
+            }
+            if kirmaAcikMi {
+                KirmaOzeti(soru: s, olay: (kirmaKalip, kirmaIpucu), dogru: dogru)
+                    .padding(8)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(Tema.arkaPlan, in: RoundedRectangle(cornerRadius: 8))
+            }
+            let kirilimlar = s.kirilimListesi
+            if !kirilimlar.isEmpty {
+                HStack(spacing: 8) {
+                    ForEach(kirilimlar.indices, id: \.self) { k in
+                        PanelDugmesi(baslik: kirilimlar.count == 1 ? "Kırılım" : "Kırılım \(k + 1)", renk: .sari, dolu: false) {
+                            kirilim = KirilimGosterimi(soruId: s.kimlik, indeks: k)
+                        }
+                    }
+                }
             }
             HStack(spacing: 10) {
                 PanelDugmesi(baslik: "Levhada göster", renk: .mavi, dolu: false) {

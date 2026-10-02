@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "levha.schema.json",
-  "title": "LEVHA paketi (şema v3)",
+  "title": "LEVHA paketi (şema v4)",
   "description": "Bir paket = bir alt konu = bir .json dosyası. Yapısal kurallar (ızgara içinde/çakışmasız konum, referans bütünlüğü, etiket ≤ 28 karakter, düğüm sayıları) levha-lint ile denetlenir. Sürüm 1–2 paketler okunmaya devam eder.",
   "type": "object",
   "required": [
@@ -17,7 +17,8 @@
       "enum": [
         1,
         2,
-        3
+        3,
+        4
       ]
     },
     "paket_id": {
@@ -262,9 +263,6 @@
         },
         "kaynak": {
           "type": "object",
-          "required": [
-            "kitap"
-          ],
           "properties": {
             "kitap": {
               "type": "string"
@@ -274,9 +272,26 @@
               "items": {
                 "type": "integer"
               }
+            },
+            "baski": {
+              "type": "string",
+              "description": "v4: kitabın baskısı, ör. \"2024\"."
+            },
+            "anahtar_kelimeler": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "minItems": 4,
+              "maxItems": 6,
+              "description": "v4: kitap sayfası eşlemesinde ×3 ağırlıklı kelimeler."
             }
-          },
-          "description": "Part 4 kamera eşlemesi için; şimdilik yalnız saklanır."
+          }
+        },
+        "revizyon": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "v4: paket güncellemesiyle artar. Depodakinden büyükse paketteki düzen yerel düzenin önüne geçer."
         }
       },
       "allOf": [
@@ -598,6 +613,19 @@
             "type": "string"
           },
           "description": "Şık indeksi → aile üyesi (doğru şık dahil); karıştırma matrisi bundan kurulur."
+        },
+        "ipucu_sirasi": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ipucu"
+          },
+          "description": "v4: belirleyicilik sırasıyla ipuçları; İpucu avı kartları kökteki sırayla gösterir."
+        },
+        "kirilimlar": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/kirilim"
+          }
         }
       }
     },
@@ -966,6 +994,73 @@
           "additionalProperties": {
             "type": "string"
           }
+        }
+      }
+    },
+    "ipucuTuru": {
+      "enum": [
+        "zaman",
+        "lab",
+        "fizik",
+        "oyku",
+        "goruntu",
+        "ilac"
+      ]
+    },
+    "ipucu": {
+      "type": "object",
+      "required": [
+        "metin",
+        "tur"
+      ],
+      "properties": {
+        "metin": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Kökte birebir geçen alt metin (lint denetler)."
+        },
+        "dugum": {
+          "type": "string"
+        },
+        "tur": {
+          "$ref": "#/$defs/ipucuTuru"
+        },
+        "agirlik": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 3,
+          "description": "0 = belirleyici değil."
+        },
+        "yaniltici": {
+          "type": "boolean",
+          "description": "Kırmızı ringa."
+        }
+      }
+    },
+    "kirilim": {
+      "type": "object",
+      "required": [
+        "ipucu",
+        "yeni_metin",
+        "yeni_dogru"
+      ],
+      "properties": {
+        "ipucu": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "ipucu_sirasi indeksi."
+        },
+        "yeni_metin": {
+          "type": "string",
+          "minLength": 1
+        },
+        "yeni_dogru": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4
+        },
+        "aciklama": {
+          "type": "string"
         }
       }
     }

@@ -1,7 +1,7 @@
 import SwiftUI
 
 enum LevhaModu: String, CaseIterable, Identifiable {
-    case kesif, ortme, sabotaj, insa
+    case kesif, ortme, sabotaj, insa, editor
     var id: String { rawValue }
 
     var ad: String {
@@ -10,6 +10,7 @@ enum LevhaModu: String, CaseIterable, Identifiable {
         case .ortme: return "Örtme"
         case .sabotaj: return "Sabotaj"
         case .insa: return "İnşa"
+        case .editor: return "Editör"
         }
     }
 }
