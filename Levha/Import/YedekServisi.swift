@@ -68,6 +68,7 @@ struct YedekPaketi: Codable {
     struct AyarlarK: Codable {
         var dagilim: [String: Int]; var ceza: Double; var calismaYeri: String?; var soruKirmaAcik: Bool; var kirmaSuresi: Double
         var saglayici: String; var tabanURL: String; var modelAdi: String; var apiBicimi: String; var maxCikisToken: Int; var sicaklik: Double
+        var muhakeme: String?
     }
 }
 
@@ -137,7 +138,8 @@ enum YedekServisi {
         y.ayarlar = .init(dagilim: SinavAyarlari.dagilim, ceza: SinavAyarlari.ceza, calismaYeri: d.string(forKey: "calismaYeri"),
                           soruKirmaAcik: SoruKirmaAyari.acik, kirmaSuresi: SoruKirmaAyari.sure,
                           saglayici: LLMAyarlari.saglayici.rawValue, tabanURL: LLMAyarlari.apiTabanURL, modelAdi: LLMAyarlari.modelAdi,
-                          apiBicimi: LLMAyarlari.apiBicimi.rawValue, maxCikisToken: LLMAyarlari.maxCikisToken, sicaklik: LLMAyarlari.sicaklik)
+                          apiBicimi: LLMAyarlari.apiBicimi.rawValue, maxCikisToken: LLMAyarlari.maxCikisToken, sicaklik: LLMAyarlari.sicaklik,
+                          muhakeme: LLMAyarlari.muhakeme.rawValue)
         return y
     }
 
@@ -292,9 +294,10 @@ enum YedekServisi {
             LLMAyarlari.saglayici = LLMSaglayici(rawValue: a.saglayici) ?? .sahte
             LLMAyarlari.apiTabanURL = a.tabanURL
             LLMAyarlari.modelAdi = a.modelAdi
-            LLMAyarlari.apiBicimi = APIBicimi(rawValue: a.apiBicimi) ?? .chat
+            LLMAyarlari.apiBicimi = APIBicimi(rawValue: a.apiBicimi) ?? .responses
             LLMAyarlari.maxCikisToken = a.maxCikisToken
             LLMAyarlari.sicaklik = a.sicaklik
+            if let m = a.muhakeme.flatMap(MuhakemeDuzeyi.init(rawValue:)) { LLMAyarlari.muhakeme = m }
             LLMAyarlari.denetle()
         }
         try? context.save()

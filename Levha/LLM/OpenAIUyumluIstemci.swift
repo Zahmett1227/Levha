@@ -6,13 +6,32 @@ struct OpenAIUyumluIstemci: LLMIstemci {
     let anahtar: String
     let model: String
     let bicim: APIBicimi
+    /// Görünür yanıt bütçesi; istekte muhakeme payı eklenir.
     let maxCikis: Int
     let sicaklik: Double
+    let muhakeme: MuhakemeDuzeyi
     /// Kullanım kaydının amacı; nil → kayıt yok (bağlantı testi).
     let amac: LLMAmac?
     var oturum: URLSession = .shared
 
     private var yol: String { bicim == .chat ? "chat/completions" : "responses" }
+
+    /// Muhakeme token'ları da çıkış sınırından düşer.
+    private var cikisSiniri: Int { maxCikis + muhakeme.pay }
+
+    /// Çıkış sınırı, muhakeme düzeyi ve (yalnız muhakeme yokken) sıcaklık. Responses yanıtı sunucuda saklanmaz.
+    private func modelAlanlari(_ g: inout [String: Any]) {
+        switch bicim {
+        case .chat:
+            g["max_completion_tokens"] = cikisSiniri
+            g["reasoning_effort"] = muhakeme.rawValue
+        case .responses:
+            g["max_output_tokens"] = cikisSiniri
+            g["reasoning"] = ["effort": muhakeme.rawValue]
+            g["store"] = false
+        }
+        if muhakeme == .yok { g["temperature"] = sicaklik }
+    }
 
     // MARK: - Akış
 
@@ -22,6 +41,7 @@ struct OpenAIUyumluIstemci: LLMIstemci {
                 do {
                     let (baytlar, _) = try await akisBaglan(akisGovdesi(sistem, mesajlar))
                     var parcaVar = false
+                    var kesildi = false
                     satirlar: for try await satir in baytlar.lines {
                         guard satir.hasPrefix("data:") else { continue }
                         let veri = satir.dropFirst(5).trimmingCharacters(in: .whitespaces)
@@ -32,10 +52,12 @@ struct OpenAIUyumluIstemci: LLMIstemci {
                         }
                         switch bicim {
                         case .chat:
-                            if let secim = (json["choices"] as? [[String: Any]])?.first,
-                               let delta = secim["delta"] as? [String: Any], let metin = delta["content"] as? String, !metin.isEmpty {
-                                parcaVar = true
-                                devam.yield(metin)
+                            if let secim = (json["choices"] as? [[String: Any]])?.first {
+                                if let metin = (secim["delta"] as? [String: Any])?["content"] as? String, !metin.isEmpty {
+                                    parcaVar = true
+                                    devam.yield(metin)
+                                }
+                                if secim["finish_reason"] as? String == "length" { kesildi = true }
                             }
                             if let u = json["usage"] as? [String: Any] {
                                 kullanimKaydet(u["prompt_tokens"], u["completion_tokens"])
@@ -51,6 +73,11 @@ struct OpenAIUyumluIstemci: LLMIstemci {
                                 let u = (json["response"] as? [String: Any])?["usage"] as? [String: Any]
                                 kullanimKaydet(u?["input_tokens"], u?["output_tokens"])
                                 break satirlar
+                            case "response.incomplete":
+                                let u = (json["response"] as? [String: Any])?["usage"] as? [String: Any]
+                                kullanimKaydet(u?["input_tokens"], u?["output_tokens"])
+                                kesildi = true
+                                break satirlar
                             case "response.failed", "error":
                                 let r = json["response"] as? [String: Any]
                                 let mesaj = ((r?["error"] ?? json["error"]) as? [String: Any])?["message"] as? String
@@ -60,7 +87,8 @@ struct OpenAIUyumluIstemci: LLMIstemci {
                             }
                         }
                     }
-                    if !parcaVar && !Task.isCancelled { throw LLMHatasi.bosYanit }
+                    if !parcaVar && !Task.isCancelled { throw kesildi ? LLMHatasi.sinirDoldu : LLMHatasi.bosYanit }
+                    if kesildi { devam.yield("\n\n(yanıt token sınırında kesildi)") }
                     devam.finish()
                 } catch {
                     devam.finish(throwing: LLMHatasi.esle(error))
@@ -72,13 +100,16 @@ struct OpenAIUyumluIstemci: LLMIstemci {
 
     private func akisGovdesi(_ sistem: String, _ mesajlar: [LLMMesaj]) -> [String: Any] {
         let liste = mesajlar.map { ["role": $0.rol, "content": $0.icerik] }
+        var g: [String: Any]
         switch bicim {
         case .chat:
-            return ["model": model, "messages": [["role": "system", "content": sistem]] + liste, "stream": true,
-                    "stream_options": ["include_usage": true], "max_tokens": maxCikis, "temperature": sicaklik]
+            g = ["model": model, "messages": [["role": "system", "content": sistem]] + liste, "stream": true,
+                 "stream_options": ["include_usage": true]]
         case .responses:
-            return ["model": model, "instructions": sistem, "input": liste, "stream": true, "max_output_tokens": maxCikis]
+            g = ["model": model, "instructions": sistem, "input": liste, "stream": true]
         }
+        modelAlanlari(&g)
+        return g
     }
 
     // MARK: - JSON
@@ -88,13 +119,15 @@ struct OpenAIUyumluIstemci: LLMIstemci {
         switch bicim {
         case .chat:
             govde = ["model": model, "messages": [["role": "system", "content": sistem], ["role": "user", "content": istem]],
-                     "response_format": ["type": "json_object"], "max_tokens": maxCikis, "temperature": sicaklik]
+                     "response_format": ["type": "json_object"]]
         case .responses:
-            govde = ["model": model, "instructions": sistem, "input": istem,
-                     "text": ["format": ["type": "json_object"]], "max_output_tokens": maxCikis]
+            govde = ["model": model, "instructions": sistem, "input": istem, "text": ["format": ["type": "json_object"]]]
         }
+        modelAlanlari(&govde)
         do {
             let json = try await gonder(govde)
+            // Yarım kalan JSON işe yaramaz.
+            if Self.kesildiMi(json, bicim) { throw LLMHatasi.sinirDoldu }
             guard let metin = Self.yanitMetni(json, bicim), !metin.isEmpty else { throw LLMHatasi.bosYanit }
             return IstemSablonlari.jsonAyikla(Data(metin.utf8))
         } catch {
@@ -102,18 +135,27 @@ struct OpenAIUyumluIstemci: LLMIstemci {
         }
     }
 
-    /// 1 token'lık "ok" isteği; başarıda kısa bir özet döner.
+    /// Muhakemesiz, 16 token'lık "ok" isteği; başarıda sağlayıcının bildirdiği model adıyla kısa bir özet döner.
     func baglantiTesti() async throws -> String {
         let govde: [String: Any] = bicim == .chat
-            ? ["model": model, "messages": [["role": "user", "content": "ok"]], "max_tokens": 1]
-            : ["model": model, "input": "ok", "max_output_tokens": 16]
+            ? ["model": model, "messages": [["role": "user", "content": "ok"]], "max_completion_tokens": 16, "reasoning_effort": "none"]
+            : ["model": model, "input": "ok", "max_output_tokens": 16, "reasoning": ["effort": "none"], "store": false]
         let bas = Date.now
+        let json: [String: Any]
         do {
-            _ = try await gonder(govde)
+            json = try await gonder(govde)
         } catch {
             throw LLMHatasi.esle(error)
         }
-        return "Bağlantı tamam · \(model) · \(Int(Date.now.timeIntervalSince(bas) * 1000)) ms"
+        return "Bağlantı tamam · \(json["model"] as? String ?? model) · \(Int(Date.now.timeIntervalSince(bas) * 1000)) ms"
+    }
+
+    /// Yanıt çıkış sınırında kesildi mi (chat `finish_reason: length`, responses `status: incomplete`)?
+    static func kesildiMi(_ json: [String: Any], _ bicim: APIBicimi) -> Bool {
+        switch bicim {
+        case .chat: return ((json["choices"] as? [[String: Any]])?.first)?["finish_reason"] as? String == "length"
+        case .responses: return json["status"] as? String == "incomplete"
+        }
     }
 
     static func yanitMetni(_ json: [String: Any], _ bicim: APIBicimi) -> String? {
@@ -191,8 +233,9 @@ struct OpenAIUyumluIstemci: LLMIstemci {
         }
     }
 
-    /// Bazı modeller `temperature` ya da `max_tokens` kabul etmez: hata metninde adı geçen alan atılır
-    /// (`max_tokens` → `max_completion_tokens`). Alan adı geçmiyorsa bir kez sıcaklık atılır.
+    /// Sağlayıcı bir alanı reddederse hata metninde adı geçen alan atılır ya da eşdeğerine çevrilir
+    /// (`max_tokens` ↔ `max_completion_tokens`; muhakemesiz modelde `reasoning_effort`/`reasoning` atılır).
+    /// Alan adı geçmiyorsa bir kez sıcaklık atılır.
     static func uyarla(_ g: [String: Any], hata: String, yapilan: inout Set<String>) -> [String: Any]? {
         var g = g
         let m = hata.lowercased()
@@ -208,7 +251,13 @@ struct OpenAIUyumluIstemci: LLMIstemci {
             yapilan.insert("max_tokens")
             return g
         }
-        for ad in ["max_completion_tokens", "max_output_tokens", "stream_options", "response_format"] where alan(ad) {
+        if alan("max_completion_tokens") {
+            g["max_tokens"] = g["max_completion_tokens"]
+            g["max_completion_tokens"] = nil
+            yapilan.formUnion(["max_completion_tokens", "max_tokens"])
+            return g
+        }
+        for ad in ["reasoning_effort", "reasoning", "store", "max_output_tokens", "stream_options", "response_format"] where alan(ad) {
             g[ad] = nil
             yapilan.insert(ad)
             return g

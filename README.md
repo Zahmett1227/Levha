@@ -26,10 +26,17 @@ Projeye dosya eklersen: `xcodegen generate` (proje `project.yml`'den üretilir).
 
 - **Sahte (çevrimdışı):** ağ çağrısı yok; "Modele sor", levha genişletme, Editör değerlendirmesi ve kitap
   sayfası önerisi hazır yanıtlarla çalışır.
-- **OpenAI uyumlu:** `/chat/completions` (varsayılan) ya da `/responses` konuşan her sağlayıcı. Alanlar:
+- **OpenAI uyumlu:** `/responses` (varsayılan) ya da `/chat/completions` konuşan her sağlayıcı. Alanlar:
   API taban URL (`https://api.openai.com/v1`), API anahtarı (yalnız bu cihazın Keychain'inde), model adı
-  (varsayılan `chatgpt 5.6 luna`), max çıkış token (800), sıcaklık (0,3). **Bağlantı testi** 1 token'lık bir istek
-  gönderir. Model `temperature`/`max_tokens` reddederse alan atılıp bir kez yeniden denenir.
+  (varsayılan `gpt-5.6-luna`), muhakeme (Yok · **Düşük** · Orta · Yüksek · Çok yüksek · En yüksek →
+  `reasoning.effort` / `reasoning_effort`), max çıkış token (800), sıcaklık (0,3).
+  - Muhakeme token'ları çıkış sınırından düşer: istekte sınır = max çıkış + düzey payı (Düşük +4.000, Orta +12.000,
+    Yüksek +25.000…); sınır yine dolarsa "Token sınırı doldu" uyarısı çıkar. Ödenen yalnız gerçekten üretilen token'dır.
+  - Sıcaklık yalnız muhakeme **Yok** iken gönderilir (GPT-5.6 öbür düzeylerde reddeder).
+  - Responses istekleri `store: false` gider. **Bağlantı testi** muhakemesiz 16 token'lık bir istek gönderir ve
+    sağlayıcının döndürdüğü model adını gösterir.
+  - Sağlayıcı bir alanı reddederse alan atılır ya da eşdeğerine çevrilir (`max_completion_tokens` ↔ `max_tokens`;
+    muhakemesiz modelde `reasoning_effort` atılır) ve bir kez yeniden denenir.
 
 Anahtar yoksa sağlayıcı kendiliğinden Sahte'ye döner (Ayarlar'da sarı uyarı). Harcanan token Ölçüm › Kullanım'da
 ("Bu ay: N çağrı, X giriş / Y çıkış token"). Kitap sayfası "Modele sor" yalnız okunan metni ve levha başlıklarını

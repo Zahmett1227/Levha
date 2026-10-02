@@ -23,6 +23,7 @@ enum LLMHatasi: LocalizedError {
     case reddedildi(Int, String)
     case cevrimdisi
     case bosYanit
+    case sinirDoldu
 
     var errorDescription: String? {
         switch self {
@@ -35,6 +36,7 @@ enum LLMHatasi: LocalizedError {
         case .http(let k, let m), .reddedildi(let k, let m): return k > 0 ? "İstek reddedildi (\(k)): \(m)" : "İstek reddedildi: \(m)"
         case .cevrimdisi: return "Çevrimdışı"
         case .bosYanit: return "Boş yanıt (model çıktı üretmedi; max token düşük olabilir)"
+        case .sinirDoldu: return "Token sınırı doldu: max çıkış token'ı artır ya da muhakemeyi düşür"
         }
     }
 
@@ -65,6 +67,35 @@ enum APIBicimi: String, CaseIterable, Identifiable {
     var ad: String { self == .chat ? "Chat (/chat/completions)" : "Responses (/responses)" }
 }
 
+/// GPT-5.x muhakeme düzeyi (`reasoning_effort` / `reasoning.effort`). Muhakeme token'ları çıkış sınırından düşer.
+enum MuhakemeDuzeyi: String, CaseIterable, Identifiable {
+    case yok = "none", dusuk = "low", orta = "medium", yuksek = "high", cokYuksek = "xhigh", enYuksek = "max"
+    var id: String { rawValue }
+
+    var ad: String {
+        switch self {
+        case .yok: return "Yok"
+        case .dusuk: return "Düşük"
+        case .orta: return "Orta"
+        case .yuksek: return "Yüksek"
+        case .cokYuksek: return "Çok yüksek"
+        case .enYuksek: return "En yüksek"
+        }
+    }
+
+    /// Görünür yanıt bütçesine eklenen pay: sınır muhakemede dolup yanıt boş kalmasın.
+    var pay: Int {
+        switch self {
+        case .yok: return 0
+        case .dusuk: return 4_000
+        case .orta: return 12_000
+        case .yuksek: return 25_000
+        case .cokYuksek: return 50_000
+        case .enYuksek: return 100_000
+        }
+    }
+}
+
 enum LLMSaglayici: String, CaseIterable, Identifiable {
     case sahte
     case openaiUyumlu
@@ -85,8 +116,12 @@ enum LLMSaglayici: String, CaseIterable, Identifiable {
 enum LLMAyarlari {
     static let varsayilanTabanURL = "https://api.openai.com/v1"
     static let varsayilanMaxToken = 800
-    static let varsayilanModel = "chatgpt 5.6 luna"
+    /// OpenAI GPT-5.6 Luna (hızlı/ucuz katman; Chat ve Responses).
+    static let varsayilanModel = "gpt-5.6-luna"
+    /// Önceki sürümün yanlış varsayılanı; açılışta varsayılana çevrilir.
+    static let eskiVarsayilanModel = "chatgpt 5.6 luna"
     static let varsayilanSicaklik = 0.3
+    static let varsayilanMuhakeme = MuhakemeDuzeyi.dusuk
 
     private static let d = UserDefaults.standard
 
@@ -107,13 +142,19 @@ enum LLMAyarlari {
     }
 
     static var apiBicimi: APIBicimi {
-        get { APIBicimi(rawValue: d.string(forKey: "llmApiBicimi") ?? "") ?? .chat }
+        get { APIBicimi(rawValue: d.string(forKey: "llmApiBicimi") ?? "") ?? .responses }
         set { d.set(newValue.rawValue, forKey: "llmApiBicimi") }
     }
 
+    /// Yalnız muhakeme "Yok" iken gönderilir (GPT-5.6 öbür düzeylerde sıcaklık almaz).
     static var sicaklik: Double {
         get { d.object(forKey: "llmSicaklik") as? Double ?? varsayilanSicaklik }
         set { d.set(newValue, forKey: "llmSicaklik") }
+    }
+
+    static var muhakeme: MuhakemeDuzeyi {
+        get { MuhakemeDuzeyi(rawValue: d.string(forKey: "llmMuhakeme") ?? "") ?? varsayilanMuhakeme }
+        set { d.set(newValue.rawValue, forKey: "llmMuhakeme") }
     }
 
     /// Anahtarı olmayan "OpenAI uyumlu" seçimi açılışta Sahte'ye döner; Ayarlar bunu sarı uyarıyla gösterir.
@@ -138,11 +179,13 @@ enum LLMAyarlari {
     static func istemci(_ amac: LLMAmac) -> LLMIstemci {
         guard !sahteMi, let url = URL(string: apiTabanURL.trimmingCharacters(in: .whitespaces)) else { return SahteLLMIstemci() }
         return OpenAIUyumluIstemci(tabanURL: url, anahtar: apiAnahtari, model: modelAdi, bicim: apiBicimi,
-                                   maxCikis: maxCikisToken, sicaklik: sicaklik, amac: amac)
+                                   maxCikis: maxCikisToken, sicaklik: sicaklik, muhakeme: muhakeme, amac: amac)
     }
 
-    /// Açılışta: anahtarı olmayan gerçek sağlayıcı seçimi Sahte'ye döner.
+    /// Açılışta (ve geri yüklemeden sonra): eski yanlış model adı varsayılana çevrilir; anahtarı olmayan gerçek
+    /// sağlayıcı seçimi Sahte'ye döner.
     static func denetle() {
+        if d.string(forKey: "llmModelAdi") == eskiVarsayilanModel { modelAdi = "" }
         if saglayici == .openaiUyumlu && apiAnahtari.isEmpty {
             saglayici = .sahte
             sahteyeDondu = true

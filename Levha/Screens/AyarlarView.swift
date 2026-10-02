@@ -15,6 +15,7 @@ struct AyarlarView: View {
     @State private var bicim = LLMAyarlari.apiBicimi
     @State private var maxToken = LLMAyarlari.maxCikisToken
     @State private var sicaklik = LLMAyarlari.sicaklik
+    @State private var muhakeme = LLMAyarlari.muhakeme
     @State private var test: TestDurumu = .yok
     @State private var abSifirlaSor = false
     @AppStorage(SoruKirmaAyari.anahtar) private var soruKirma = true
@@ -141,13 +142,17 @@ struct AyarlarView: View {
                 ForEach(APIBicimi.allCases) { Text($0 == .chat ? "chat" : "responses").tag($0) }
             }
             .pickerStyle(.segmented)
+            Picker("Muhakeme", selection: $muhakeme) {
+                ForEach(MuhakemeDuzeyi.allCases) { Text($0.ad).tag($0) }
+            }
             Stepper(value: $maxToken, in: 100...8000, step: 100) {
-                LabeledContent("Max çıkış token", value: "\(maxToken)")
+                LabeledContent("Max çıkış token", value: muhakeme.pay > 0 ? "\(maxToken) + \(muhakeme.pay) muhakeme" : "\(maxToken)")
             }
             VStack(alignment: .leading, spacing: 4) {
-                LabeledContent("Sıcaklık", value: Bicim.sayi(sicaklik))
+                LabeledContent("Sıcaklık", value: muhakeme == .yok ? Bicim.sayi(sicaklik) : "muhakemede gönderilmez")
                 Slider(value: $sicaklik, in: 0...1, step: 0.1).tint(Tema.metin)
             }
+            .disabled(muhakeme != .yok)
             Button {
                 baglantiTesti()
             } label: {
@@ -169,7 +174,7 @@ struct AyarlarView: View {
         } header: {
             Text("Model sağlayıcı")
         } footer: {
-            Text("\"OpenAI uyumlu\": /chat/completions ya da /responses uç noktasını konuşan her sağlayıcı. Anahtar yalnız bu cihazın Keychain'inde durur; yedeğe girmez. Model bazı alanları (temperature, max_tokens) reddederse alan atılıp bir kez yeniden denenir.")
+            Text("\"OpenAI uyumlu\": /chat/completions ya da /responses uç noktasını konuşan her sağlayıcı. Varsayılan model gpt-5.6-luna. Muhakeme token'ları çıkış sınırından düşer; yanıt boş kalmasın diye düzeye göre pay eklenir. Sıcaklık yalnız muhakeme \"Yok\" iken gönderilir. Anahtar yalnız bu cihazın Keychain'inde durur; yedeğe girmez. Model bir alanı reddederse alan atılıp bir kez yeniden denenir.")
         }
     }
 
@@ -187,7 +192,7 @@ struct AyarlarView: View {
         }
         let model = modelAdi.trimmingCharacters(in: .whitespaces).isEmpty ? LLMAyarlari.varsayilanModel : modelAdi
         let istemci = OpenAIUyumluIstemci(tabanURL: url, anahtar: apiAnahtari.trimmingCharacters(in: .whitespacesAndNewlines),
-                                         model: model, bicim: bicim, maxCikis: maxToken, sicaklik: sicaklik, amac: nil)
+                                         model: model, bicim: bicim, maxCikis: maxToken, sicaklik: sicaklik, muhakeme: muhakeme, amac: nil)
         test = .calisiyor
         Task {
             do {
@@ -229,6 +234,7 @@ struct AyarlarView: View {
         LLMAyarlari.apiBicimi = bicim
         LLMAyarlari.maxCikisToken = maxToken
         LLMAyarlari.sicaklik = sicaklik
+        LLMAyarlari.muhakeme = muhakeme
         if saglayici == .openaiUyumlu && anahtarYok {
             LLMAyarlari.saglayici = .sahte
             LLMAyarlari.sahteyeDondu = true
