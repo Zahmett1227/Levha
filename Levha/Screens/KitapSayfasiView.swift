@@ -88,7 +88,7 @@ struct KitapSayfasiView: View {
                         .font(.system(size: 14))
                     }
                 } footer: {
-                    Text("Metin cihazda okunur (Vision); fotoğraf hiçbir yere gönderilmez.")
+                    Text("Metin cihazda okunur (Vision); fotoğraf cihazdan çıkmaz. \"Modele sor\" yalnız okunan metni ve levha başlıklarını gönderir.")
                 }
 
                 if let goruntu {
@@ -155,7 +155,11 @@ struct KitapSayfasiView: View {
     private func sonucBolumu(_ ocr: String) -> some View {
         let sozluk = Dictionary(levhalar.map { ($0.id, $0) }, uniquingKeysWith: { a, _ in a })
         Section {
-            if SayfaEsleme.eslesmeYok(sonuclar) {
+            if SayfaEsleme.kelimeler(ocr).isEmpty {
+                Label("Sayfada okunabilir metin bulunamadı. Sayfayı düz ve aydınlık çek.", systemImage: "text.viewfinder")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundStyle(RenkSeti.sari.yazi)
+            } else if SayfaEsleme.eslesmeYok(sonuclar) {
                 VStack(alignment: .leading, spacing: 8) {
                     Label("Eşleşme yok", systemImage: "questionmark.square.dashed")
                         .font(.system(size: 15, weight: .bold))
@@ -268,8 +272,9 @@ struct KitapSayfasiView: View {
         Task {
             defer { modelCalisiyor = false }
             do {
-                let veri = IstemSablonlari.jsonAyikla(try await LLMAyarlari.istemci.jsonUret(sistem: IstemSablonlari.eslemeSistemi, istem: istem))
-                let idler = try JSONDecoder().decode([String].self, from: veri)
+                let veri = IstemSablonlari.jsonAyikla(try await LLMAyarlari.istemci(.esleme).jsonUret(sistem: IstemSablonlari.eslemeSistemi, istem: istem))
+                struct Yanit: Decodable { let idler: [String] }
+                let idler = try JSONDecoder().decode(Yanit.self, from: veri).idler
                 modelOnerisi = Array(idler.filter(bilinen.contains).prefix(3))
             } catch {
                 hata = "Model önerisi okunamadı: \(error.localizedDescription)"

@@ -26,6 +26,14 @@ struct BugunView: View {
     @State private var tur: TurDurumu?
     @State private var acikBlok: TurBlogu?
     @State private var kitapAcik = false
+    @Query(sort: \SinavOlayi.tarih, order: .reverse) private var sinavlar: [SinavOlayi]
+
+    /// Pazar günleri, son 6 günde sınav yoksa "Mini sınav zamanı" kartı.
+    private var sinavZamani: Bool {
+        let pazar = Calendar.current.component(.weekday, from: .now) == 1 || UserDefaults.standard.bool(forKey: "sinavKartiGoster")
+        let son = sinavlar.first?.tarih ?? .distantPast
+        return pazar && Date.now.timeIntervalSince(son) > 6 * 86_400 && !icerikPaketleri.isEmpty
+    }
 
     /// Editör'ün "Yazdıklarım" paketi alt konu sayılmaz.
     private var icerikPaketleri: [Paket] { paketler.filter { !$0.kullaniciMi } }
@@ -33,7 +41,25 @@ struct BugunView: View {
     var body: some View {
         NavigationStack {
             List {
-                if let tur {
+                if sinavZamani {
+                    Section {
+                        Button { Yonlendirici.ortak.miniSinavAc() } label: {
+                            HStack(spacing: 12) {
+                                Image(systemName: "stopwatch").font(.system(size: 20, weight: .semibold)).foregroundStyle(RenkSeti.sari.yazi)
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text("Mini sınav zamanı").font(.system(size: 16, weight: .semibold)).foregroundStyle(Tema.metin)
+                                    Text("Haftalık 30 soru · 34 dk · tahmini netini sına").font(.system(size: 12.5)).foregroundStyle(Tema.ikincil)
+                                }
+                                Spacer()
+                                Image(systemName: "chevron.right").font(.system(size: 13, weight: .semibold)).foregroundStyle(Tema.cizgi)
+                            }
+                            .contentShape(Rectangle())
+                        }
+                        .buttonStyle(.plain)
+                        .listRowBackground(RenkSeti.sari.zemin)
+                    }
+                }
+                if let tur = gecerliTur {
                     turBolumleri(tur)
                 }
                 tumAltKonular
@@ -44,19 +70,27 @@ struct BugunView: View {
         }
         .onAppear(perform: yukle)
         .onChange(of: faz) { if faz == .active { yukle() } }
-        .onChange(of: paketler.map(\.paket_id)) { if let tur { TurPlanlayici.planla(tur, context) } }
+        .onChange(of: paketler.map(\.paket_id)) { if let tur = gecerliTur { TurPlanlayici.planla(tur, context) } }
+        // Geri yükleme turu silip yeniden yazabilir: olay sürümü değişince tur yeniden okunur.
+        .onChange(of: OlayDefteri.ortak.surum) { yukle() }
         .fullScreenCover(item: $acikBlok) { blok in
-            if let tur { TurBlokView(blok: blok, tur: tur) }
+            if let tur = gecerliTur { TurBlokView(blok: blok, tur: tur) }
         }
         .sheet(isPresented: $kitapAcik) {
-            if let tur { KitapSayfasiView(tur: tur) }
+            if let tur = gecerliTur { KitapSayfasiView(tur: tur) }
         }
     }
 
     /// Gün 04:00'te döner; uygulama öne gelince yeni günün turu açılır.
     private func yukle() {
         let t = TurPlanlayici.bugun(context)
-        if tur?.gun != t.gun { tur = t }
+        if gecerliTur?.persistentModelID != t.persistentModelID { tur = t }
+    }
+
+    /// Silinmiş (ör. yedekten üzerine yazılmış) tur nesnesine erişilmez.
+    private var gecerliTur: TurDurumu? {
+        guard let tur, !tur.isDeleted, tur.modelContext != nil else { return nil }
+        return tur
     }
 
     // MARK: - Tur
@@ -116,15 +150,19 @@ struct BugunView: View {
     private func blokAyrintisi(_ blok: TurBlogu, _ k: TurKuyrugu, _ tur: TurDurumu) -> (metin: String, acik: Bool) {
         switch blok {
         case .isinma:
-            return ("\(blok.modAdi) · \(k.isinma.count) levha", !k.isinma.isEmpty)
+            if k.isinma.isEmpty { return (icerikPaketleri.isEmpty ? "Paket yok" : "Sabote edilecek levha yok", false) }
+            return ("\(blok.modAdi) · \(k.isinma.count) levha", true)
         case .yeni:
             if tur.calismaYeri == CalismaYeri.kitapli.rawValue && tur.altKonuPaketId == nil && k.yeni.isEmpty {
                 return ("Önce alt konu seç ya da kitap sayfası tara", false)
             }
-            if k.yeni.isEmpty { return ("Uygun levha yok", false) }
+            if k.yeni.isEmpty {
+                return (tur.calismaYeri == CalismaYeri.kitapsiz.rawValue ? "Vadesi gelen yeni levha yok; yarın tekrar bak" : "Uygun levha yok", false)
+            }
             return ("\(blok.modAdi) · \(k.yeni.count) levha", true)
         case .soru:
-            return ("\(blok.modAdi) · \(k.soru.count) soru", !k.soru.isEmpty)
+            if k.soru.isEmpty { return ("Paketlerde soru yok", false) }
+            return ("\(blok.modAdi) · \(k.soru.count) soru", true)
         case .pekistirme:
             guard let p = k.pekistirme else { return ("Soru bloğundan sonra hesaplanır", false) }
             if p.isEmpty { return ("Yanlış yok, pekiştirme gerekmedi", false) }

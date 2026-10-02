@@ -28,6 +28,7 @@ enum SinavAyarlari {
     }
 
     static func soruSayisi(_ ders: String) -> Int { dagilim[ders] ?? bilinmeyenDers }
+    static func siraIndeksi(_ ders: String) -> Int { sira.firstIndex(of: ders) ?? sira.count }
 
     /// Tablonun gösterim sırası: varsayılan dersler sabit sırada, sonra pakette olup tabloda olmayanlar.
     static let sira = ["Pediatri", "Dahiliye", "Genel Cerrahi", "Kadın-Doğum", "Küçük Stajlar",

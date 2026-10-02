@@ -38,6 +38,12 @@ targets:
         UIFileSharingEnabled: true
         LSSupportsOpeningDocumentsInPlace: true
         NSCameraUsageDescription: Kitap sayfasını levhalarla eşlemek için fotoğraf çekilir; metin cihazda okunur.
+        UTExportedTypeDeclarations:
+          - UTTypeIdentifier: tr.kisisel.levha.yedek
+            UTTypeDescription: Levha yedeği
+            UTTypeConformsTo: [public.data]
+            UTTypeTagSpecification:
+              public.filename-extension: [levhayedek]
         CFBundleURLTypes:
           - CFBundleURLName: tr.kisisel.levha
             CFBundleURLSchemes: [levha]

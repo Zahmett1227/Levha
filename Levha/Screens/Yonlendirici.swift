@@ -12,6 +12,13 @@ final class Yonlendirici {
     private(set) var hedefLevhaId: String?
     private(set) var hedefMod: LevhaModu?
     private(set) var istek = 0
+    /// Bugün'deki "Mini sınav zamanı" kartı: Soru sekmesi kurulumu açar.
+    var miniSinavIstek = 0
+
+    func miniSinavAc() {
+        miniSinavIstek += 1
+        sekme = .soru
+    }
 
     /// levha://levha/<id>?mode=ortme · levha://bugun
     func ac(_ url: URL) {

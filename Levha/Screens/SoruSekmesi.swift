@@ -22,12 +22,19 @@ struct SoruSekmesi: View {
     @State private var oturum: SoruOturumu?
     @State private var tur: TurDurumu?
     @State private var oturumSayaci = 0
+    @State private var sinavKurulumu = false
+    @State private var sinav: MiniSinavKurulumu?
+    private var yonlendirici = Yonlendirici.ortak
 
     var body: some View {
         NavigationStack {
             List {
                 Section("Bugünün soruları") {
-                    if let tur {
+                    if paketler.isEmpty {
+                        Label("Henüz paket yok. İçerik sekmesinden içe aktar.", systemImage: "tray")
+                            .foregroundStyle(Tema.ikincil)
+                    }
+                    if let tur, !tur.isDeleted, tur.modelContext != nil {
                         let k = TurPlanlayici.kuyruk(tur)
                         let bitti = tur.tamamlananlar.contains(TurBlogu.soru.rawValue)
                         Button {
@@ -44,6 +51,20 @@ struct SoruSekmesi: View {
                         }
                         .disabled(k.soru.isEmpty)
                     }
+                }
+
+                Section {
+                    Button {
+                        sinavKurulumu = true
+                    } label: {
+                        Label("Mini sınav kur", systemImage: "stopwatch")
+                            .font(.system(size: 16, weight: .semibold))
+                    }
+                    .disabled(paketler.isEmpty)
+                } header: {
+                    Text("Mini sınav")
+                } footer: {
+                    Text("Süreli, geri bildirimsiz; net ve tahmin politikası sonunda.")
                 }
 
                 Section {
@@ -97,11 +118,21 @@ struct SoruSekmesi: View {
             .navigationTitle("Soru")
             .navigationDestination(item: $oturum) { o in
                 SoruOturumuView(baslik: o.baslik, soruIdleri: o.idler, ipucuAviIdleri: o.ipucuAvi) {
-                    if o.tur, let tur { TurPlanlayici.tamamla(.soru, tur, context) }
+                    if o.tur, let tur, !tur.isDeleted { TurPlanlayici.tamamla(.soru, tur, context) }
                     oturum = nil
                 }
             }
             .onAppear { tur = TurPlanlayici.bugun(context) }
+            .onChange(of: OlayDefteri.ortak.surum) {
+                if tur == nil || tur?.isDeleted == true || tur?.modelContext == nil { tur = TurPlanlayici.bugun(context) }
+            }
+            .sheet(isPresented: $sinavKurulumu) {
+                MiniSinavKurulumView { sinav = $0 }
+            }
+            .fullScreenCover(item: $sinav) { k in
+                MiniSinavView(kurulum: k) { sinav = nil }
+            }
+            .onChange(of: yonlendirici.miniSinavIstek) { sinavKurulumu = true }
         }
     }
 

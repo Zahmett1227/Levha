@@ -19,13 +19,50 @@ protocol LLMIstemci {
 enum LLMHatasi: LocalizedError {
     case gecersizIstem(String)
     case sahteHata
+    case http(Int, String)
+    case reddedildi(Int, String)
+    case cevrimdisi
+    case bosYanit
 
     var errorDescription: String? {
         switch self {
         case .gecersizIstem(let m): return "İstem okunamadı: \(m)"
         case .sahteHata: return "Sahte bağlantı hatası (\"hata testi\" yazıldı)."
+        case .http(401, _): return "Anahtar geçersiz"
+        case .http(403, let m): return "Erişim reddedildi: \(m)"
+        case .http(429, _): return "Hız sınırı, 20 sn sonra tekrar"
+        case .http(let k, _) where k >= 500: return "Sağlayıcı hatası (\(k))"
+        case .http(let k, let m), .reddedildi(let k, let m): return k > 0 ? "İstek reddedildi (\(k)): \(m)" : "İstek reddedildi: \(m)"
+        case .cevrimdisi: return "Çevrimdışı"
+        case .bosYanit: return "Boş yanıt (model çıktı üretmedi; max token düşük olabilir)"
         }
     }
+
+    /// URLSession hatalarını kullanıcı diline çevirir.
+    static func esle(_ hata: Error) -> Error {
+        if hata is LLMHatasi { return hata }
+        if let u = hata as? URLError {
+            switch u.code {
+            case .cancelled: return u
+            case .notConnectedToInternet, .networkConnectionLost, .cannotFindHost, .cannotConnectToHost,
+                 .timedOut, .dataNotAllowed, .internationalRoamingOff, .dnsLookupFailed:
+                return LLMHatasi.cevrimdisi
+            default: return u
+            }
+        }
+        return hata
+    }
+}
+
+/// Kullanım kaydında çağrının amacı.
+enum LLMAmac: String, CaseIterable {
+    case sor, genislet, editor, esleme
+}
+
+enum APIBicimi: String, CaseIterable, Identifiable {
+    case chat, responses
+    var id: String { rawValue }
+    var ad: String { self == .chat ? "Chat (/chat/completions)" : "Responses (/responses)" }
 }
 
 enum LLMSaglayici: String, CaseIterable, Identifiable {
@@ -41,13 +78,15 @@ enum LLMSaglayici: String, CaseIterable, Identifiable {
     }
 
     /// Bu sürümde seçilebilir mi?
-    var hazir: Bool { self == .sahte }
+    var hazir: Bool { true }
 }
 
-/// Ayarlar › Model. Anahtar Keychain'de, diğerleri UserDefaults'ta. Part 4'te yalnız saklanır, kullanılmaz.
+/// Ayarlar › Model. Anahtar Keychain'de, diğerleri UserDefaults'ta.
 enum LLMAyarlari {
     static let varsayilanTabanURL = "https://api.openai.com/v1"
     static let varsayilanMaxToken = 800
+    static let varsayilanModel = "chatgpt 5.6 luna"
+    static let varsayilanSicaklik = 0.3
 
     private static let d = UserDefaults.standard
 
@@ -61,9 +100,26 @@ enum LLMAyarlari {
         set { d.set(newValue, forKey: "llmTabanURL") }
     }
 
+    /// Boş bırakılırsa varsayılan model.
     static var modelAdi: String {
-        get { d.string(forKey: "llmModelAdi") ?? "" }
+        get { (d.string(forKey: "llmModelAdi")).flatMap { $0.isEmpty ? nil : $0 } ?? varsayilanModel }
         set { d.set(newValue, forKey: "llmModelAdi") }
+    }
+
+    static var apiBicimi: APIBicimi {
+        get { APIBicimi(rawValue: d.string(forKey: "llmApiBicimi") ?? "") ?? .chat }
+        set { d.set(newValue.rawValue, forKey: "llmApiBicimi") }
+    }
+
+    static var sicaklik: Double {
+        get { d.object(forKey: "llmSicaklik") as? Double ?? varsayilanSicaklik }
+        set { d.set(newValue, forKey: "llmSicaklik") }
+    }
+
+    /// Anahtarı olmayan "OpenAI uyumlu" seçimi açılışta Sahte'ye döner; Ayarlar bunu sarı uyarıyla gösterir.
+    static var sahteyeDondu: Bool {
+        get { d.bool(forKey: "llmSahteyeDondu") }
+        set { d.set(newValue, forKey: "llmSahteyeDondu") }
     }
 
     static var maxCikisToken: Int {
@@ -76,9 +132,22 @@ enum LLMAyarlari {
         set { Anahtarlik.yaz(newValue, "apiAnahtari") }
     }
 
-    /// Etkin istemci. "OpenAI uyumlu" Part 5'e kadar seçilemez; seçili kalmışsa da sahte döner.
-    static var istemci: LLMIstemci { SahteLLMIstemci() }
-    static var sahteMi: Bool { true }
+    /// Anahtar varsa ve "OpenAI uyumlu" seçiliyse gerçek sağlayıcı, değilse sahte.
+    static var sahteMi: Bool { saglayici == .sahte || apiAnahtari.isEmpty }
+
+    static func istemci(_ amac: LLMAmac) -> LLMIstemci {
+        guard !sahteMi, let url = URL(string: apiTabanURL.trimmingCharacters(in: .whitespaces)) else { return SahteLLMIstemci() }
+        return OpenAIUyumluIstemci(tabanURL: url, anahtar: apiAnahtari, model: modelAdi, bicim: apiBicimi,
+                                   maxCikis: maxCikisToken, sicaklik: sicaklik, amac: amac)
+    }
+
+    /// Açılışta: anahtarı olmayan gerçek sağlayıcı seçimi Sahte'ye döner.
+    static func denetle() {
+        if saglayici == .openaiUyumlu && apiAnahtari.isEmpty {
+            saglayici = .sahte
+            sahteyeDondu = true
+        }
+    }
 }
 
 /// Keychain (kSecClassGenericPassword, yalnız bu cihaz).
@@ -150,7 +219,7 @@ struct SahteLLMIstemci: LLMIstemci {
         switch gorev {
         case "genislet": cikti = genislet(veri)
         case "degerlendir": cikti = degerlendir(veri)
-        case "esleme": cikti = ((veri["levhalar"] as? [[String: Any]]) ?? []).prefix(3).compactMap { $0["id"] as? String }
+        case "esleme": cikti = ["idler": ((veri["levhalar"] as? [[String: Any]]) ?? []).prefix(3).compactMap { $0["id"] as? String }]
         default: throw LLMHatasi.gecersizIstem("bilinmeyen görev \(gorev)")
         }
         return try JSONSerialization.data(withJSONObject: cikti, options: [.sortedKeys])

@@ -106,18 +106,18 @@ enum TurPlanlayici {
         t.kuyruk.flatMap { try? JSONDecoder().decode(TurKuyrugu.self, from: $0) } ?? TurKuyrugu()
     }
 
-    static func aktifBloklar(_ t: TurDurumu) -> [TurBlogu] {
+    nonisolated static func aktifBloklar(_ t: TurDurumu) -> [TurBlogu] {
         if t.kisa { return [.isinma, .soru] }
         if t.calismaYeri == CalismaYeri.sadeceTekrar.rawValue { return [.isinma, .soru, .pekistirme, .kapanis] }
         return TurBlogu.allCases
     }
 
     /// Tamamlanabilir blokların toplam dakikası.
-    static func planlananDakika(_ t: TurDurumu) -> Int {
+    nonisolated static func planlananDakika(_ t: TurDurumu) -> Int {
         aktifBloklar(t).filter(\.hazir).reduce(0) { $0 + $1.dakika }
     }
 
-    static func tamamlananDakika(_ t: TurDurumu) -> Int {
+    nonisolated static func tamamlananDakika(_ t: TurDurumu) -> Int {
         aktifBloklar(t).filter { t.tamamlananlar.contains($0.rawValue) }.reduce(0) { $0 + $1.dakika }
     }
 
@@ -131,7 +131,9 @@ enum TurPlanlayici {
 
         if !bitti(.isinma) {
             // "Eski ve sağlam" olan sabote edilir: geçmişi olan, sağlamlığı yüksek, vadesi gelmiş.
-            let vadeliler = levhalar.filter { DurumServisi.vadeliMi(durumlar[$0.id]) }
+            // A/B: metin grubunda Sabotaj kapalı.
+            let gorsel = levhalar.filter { !ABDeneyi.ortak.metinMi($0) }
+            let vadeliler = gorsel.filter { DurumServisi.vadeliMi(durumlar[$0.id]) }
             let vadeli: [String] = vadeliler.indices.sorted { i, j in
                 let (a, b) = (durumlar[vadeliler[i].id], durumlar[vadeliler[j].id])
                 let (aEski, bEski) = (a?.sonGorulme != nil, b?.sonGorulme != nil)
@@ -140,7 +142,7 @@ enum TurPlanlayici {
                 if as_ != bs { return as_ > bs }
                 return i < j
             }.map { vadeliler[$0].id }
-            let digerleri: [String] = levhalar.map(\.id).filter { !vadeli.contains($0) }
+            let digerleri: [String] = gorsel.map(\.id).filter { !vadeli.contains($0) }
             k.isinma = Array((vadeli + digerleri).prefix(3))
         }
 
@@ -195,6 +197,7 @@ enum TurPlanlayici {
         }
         try? context.save()
         WidgetYazici.yaz(context)
+        OlayDefteri.degisti()
     }
 
     /// Kitap sayfasından seçilen levhaları bugünkü Yeni bloğuna ekler. Blok bitmişse yeniden açılır;
@@ -230,7 +233,9 @@ enum TurPlanlayici {
     }
 
     /// Kapanış (İnşa): bugün çalışılan levhalardan önceliği en yüksek iki tanesi; yoksa tüm levhalardan.
-    static func kapanisSec(_ k: TurKuyrugu, _ tumu: [Levha], _ context: ModelContext) -> [String] {
+    static func kapanisSec(_ k: TurKuyrugu, _ hepsi: [Levha], _ context: ModelContext) -> [String] {
+        // A/B: metin grubunda İnşa kapalı.
+        let tumu = hepsi.filter { !ABDeneyi.ortak.metinMi($0) }
         let bugunku = Set((k.pekistirme ?? []) + k.yeni + k.isinma)
         let adaylar = tumu.filter { bugunku.contains($0.id) }
         return Array(DurumServisi.oncelikSirala(adaylar.isEmpty ? tumu : adaylar, context).map(\.id).prefix(2))

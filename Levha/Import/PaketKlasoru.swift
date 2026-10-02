@@ -123,6 +123,18 @@ enum Baslangic {
         }
     }
 
+    /// Part 5 öncesi içe aktarılmış soruların önbellek alanları (ders, kalıp, sorulabilirlik) bir kez doldurulur.
+    static func soruAlanlariniDoldur(_ context: ModelContext) {
+        let eksik = ((try? context.fetch(FetchDescriptor<Soru>(predicate: #Predicate { $0.konuDers == nil }))) ?? [])
+        guard !eksik.isEmpty else { return }
+        for s in eksik {
+            let konu = s.konuPaketi
+            let k = s.kazanim.flatMap { kid in konu?.kazanimlar.first { $0.id == kid } }
+            s.cozumle(ders: konu?.ders, kazanimKalibi: k?.kalip, kazanimSorulabilirligi: k?.sorulabilirlik)
+        }
+        try? context.save()
+    }
+
     /// Paket depoda yoksa ya da depodaki şema sürümü dosyadakinden eskiyse (ör. depo yeni yere taşındı) true.
     private static func depodaEski(_ veri: Data, _ context: ModelContext) -> Bool {
         guard let p = try? JSONDecoder().decode(PaketJSON.self, from: veri) else { return false }

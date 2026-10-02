@@ -14,7 +14,7 @@ enum TaslakServisi {
     static func uret(levha: Levha, seciliDugum: String?, cevap: String?, _ context: ModelContext) async throws -> Taslak {
         let bos = bosKonumlar(levha)
         let istem = IstemSablonlari.genisletIstemi(levha: levha, bosKonumlar: bos, seciliDugum: seciliDugum, cevap: cevap)
-        let veri = IstemSablonlari.jsonAyikla(try await LLMAyarlari.istemci.jsonUret(sistem: IstemSablonlari.genisletSistemi, istem: istem))
+        let veri = IstemSablonlari.jsonAyikla(try await LLMAyarlari.istemci(.genislet).jsonUret(sistem: IstemSablonlari.genisletSistemi, istem: istem))
         let ham = String(data: veri, encoding: .utf8) ?? ""
         let taslak: Taslak
         do {
@@ -75,6 +75,7 @@ enum TaslakServisi {
         levha.yerelRevizyon = (levha.yerelRevizyon ?? 0) + 1
         taslak.eklendi = true
         try? context.save()
+        OlayDefteri.degisti()
         return []
     }
 }

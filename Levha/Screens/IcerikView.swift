@@ -11,6 +11,11 @@ struct IcerikView: View {
     @State private var dosyaSeciliyor = false
     @State private var sonuclar: [PaketIceAktarici.Sonuc] = []
     @State private var taslakHatalari: [PersistentIdentifier: [String]] = [:]
+    @State private var paylasim: PaylasimDosyasi?
+    @State private var yedekSeciliyor = false
+    @State private var bekleyenYedek: YedekPaketi?
+    @State private var yedekMesaji: (metin: String, hata: Bool)?
+    @Query private var bekleyenler: [BekleyenYedek]
 
     var body: some View {
         NavigationStack {
@@ -50,6 +55,8 @@ struct IcerikView: View {
                         }
                     }
                 }
+
+                yedekBolumu
 
                 if !taslaklar.isEmpty {
                     Section {
@@ -107,7 +114,69 @@ struct IcerikView: View {
             .fileImporter(isPresented: $dosyaSeciliyor, allowedContentTypes: [.json], allowsMultipleSelection: true) { sonuc in
                 if case .success(let urller) = sonuc { seciliDosyalariAktar(urller) }
             }
+            .sheet(item: $paylasim) { PaylasimSayfasi(url: $0.url) }
+            .background {
+                // İkinci dosya seçici ayrı bir görünüme bağlanır (aynı görünümde iki fileImporter çakışır).
+                Color.clear.fileImporter(isPresented: $yedekSeciliyor, allowedContentTypes: [.levhaYedek, .zip, .data]) { sonuc in
+                    if case .success(let url) = sonuc { yedekOku(url) }
+                }
+            }
+            .confirmationDialog("Yedeği geri yükle", isPresented: Binding(get: { bekleyenYedek != nil }, set: { if !$0 { bekleyenYedek = nil } }),
+                                titleVisibility: .visible, presenting: bekleyenYedek) { y in
+                Button("Birleştir (aynı kayıtlar atlanır)") { geriYukle(y, .birlestir) }
+                Button("Üzerine yaz", role: .destructive) { geriYukle(y, .uzerineYaz) }
+                Button("Vazgeç", role: .cancel) {}
+            } message: { y in
+                Text("\(Bicim.tarih(y.olusturma)) tarihli yedek: \(YedekServisi.ozet(y).metin).")
+            }
         }
+    }
+
+    private var yedekBolumu: some View {
+        Section {
+            Button {
+                do { paylasim = PaylasimDosyasi(url: try YedekServisi.dosya(context)) }
+                catch { yedekMesaji = ("Yedek oluşturulamadı: \(error.localizedDescription)", true) }
+            } label: {
+                Label("Yedekle", systemImage: "externaldrive.badge.checkmark")
+            }
+            Button {
+                yedekSeciliyor = true
+            } label: {
+                Label("Geri yükle…", systemImage: "clock.arrow.circlepath")
+            }
+            if let m = yedekMesaji {
+                Label(m.metin, systemImage: m.hata ? "xmark.octagon.fill" : "checkmark.circle.fill")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(m.hata ? RenkSeti.kirmizi.yazi : RenkSeti.yesil.yazi)
+            }
+            if !bekleyenler.isEmpty {
+                Label("\(bekleyenler.count) yerel düğüm eki, levhası içe aktarılınca bağlanacak", systemImage: "hourglass")
+                    .font(.system(size: 13))
+                    .foregroundStyle(RenkSeti.sari.yazi)
+            }
+        } header: {
+            Text("Yedek")
+        } footer: {
+            Text("Olaylar, notlar, sohbetler, taslaklar, Yazdıklarım, yerel düğümler, A/B grupları ve ayarlar (API anahtarı hariç); paket içeriği girmez. Her gün 04:00 dönüşünden sonraki ilk açılışta \(YedekServisi.yedekKlasoruAdi(klasor)) klasörüne otomatik yedek alınır; son 7 gün tutulur.")
+        }
+    }
+
+    private func yedekOku(_ url: URL) {
+        let erisim = url.startAccessingSecurityScopedResource()
+        defer { if erisim { url.stopAccessingSecurityScopedResource() } }
+        do {
+            guard let veri = PaketKlasoru.oku(url) else { throw ZipArsiv.Hata.bozuk("dosya okunamadı") }
+            bekleyenYedek = try YedekServisi.coz(veri)
+        } catch {
+            yedekMesaji = (error.localizedDescription, true)
+        }
+    }
+
+    private func geriYukle(_ y: YedekPaketi, _ kip: YedekServisi.Kip) {
+        let o = YedekServisi.geriYukle(y, kip: kip, context)
+        bekleyenYedek = nil
+        yedekMesaji = ("Geri yüklendi: \(o.metin)" + (o.bekleyen > 0 ? "; \(o.bekleyen) ek beklemede" : ""), false)
     }
 
     private func levha(_ id: String) -> Levha? {

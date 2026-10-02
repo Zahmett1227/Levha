@@ -61,6 +61,11 @@ struct LevhaSayfasi: View {
         case bulunamadi
     }
 
+    /// A/B deneyinde metin grubundaki levha: iki katmanlı Keşif, Sabotaj ve İnşa kapalı.
+    private var metinModu: Bool { ABDeneyi.ortak.metinMi(levha) }
+    private var toplamKatman: Int { metinModu ? 2 : LevhaGorunumDurumu.katmanSayisi }
+    private var modlar: [LevhaModu] { metinModu ? izinliModlar.filter { $0 != .sabotaj && $0 != .insa } : izinliModlar }
+
     private var durum: LevhaGorunumDurumu {
         switch mod {
         case .ortme:
@@ -77,7 +82,7 @@ struct LevhaSayfasi: View {
             return d
         case .kesif:
             return LevhaGorunumDurumu(mod: .kesif, katman: katman, secili: secili,
-                                      dokunulabilir: katman >= LevhaGorunumDurumu.katmanSayisi)
+                                      dokunulabilir: katman >= toplamKatman)
         case .editor:
             return LevhaGorunumDurumu(mod: .kesif, katman: LevhaGorunumDurumu.katmanSayisi)
         case .insa:
@@ -135,8 +140,8 @@ struct LevhaSayfasi: View {
 
             AkildaKalanSeridi(metin: levha.akilda_kalan)
 
-            if izinliModlar.count > 1 {
-                ModSecici(mod: $mod, izinli: izinliModlar)
+            if modlar.count > 1 {
+                ModSecici(mod: $mod, izinli: modlar)
             }
 
             if mod == .editor {
@@ -191,10 +196,18 @@ struct LevhaSayfasi: View {
     // MARK: - Hazırlık
 
     private func hazirla() {
-        if !izinliModlar.contains(mod), let ilk = izinliModlar.first { mod = ilk }
-        hedefleriSec()
-        sabotajKur()
-        insaKur()
+        if !modlar.contains(mod), let ilk = modlar.first { mod = ilk }
+        modKur()
+    }
+
+    /// Yalnız etkin modun hazırlığı yapılır (kaydırırken her sayfada sabotaj/İnşa üretilmesin).
+    private func modKur() {
+        switch mod {
+        case .ortme: hedefleriSec()
+        case .sabotaj: sabotajKur()
+        case .insa: insaKur()
+        case .kesif, .editor: break
+        }
     }
 
     /// İnşa: insa_sirasi (yoksa ortme_sirasi) düğümleri boş kalır, etiketleri tohumlu karışık çip olur.
@@ -234,9 +247,9 @@ struct LevhaSayfasi: View {
 
     private func kartaDokun() {
         guard mod == .kesif else { return }
-        if katman < LevhaGorunumDurumu.katmanSayisi {
+        if katman < toplamKatman {
             withAnimation(.easeOut(duration: 0.25)) { katman += 1 }
-            if katman == LevhaGorunumDurumu.katmanSayisi { calisildi() }
+            if katman == toplamKatman { calisildi() }
         } else {
             withAnimation(.easeOut(duration: 0.25)) { secili = nil }
         }
@@ -245,7 +258,7 @@ struct LevhaSayfasi: View {
     private func dugumeDokun(_ id: String) {
         switch mod {
         case .kesif:
-            guard katman >= LevhaGorunumDurumu.katmanSayisi else { return kartaDokun() }
+            guard katman >= toplamKatman else { return kartaDokun() }
             withAnimation(.easeOut(duration: 0.25)) { secili = secili == id ? nil : id }
         case .ortme:
             guard durum.gizli.contains(id) else { return }
@@ -327,9 +340,7 @@ struct LevhaSayfasi: View {
             asama = .aciliyor
             bilemedikler = []
         }
-        hedefleriSec()
-        sabotajKur()
-        insaKur()
+        modKur()
     }
 
     // MARK: - Paneller
@@ -345,12 +356,13 @@ struct LevhaSayfasi: View {
     ]
 
     private var katmanAdlari: [String] {
-        Self.katmanAdlari[levha.levhaTipi ?? .algoritma] ?? ["1", "2", "3", "4"]
+        if metinModu { return ["Başlıklar", "Notlar"] }
+        return Self.katmanAdlari[levha.levhaTipi ?? .algoritma] ?? ["1", "2", "3", "4"]
     }
 
     @ViewBuilder
     private var kesifPaneli: some View {
-        let toplam = LevhaGorunumDurumu.katmanSayisi
+        let toplam = toplamKatman
         HStack(spacing: 8) {
             PanelBasligi(ust: "KATMAN \(katman)/\(toplam)", alt: katmanAdlari[katman - 1])
             Spacer()
@@ -371,7 +383,18 @@ struct LevhaSayfasi: View {
             Text("Bir düğüme dokun; notu burada açılır.")
                 .font(.system(size: 14))
                 .foregroundStyle(Tema.ikincil)
+            if soruSayisi == 0 {
+                Label("Bu levhanın sorusu yok · Editör'de yazabilirsin", systemImage: "questionmark.square.dashed")
+                    .font(.system(size: 12.5, weight: .semibold))
+                    .foregroundStyle(RenkSeti.sari.yazi)
+            }
         }
+    }
+
+    /// Levhaya bağlı soru sayısı (paketinkiler + Yazdıklarım).
+    private var soruSayisi: Int {
+        let id = levha.id
+        return (try? context.fetchCount(FetchDescriptor<Soru>(predicate: #Predicate { $0.levha == id }))) ?? 0
     }
 
     @ViewBuilder

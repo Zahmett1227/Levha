@@ -40,6 +40,15 @@ struct SorView: View {
         NavigationStack {
             VStack(spacing: 0) {
                 baglamSeridi
+                if LLMAyarlari.sahteyeDondu {
+                    Label("Gerçek sağlayıcı yok: sahte model yanıtlıyor. Anahtar: Ölçüm › ⚙︎ › Model sağlayıcı.", systemImage: "exclamationmark.triangle.fill")
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundStyle(RenkSeti.sari.yazi)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 6)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(RenkSeti.sari.zemin)
+                }
                 ScrollViewReader { kaydirici in
                     ScrollView {
                         LazyVStack(alignment: .leading, spacing: 10) {
@@ -159,7 +168,7 @@ struct SorView: View {
         let sistem = IstemSablonlari.sorSistemi(levha: levha, seciliDugum: seciliDugum)
         var mesajlar = gorunen.suffix(3).flatMap { [LLMMesaj(rol: "user", icerik: $0.soru), LLMMesaj(rol: "assistant", icerik: $0.cevap)] }
         mesajlar.append(LLMMesaj(rol: "user", icerik: soru))
-        let istemci = LLMAyarlari.istemci
+        let istemci = LLMAyarlari.istemci(.sor)
         gorev = Task {
             do {
                 for try await parca in istemci.sor(sistem: sistem, mesajlar: mesajlar) {

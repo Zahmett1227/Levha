@@ -61,5 +61,25 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>UTExportedTypeDeclarations</key>
+	<array>
+		<dict>
+			<key>UTTypeConformsTo</key>
+			<array>
+				<string>public.data</string>
+			</array>
+			<key>UTTypeDescription</key>
+			<string>Levha yedeği</string>
+			<key>UTTypeIdentifier</key>
+			<string>tr.kisisel.levha.yedek</string>
+			<key>UTTypeTagSpecification</key>
+			<dict>
+				<key>public.filename-extension</key>
+				<array>
+					<string>levhayedek</string>
+				</array>
+			</dict>
+		</dict>
+	</array>
 </dict>
 </plist>

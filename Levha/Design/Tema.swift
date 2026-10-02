@@ -77,7 +77,24 @@ enum Sigdir {
         Font(UIFont.systemFont(ofSize: punto(metin, temel: temel, genislik: genislik, agirlik: agirlik, enAz: enAz), weight: agirlik))
     }
 
+    private static let kilit = NSLock()
+    nonisolated(unsafe) private static var onbellek: [String: CGFloat] = [:]
+
+    /// Ölçüm sonucu metin+punto+genişlik+ağırlık için önbelleğe alınır (kaydırırken her sayfada yeniden ölçülmesin).
     static func punto(_ metin: String, temel: CGFloat, genislik: CGFloat, agirlik: UIFont.Weight, enAz: CGFloat = 8.5) -> CGFloat {
+        let anahtar = "\(metin)|\(temel)|\((genislik * 2).rounded())|\(agirlik.rawValue)|\(enAz)"
+        kilit.lock()
+        if let v = onbellek[anahtar] { kilit.unlock(); return v }
+        kilit.unlock()
+        let v = olc(metin, temel: temel, genislik: genislik, agirlik: agirlik, enAz: enAz)
+        kilit.lock()
+        if onbellek.count > 20_000 { onbellek.removeAll() }
+        onbellek[anahtar] = v
+        kilit.unlock()
+        return v
+    }
+
+    private static func olc(_ metin: String, temel: CGFloat, genislik: CGFloat, agirlik: UIFont.Weight, enAz: CGFloat) -> CGFloat {
         let font = UIFont.systemFont(ofSize: temel, weight: agirlik)
         let enUzun = metin.split(whereSeparator: { $0 == " " || $0 == "\n" })
             .map { (String($0) as NSString).size(withAttributes: [.font: font]).width }

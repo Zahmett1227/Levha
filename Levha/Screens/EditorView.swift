@@ -213,7 +213,7 @@ struct EditorView: View {
         Task {
             defer { calisiyor = false }
             do {
-                let veri = IstemSablonlari.jsonAyikla(try await LLMAyarlari.istemci.jsonUret(sistem: IstemSablonlari.editorSistemi, istem: istem))
+                let veri = IstemSablonlari.jsonAyikla(try await LLMAyarlari.istemci(.editor).jsonUret(sistem: IstemSablonlari.editorSistemi, istem: istem))
                 do {
                     let s = try JSONDecoder().decode(EditorDegerlendirmesi.self, from: veri)
                     withAnimation(.easeOut(duration: 0.25)) { sonuc = s }
@@ -247,6 +247,7 @@ struct EditorView: View {
         let soru = Soru(json, paketId: Paket.kullaniciId, sira: paket.sorular.count)
         soru.kaynakTuru = Paket.kullaniciKaynak
         soru.levhaPaketId = levha.paket?.paket_id
+        soru.cozumle(ders: levha.paket?.ders, kazanimKalibi: kazanim?.kalip, kazanimSorulabilirligi: kazanim?.sorulabilirlik)
         context.insert(soru)
         soru.paket = paket
         if let sonOlay, !sonOlay.kaydedildi {
@@ -256,6 +257,7 @@ struct EditorView: View {
         }
         try? context.save()
         TurPlanlayici.soruEkle(soru.kimlik, context)
+        OlayDefteri.degisti()
         withAnimation(.easeOut(duration: 0.25)) {
             kayitMesaji = "Kaydedildi · Soru › Yazdıklarım; bugünkü tura eklendi."
             kok = ""

@@ -262,6 +262,10 @@ final class Soru {
     /// "kullanici" → Editör'de yazıldı; konu paketi `levhaPaketId`.
     var kaynakTuru: String?
     var levhaPaketId: String?
+    // Part 5: içe aktarmada çözülüp saklanır (Ölçüm her olayda paket/kazanım aramasın).
+    var konuDers: String?
+    var kalipCozulmus: String?
+    var sorulabilirlikDegeri: Int?
 
     init(_ j: SoruJSON, paketId: String, sira: Int) {
         id = j.id
@@ -293,18 +297,29 @@ final class Soru {
 
     /// Kazanımın sorulabilirliği (1–5); kazanımı yoksa nil.
     var sorulabilirlik: Int? {
+        if let s = sorulabilirlikDegeri { return s }
         guard let kid = kazanim else { return nil }
         return konuPaketi?.kazanimlar.first { $0.id == kid }?.sorulabilirlik
     }
 
     /// Sorunun kalıbı; soruda yoksa kazanımınki.
     var kalipTipi: KalipTipi? {
-        if let k = kalip.flatMap(KalipTipi.init(rawValue:)) { return k }
+        if let k = (kalipCozulmus ?? kalip).flatMap(KalipTipi.init(rawValue:)) { return k }
         return kazanim.flatMap { kid in konuPaketi?.kazanimlar.first { $0.id == kid }?.kalipTipi }
     }
 
-    var ipuclari: [IpucuJSON] { ipucu_sirasi.flatMap { try? JSONDecoder().decode([IpucuJSON].self, from: $0) } ?? [] }
-    var kirilimListesi: [KirilimJSON] { kirilimlar.flatMap { try? JSONDecoder().decode([KirilimJSON].self, from: $0) } ?? [] }
+    /// Dersi (kullanıcı sorusunda levhanın paketinin dersi).
+    var ders: String? { konuDers ?? konuPaketi?.ders }
+
+    /// İçe aktarmada/kayıtta çağrılır: kalıp, ders ve sorulabilirlik bir kez çözülüp saklanır.
+    func cozumle(ders: String?, kazanimKalibi: String?, kazanimSorulabilirligi: Int?) {
+        konuDers = ders
+        kalipCozulmus = kalip.flatMap(KalipTipi.init(rawValue:))?.rawValue ?? kazanimKalibi
+        sorulabilirlikDegeri = kazanimSorulabilirligi
+    }
+
+    var ipuclari: [IpucuJSON] { SoruOnbellegi.ipuclari(kimlik, ipucu_sirasi) }
+    var kirilimListesi: [KirilimJSON] { SoruOnbellegi.kirilimlar(kimlik, kirilimlar) }
 
     var secenekAileleri: [Int: String] {
         let ham = secenek_aile.flatMap { try? JSONDecoder().decode([String: String].self, from: $0) } ?? [:]
@@ -325,6 +340,8 @@ final class OrtmeOlayi {
     var dugumId: String
     var tarih: Date
     var bildim: Bool
+    /// A/B deneyi açıkken levhanın grubu.
+    var abGrup: String?
 
     init(levhaId: String, dugumId: String, tarih: Date, bildim: Bool) {
         self.levhaId = levhaId
@@ -361,6 +378,10 @@ final class SoruOlayi {
     var tarih: Date
     /// 1 Eminim · 2 Sanırım · 3 Tahmin (Part 2 kayıtlarında ve İpucu avında boş).
     var guven: Int?
+    /// "sinav" → Mini sınavda verildi; nil → çalışma.
+    var baglam: String?
+    /// A/B deneyi açıkken levhanın grubu ("levha" | "metin").
+    var abGrup: String?
     // Soru kırma (Part 4): seçilen kalıp (`KalipTipi` ham değeri), seçilen ipucu indeksi, kilit açılana kadar geçen süre.
     var kalipTahmini: String?
     var ipucuTahminiIndeks: Int?
@@ -495,6 +516,94 @@ final class EditorOlayi {
     }
 }
 
+/// Mini sınav sonucu. `detay`: soru başına `[SinavSorusu]` JSON (boş bırakılanlar dahil).
+@Model
+final class SinavOlayi {
+    var tarih: Date
+    var soruSayisi: Int
+    var net: Double
+    var dogru: Int
+    var yanlis: Int
+    var bos: Int
+    var sureSaniye: Double
+    var dersler: [String]
+    /// Sınav günü, sınav öncesi 14 günün cevaplarından hesaplanan tahmini net (aynı soru sayısı için).
+    var tahminBeklenen: Double?
+    var tahminAlt: Double?
+    var tahminUst: Double?
+    /// Tahminin dayandığı cevap sayısı (30'un altı "az veri").
+    var tahminN: Int?
+    var detay: Data?
+
+    init(tarih: Date, soruSayisi: Int, net: Double, dogru: Int, yanlis: Int, bos: Int, sureSaniye: Double, dersler: [String]) {
+        self.tarih = tarih
+        self.soruSayisi = soruSayisi
+        self.net = net
+        self.dogru = dogru
+        self.yanlis = yanlis
+        self.bos = bos
+        self.sureSaniye = sureSaniye
+        self.dersler = dersler
+    }
+
+    var sorular: [SinavSorusu] { detay.flatMap { try? JSONDecoder().decode([SinavSorusu].self, from: $0) } ?? [] }
+}
+
+struct SinavSorusu: Codable, Hashable {
+    var soruId: String
+    var secilen: Int?
+    var dogru: Int
+    var guven: Int?
+    var isaretli: Bool
+}
+
+/// Model çağrısı başına token kullanımı. `amac`: sor | genislet | editor | esleme.
+@Model
+final class LLMKullanim {
+    var tarih: Date
+    var giris: Int
+    var cikis: Int
+    var amac: String
+
+    init(tarih: Date, giris: Int, cikis: Int, amac: String) {
+        self.tarih = tarih
+        self.giris = giris
+        self.cikis = cikis
+        self.amac = amac
+    }
+}
+
+/// A/B deneyinde alt konunun (paketin) grubu; deney boyunca sabit.
+@Model
+final class ABGrup {
+    @Attribute(.unique) var paketId: String
+    /// "levha" | "metin"
+    var grup: String
+    var atamaTarihi: Date
+
+    init(paketId: String, grup: String, atamaTarihi: Date) {
+        self.paketId = paketId
+        self.grup = grup
+        self.atamaTarihi = atamaTarihi
+    }
+}
+
+/// Geri yüklenen ama levhası henüz içe aktarılmamış kayıt (yerel düğüm ekleri); paket gelince bağlanır.
+@Model
+final class BekleyenYedek {
+    var levhaId: String
+    var tur: String
+    var veri: Data
+    var tarih: Date
+
+    init(levhaId: String, tur: String, veri: Data, tarih: Date) {
+        self.levhaId = levhaId
+        self.tur = tur
+        self.veri = veri
+        self.tarih = tarih
+    }
+}
+
 /// Uygulamanın ön planda geçirdiği süre (günlük).
 @Model
 final class KullanimKaydi {
@@ -572,6 +681,7 @@ enum Depo {
         SabotajOlayi.self, SoruOlayi.self, DugumZayiflik.self, LevhaDurumu.self, TurDurumu.self,
         Kazanim.self, Aile.self, InsaOlayi.self, KullanimKaydi.self,
         IpucuOlayi.self, SorKaydi.self, DugumNotu.self, Taslak.self, EditorOlayi.self,
+        SinavOlayi.self, LLMKullanim.self, ABGrup.self, BekleyenYedek.self,
     ]
 
     /// Depo App Group container'ında durur (widget ve Part 4+ eklentileri erişebilsin). App Group yoksa
@@ -609,4 +719,34 @@ enum Depo {
             return try! ModelContainer(for: sema, configurations: gecici)
         }
     }()
+}
+
+
+/// Soruların ipucu ve kırılım listeleri süreç boyunca bir kez çözülür; içe aktarmada temizlenir.
+enum SoruOnbellegi {
+    private static let kilit = NSLock()
+    nonisolated(unsafe) private static var ipucu: [String: [IpucuJSON]] = [:]
+    nonisolated(unsafe) private static var kirilim: [String: [KirilimJSON]] = [:]
+
+    static func ipuclari(_ kimlik: String, _ veri: Data?) -> [IpucuJSON] {
+        kilit.lock(); defer { kilit.unlock() }
+        if let v = ipucu[kimlik] { return v }
+        let v = veri.flatMap { try? JSONDecoder().decode([IpucuJSON].self, from: $0) } ?? []
+        ipucu[kimlik] = v
+        return v
+    }
+
+    static func kirilimlar(_ kimlik: String, _ veri: Data?) -> [KirilimJSON] {
+        kilit.lock(); defer { kilit.unlock() }
+        if let v = kirilim[kimlik] { return v }
+        let v = veri.flatMap { try? JSONDecoder().decode([KirilimJSON].self, from: $0) } ?? []
+        kirilim[kimlik] = v
+        return v
+    }
+
+    static func temizle() {
+        kilit.lock(); defer { kilit.unlock() }
+        ipucu = [:]
+        kirilim = [:]
+    }
 }

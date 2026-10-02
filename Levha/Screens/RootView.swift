@@ -31,10 +31,25 @@ struct RootView: View {
                 .tag(Sekme.icerik)
         }
         .tint(Tema.metin)
-        .task {
-            await Baslangic.calistir(klasor: klasor, context: context)
-            WidgetYazici.yaz(context)
+        #if DEBUG
+        .overlay(alignment: .topTrailing) {
+            if UserDefaults.standard.bool(forKey: "fpsGoster") { FPSRozeti().padding(.top, 54).padding(.trailing, 8) }
         }
+        #endif
+        .task {
+            LLMAyarlari.denetle()
+            ABDeneyi.ortak.yukle(context)
+            await Baslangic.calistir(klasor: klasor, context: context)
+            Baslangic.soruAlanlariniDoldur(context)
+            #if DEBUG
+            YukTesti.calistir(context)
+            #endif
+            YedekServisi.otomatik(klasor: klasor, context)
+            WidgetYazici.yaz(context)
+            OlcumOnbellegi.ortak.isit(context.container, gecikme: .milliseconds(300))
+        }
+        // Her olay yazımından 1 sn sonra Ölçüm özeti arka planda tazelenir.
+        .onChange(of: OlayDefteri.ortak.surum) { OlcumOnbellegi.ortak.isit(context.container) }
         .onOpenURL { url in
             if url.host() == "levha", let id = url.pathComponents.dropFirst().first, let levha = levhaBul(id) {
                 UserDefaults.standard.set(levha.paket?.paket_id, forKey: "aktifPaketId")
@@ -45,6 +60,7 @@ struct RootView: View {
             // Ön planda geçen süre günlük kullanım kaydına yazılır.
             if yeni == .active {
                 onPlandaBaslangic = .now
+                if klasor.kok != nil { YedekServisi.otomatik(klasor: klasor, context) }
             } else if let bas = onPlandaBaslangic {
                 DurumServisi.kullanimEkle(Date.now.timeIntervalSince(bas), context)
                 onPlandaBaslangic = nil

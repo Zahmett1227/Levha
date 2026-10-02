@@ -96,10 +96,10 @@ enum IstemSablonlari {
 
     // MARK: - Kitap sayfası
 
-    static let eslemeSistemi = "Yalnız JSON listesi döndür; başka metin yazma."
+    static let eslemeSistemi = "Yalnız JSON nesnesi döndür; başka metin yazma."
 
     static func eslemeIstemi(ocr: String, levhalar: [(id: String, baslik: String)]) -> String {
-        var s = "Aşağıdaki kitap sayfası metnine en uygun 3 levha id'sini JSON listesi olarak döndür, ör. [\"id1\", \"id2\", \"id3\"].\n\nLevhalar:\n"
+        var s = "Aşağıdaki kitap sayfası metnine en uygun 3 levha id'sini JSON olarak döndür: {\"idler\": [\"id1\", \"id2\", \"id3\"]}.\n\nLevhalar:\n"
         s += levhalar.map { "- \($0.id): \($0.baslik)" }.joined(separator: "\n")
         s += "\n\nSayfa metni:\n\(ocr.prefix(4000))"
         let veri: [String: Any] = ["gorev": "esleme", "levhalar": levhalar.map { ["id": $0.id, "baslik": $0.baslik] }]

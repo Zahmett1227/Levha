@@ -144,26 +144,35 @@ struct LevhaView: View {
     var body: some View {
         let cizim = self.cizim ?? LevhaCizim(levha)
         GeometryReader { geo in
-            switch cizim.tip {
-            case .algoritma:
-                AlgoritmaCanvas(cizim: cizim, durum: mode, boyut: geo.size, dokun: dokun)
-            case .yolak:
-                YolakCanvas(cizim: cizim, durum: mode, boyut: geo.size, dokun: dokun)
-            case .agac:
-                AgacCanvas(cizim: cizim, durum: mode, boyut: geo.size, dokun: dokun)
-            case .matris:
-                MatrisCanvas(cizim: cizim, durum: mode, boyut: geo.size, dokun: dokun)
-            case .sayi_cetveli:
-                SayiCetveliCanvas(cizim: cizim, durum: mode, boyut: geo.size, dokun: dokun)
-            case .zaman_cizelgesi:
-                ZamanCizelgesiCanvas(cizim: cizim, durum: mode, boyut: geo.size, dokun: dokun)
-            case .vucut_haritasi:
-                VucutHaritasiCanvas(cizim: cizim, durum: mode, boyut: geo.size, dokun: dokun)
-            case .none:
-                ContentUnavailableView("Bilinmeyen levha tipi", systemImage: "questionmark.square.dashed",
-                                       description: Text(levha.tip))
-                    .frame(width: geo.size.width, height: geo.size.height)
+            if ABDeneyi.ortak.metinMi(levha) {
+                MetinCanvas(cizim: cizim, durum: mode, boyut: geo.size, dokun: dokun)
+            } else {
+                gorsel(cizim, geo.size)
             }
+        }
+    }
+
+    @ViewBuilder
+    private func gorsel(_ cizim: LevhaCizim, _ boyut: CGSize) -> some View {
+        switch cizim.tip {
+        case .algoritma:
+            AlgoritmaCanvas(cizim: cizim, durum: mode, boyut: boyut, dokun: dokun)
+        case .yolak:
+            YolakCanvas(cizim: cizim, durum: mode, boyut: boyut, dokun: dokun)
+        case .agac:
+            AgacCanvas(cizim: cizim, durum: mode, boyut: boyut, dokun: dokun)
+        case .matris:
+            MatrisCanvas(cizim: cizim, durum: mode, boyut: boyut, dokun: dokun)
+        case .sayi_cetveli:
+            SayiCetveliCanvas(cizim: cizim, durum: mode, boyut: boyut, dokun: dokun)
+        case .zaman_cizelgesi:
+            ZamanCizelgesiCanvas(cizim: cizim, durum: mode, boyut: boyut, dokun: dokun)
+        case .vucut_haritasi:
+            VucutHaritasiCanvas(cizim: cizim, durum: mode, boyut: boyut, dokun: dokun)
+        case .none:
+            ContentUnavailableView("Bilinmeyen levha tipi", systemImage: "questionmark.square.dashed",
+                                   description: Text(levha.tip))
+                .frame(width: boyut.width, height: boyut.height)
         }
     }
 }

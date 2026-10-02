@@ -2,44 +2,47 @@ import SwiftUI
 import SwiftData
 import Charts
 
-/// Ölçüm: İçerik · Öğrenme · Soru · Kullanım. Hepsi olay tablolarından anlık hesaplanır.
+/// Ölçüm: İçerik · Öğrenme · Soru · Kullanım. Olaylar arka planda tek geçişte toplanır (`OlcumOzeti`);
+/// özet yalnız yeni olay yazılınca (`OlayDefteri.surum`) yeniden hesaplanır.
 struct OlcumSekmesi: View {
     @Environment(\.modelContext) private var context
-    @Query(sort: [SortDescriptor(\Paket.ders), SortDescriptor(\Paket.bolum), SortDescriptor(\Paket.alt_konu)])
-    private var paketler: [Paket]
-    @Query private var sorular: [Soru]
-    @Query private var kazanimlar: [Kazanim]
-    @Query private var durumlar: [LevhaDurumu]
-    @Query(sort: \OrtmeOlayi.tarih) private var ortmeler: [OrtmeOlayi]
-    @Query(sort: \SoruOlayi.tarih) private var soruOlaylari: [SoruOlayi]
-    @Query private var turlar: [TurDurumu]
-    @Query private var kullanim: [KullanimKaydi]
-    @Query(sort: \IpucuOlayi.tarih) private var ipucuOlaylari: [IpucuOlayi]
-
     @State private var ayarlarAcik = false
+    @State private var acilis: Date?
+    private var onbellek = OlcumOnbellegi.ortak
+    private var ozet: OlcumOzeti? { onbellek.ozet }
     @State private var paylasim: PaylasimDosyasi?
-    @State private var ayarSurumu = 0
+    private var yonlendirici = Yonlendirici.ortak
 
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: 14) {
-                    icerikGrubu
-                    ogrenmeGrubu
-                    soruGrubu
-                    kullanimGrubu
-                    Button {
-                        paylasim = CSVDisaAktarim.olustur(context).map(PaylasimDosyasi.init)
-                    } label: {
-                        Label("CSV dışa aktar", systemImage: "square.and.arrow.up")
-                            .font(.system(size: 15, weight: .semibold))
-                            .frame(maxWidth: .infinity, minHeight: 44)
+                if let o = ozet {
+                    VStack(alignment: .leading, spacing: 14) {
+                        icerikGrubu(o)
+                        ogrenmeGrubu(o)
+                        soruGrubu(o)
+                        kullanimGrubu(o)
+                        Button {
+                            paylasim = CSVDisaAktarim.olustur(context).map(PaylasimDosyasi.init)
+                        } label: {
+                            Label("CSV dışa aktar", systemImage: "square.and.arrow.up")
+                                .font(.system(size: 15, weight: .semibold))
+                                .frame(maxWidth: .infinity, minHeight: 44)
+                        }
+                        .buttonStyle(.bordered)
+                        .tint(Tema.metin)
+                        Text("\(Bicim.sayi(Double(o.olaySayisi))) olay · özet \(Int(o.sureMs.rounded())) ms (arka planda)"
+                             + (onbellek.guncel ? "" : " · güncelleniyor"))
+                            .font(.system(size: 11))
+                            .foregroundStyle(Tema.cizgi)
+                            .frame(maxWidth: .infinity)
                     }
-                    .buttonStyle(.bordered)
-                    .tint(Tema.metin)
+                    .padding(16)
+                    .onAppear { acilisBitti(onbellekten: true) }
+                } else {
+                    ProgressView("Hesaplanıyor…")
+                        .frame(maxWidth: .infinity, minHeight: 300)
                 }
-                .padding(16)
-                .id(ayarSurumu)
             }
             .background(Tema.arkaPlan)
             .navigationTitle("Ölçüm")
@@ -49,51 +52,57 @@ struct OlcumSekmesi: View {
                         .accessibilityLabel("Ayarlar")
                 }
             }
-            .sheet(isPresented: $ayarlarAcik, onDismiss: { ayarSurumu += 1 }) {
-                AyarlarView(dersler: icerikPaketleri.map(\.ders))
+            .sheet(isPresented: $ayarlarAcik, onDismiss: { OlayDefteri.degisti() }) {
+                AyarlarView(dersler: ozet?.dersler ?? [])
             }
             .sheet(item: $paylasim) { PaylasimSayfasi(url: $0.url) }
         }
+        // Özet eskiyse arka planda yenilenir; o sırada önceki özet görünür.
+        .onChange(of: yonlendirici.sekme, initial: true) { _, yeni in
+            guard yeni == .olcum else { return }
+            acilis = .now
+            onbellek.isit(context.container, gecikme: .zero)
+        }
+        .onChange(of: onbellek.ozet != nil) { if onbellek.ozet != nil { acilisBitti(onbellekten: false) } }
+    }
+
+    /// Sekme seçiminden içeriğin görünmesine kadar geçen süre (Ölçüm hedefi < 300 ms).
+    private func acilisBitti(onbellekten: Bool) {
+        guard let bas = acilis else { return }
+        acilis = nil
+        let ms = Date.now.timeIntervalSince(bas) * 1000
+        OlcumHesaplayici.gunluk.notice("Ölçüm açılış: \(String(format: "%.0f", ms)) ms (\(onbellekten ? "önbellekten" : "yeni hesap"))")
     }
 
     // MARK: - Ortak
 
-    /// Editör'ün "Yazdıklarım" paketi içerik sayılarına girmez.
-    private var icerikPaketleri: [Paket] { paketler.filter { !$0.kullaniciMi } }
-
-    private var soruSozlugu: [String: Soru] {
-        Dictionary(sorular.map { ($0.kimlik, $0) }, uniquingKeysWith: { a, _ in a })
-    }
-
-    private func kalip(_ s: Soru) -> KalipTipi? { s.kalipTipi }
-
     private func oran(_ d: Int, _ n: Int) -> String { n == 0 ? "—" : "%\(Int((Double(d) / Double(n) * 100).rounded()))" }
+    private func oran(_ s: Sayac) -> String { oran(s.d, s.n) }
 
     // MARK: - 1. İçerik
 
-    private var icerikGrubu: some View {
-        let soruluKazanim = Set(sorular.compactMap { s in s.kazanim.map { "\(s.paket?.paket_id ?? "").\($0)" } })
-        let sorusuz = kazanimlar.filter { !soruluKazanim.contains("\($0.paket?.paket_id ?? "").\($0.id)") }.count
-        let levhaSayisi = paketler.reduce(0) { $0 + $1.levhalar.count }
-        let yazdiklarim = sorular.filter(\.kullaniciSorusu).count
-        return OlcumKarti(baslik: "İçerik", simge: "shippingbox") {
+    private func icerikGrubu(_ o: OlcumOzeti) -> some View {
+        OlcumKarti(baslik: "İçerik", simge: "shippingbox") {
             HStack(spacing: 8) {
-                SayiKutusu(deger: "\(icerikPaketleri.count)", ad: "paket")
-                SayiKutusu(deger: "\(levhaSayisi)", ad: "levha")
-                SayiKutusu(deger: "\(sorular.count)", ad: "soru")
-                SayiKutusu(deger: "\(kazanimlar.count)", ad: "kazanım")
+                SayiKutusu(deger: "\(o.paketSayisi)", ad: "paket")
+                SayiKutusu(deger: "\(o.levhaSayisi)", ad: "levha")
+                SayiKutusu(deger: "\(o.soruSayisi)", ad: "soru")
+                SayiKutusu(deger: "\(o.kazanimSayisi)", ad: "kazanım")
             }
-            if yazdiklarim > 0 {
-                Label("\(yazdiklarim) soru Editör'de yazıldı (Yazdıklarım)", systemImage: "square.and.pencil")
+            if o.yazdiklarim > 0 {
+                Label("\(o.yazdiklarim) soru Editör'de yazıldı (Yazdıklarım)", systemImage: "square.and.pencil")
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(RenkSeti.mavi.yazi)
             }
-            if sorusuz > 0 {
-                Label("\(sorusuz) kazanımın sorusu yok", systemImage: "questionmark.square.dashed")
+            if o.sorusuzKazanim > 0 {
+                Label("\(o.sorusuzKazanim) kazanımın sorusu yok", systemImage: "questionmark.square.dashed")
                     .font(.system(size: 13, weight: .semibold))
                     .foregroundStyle(RenkSeti.sari.yazi)
             }
-            ForEach(dersBolumler, id: \.ad) { satir in
+            if o.paketSayisi == 0 {
+                Text("Henüz paket yok. İçerik sekmesinden içe aktar.").font(.system(size: 13)).foregroundStyle(Tema.ikincil)
+            }
+            ForEach(o.dersBolumler, id: \.ad) { satir in
                 HStack {
                     Text(satir.ad).font(.system(size: 13.5))
                     Spacer()
@@ -104,29 +113,14 @@ struct OlcumSekmesi: View {
         }
     }
 
-    private var dersBolumler: [(ad: String, levha: Int)] {
-        var sira: [String] = []
-        var sayi: [String: Int] = [:]
-        for p in icerikPaketleri {
-            let ad = "\(p.ders) › \(p.bolum)"
-            if sayi[ad] == nil { sira.append(ad) }
-            sayi[ad, default: 0] += p.levhalar.count
-        }
-        return sira.map { ($0, sayi[$0] ?? 0) }
-    }
-
     // MARK: - 2. Öğrenme
 
-    private var ogrenmeGrubu: some View {
-        let calisilan = durumlar.filter { $0.sonGorulme != nil || $0.sonrakiTarih != nil }
+    private func ogrenmeGrubu(_ o: OlcumOzeti) -> some View {
         let kovalar = ["0–20", "20–40", "40–60", "60–80", "80–100"]
-        let histogram = kovalar.enumerated().map { i, ad in
-            (ad: ad, n: calisilan.filter { min(4, Int($0.saglamlik / 20)) == i }.count)
-        }
-        let kutular = (0...4).map { k in (kutu: "Kutu \(k)", n: durumlar.filter { $0.sonrakiTarih != nil && $0.kutu == k }.count) }
-        let (g7, g30) = gecikmeliHatirlama
+        let histogram = kovalar.enumerated().map { (ad: $0.element, n: o.histogram[$0.offset]) }
+        let kutular = (0...4).map { (kutu: "Kutu \($0)", n: o.kutular[$0]) }
         return OlcumKarti(baslik: "Öğrenme", simge: "brain.head.profile") {
-            Text("Sağlamlık dağılımı · \(calisilan.count) çalışılmış levha")
+            Text("Sağlamlık dağılımı · \(o.calisilan) çalışılmış levha")
                 .font(.system(size: 13, weight: .semibold)).foregroundStyle(Tema.ikincil)
             Chart(histogram, id: \.ad) { kova in
                 BarMark(x: .value("Sağlamlık", kova.ad), y: .value("Levha", kova.n))
@@ -139,8 +133,8 @@ struct OlcumSekmesi: View {
             Text("Gecikmeli hatırlama (Örtme'de bildim oranı)")
                 .font(.system(size: 13, weight: .semibold)).foregroundStyle(Tema.ikincil)
             HStack(spacing: 8) {
-                SayiKutusu(deger: oran(g7.bildim, g7.toplam), ad: "≥7 gün sonra · n=\(g7.toplam)")
-                SayiKutusu(deger: oran(g30.bildim, g30.toplam), ad: "≥30 gün sonra · n=\(g30.toplam)")
+                SayiKutusu(deger: oran(o.g7), ad: "≥7 gün sonra · n=\(o.g7.n)")
+                SayiKutusu(deger: oran(o.g30), ad: "≥30 gün sonra · n=\(o.g30.n)")
             }
 
             Text("Kutu dağılımı").font(.system(size: 13, weight: .semibold)).foregroundStyle(Tema.ikincil)
@@ -151,71 +145,59 @@ struct OlcumSekmesi: View {
             }
             .chartYAxis(.hidden)
             .frame(height: 100)
+
+            Divider()
+            abKarti(o.ab)
         }
     }
 
-    /// Bir levhanın Örtme oturumu, aynı levhanın önceki oturumundan ≥7 (≥30) gün sonra yapıldıysa sayılır.
-    private var gecikmeliHatirlama: ((bildim: Int, toplam: Int), (bildim: Int, toplam: Int)) {
-        var oturumlar: [String: [(tarih: Date, bildim: Int, toplam: Int)]] = [:]
-        for o in ortmeler {
-            var dizi = oturumlar[o.levhaId] ?? []
-            if let son = dizi.last, son.tarih == o.tarih {
-                dizi[dizi.count - 1] = (son.tarih, son.bildim + (o.bildim ? 1 : 0), son.toplam + 1)
-            } else {
-                dizi.append((o.tarih, o.bildim ? 1 : 0, 1))
-            }
-            oturumlar[o.levhaId] = dizi
+    @ViewBuilder
+    private func abKarti(_ ab: ABOzeti?) -> some View {
+        Text("A/B deneyi · levha mı, metin mi?").font(.system(size: 13, weight: .semibold)).foregroundStyle(Tema.ikincil)
+        if let ab {
+            Text("\(Bicim.tarih(ab.baslangic))'den beri · \(ab.levhaPaket) alt konu levha, \(ab.metinPaket) alt konu metin")
+                .font(.system(size: 12)).foregroundStyle(Tema.ikincil)
+            ABSatiri(ad: "Soru doğruluğu (7+ gün)", levha: ab.soru.levha, metin: ab.soru.metin)
+            ABSatiri(ad: "Örtme / cloze bildim (7+ gün)", levha: ab.ortme.levha, metin: ab.ortme.metin)
+        } else {
+            Text("Deney kapalı. Ayarlar › A/B deneyi › Başlat.").font(.system(size: 13)).foregroundStyle(Tema.ikincil)
         }
-        var g7 = (bildim: 0, toplam: 0), g30 = (bildim: 0, toplam: 0)
-        for dizi in oturumlar.values where dizi.count > 1 {
-            for i in 1..<dizi.count {
-                let gun = dizi[i].tarih.timeIntervalSince(dizi[i - 1].tarih) / 86_400
-                if gun >= 7 { g7.bildim += dizi[i].bildim; g7.toplam += dizi[i].toplam }
-                if gun >= 30 { g30.bildim += dizi[i].bildim; g30.toplam += dizi[i].toplam }
-            }
-        }
-        return (g7, g30)
     }
 
     // MARK: - 3. Soru
 
-    private var soruGrubu: some View {
-        let sozluk = soruSozlugu
-        return OlcumKarti(baslik: "Soru", simge: "questionmark.circle") {
-            kalipTablosu(sozluk)
+    private func soruGrubu(_ o: OlcumOzeti) -> some View {
+        OlcumKarti(baslik: "Soru", simge: "questionmark.circle") {
+            kalipTablosu(o)
             Divider()
-            kirmaSayaclari(sozluk)
+            kirmaSayaclari(o)
             Divider()
-            ipucuGecikmesi(sozluk)
+            ipucuGecikmesi(o)
             Divider()
-            karistirmaMatrisi(sozluk)
+            karistirmaMatrisi(o)
             Divider()
-            tahminiNet(sozluk)
+            tahminiNet(o)
             Divider()
-            tahminVerimliligi(sozluk)
+            sinavKalibrasyonu(o)
+            Divider()
+            tahminVerimliligi(o)
         }
     }
 
-    private func kalipTablosu(_ sozluk: [String: Soru]) -> some View {
-        var sayac: [KalipTipi: (d: Int, n: Int)] = [:]
-        for o in soruOlaylari {
-            guard let s = sozluk[o.soruGlobalId], let k = kalip(s) else { continue }
-            let e = sayac[k] ?? (0, 0)
-            sayac[k] = (e.d + (o.dogruMu ? 1 : 0), e.n + 1)
-        }
-        let enKotu = Set(sayac.filter { $0.value.n > 0 }
+    private func kalipTablosu(_ o: OlcumOzeti) -> some View {
+        let enKotu = Set(o.kalip.filter { $0.value.n > 0 }
             .sorted { (Double($0.value.d) / Double($0.value.n), -$0.value.n) < (Double($1.value.d) / Double($1.value.n), -$1.value.n) }
             .prefix(3).map(\.key))
         return VStack(alignment: .leading, spacing: 4) {
             Text("Kalıp doğruluğu").font(.system(size: 13, weight: .semibold)).foregroundStyle(Tema.ikincil)
             ForEach(KalipTipi.allCases, id: \.self) { k in
-                let e = sayac[k] ?? (0, 0)
+                let e = o.kalip[k] ?? Sayac()
                 let kotu = enKotu.contains(k)
                 HStack {
                     Text(k.ad).font(.system(size: 13.5, weight: kotu ? .bold : .regular))
                     Spacer()
                     Text("\(e.n) soru").font(.system(size: 12.5).monospacedDigit()).foregroundStyle(Tema.ikincil)
-                    Text(oran(e.d, e.n))
+                    Text(oran(e))
                         .font(.system(size: 13.5, weight: .bold).monospacedDigit())
                         .frame(width: 48, alignment: .trailing)
                 }
@@ -229,33 +211,17 @@ struct OlcumSekmesi: View {
 
     /// Soru kırma: kalıp doğru + cevap yanlış = bilgi eksiği; kalıp yanlış (ya da süre doldu) + cevap yanlış = okuma eksiği;
     /// yanıltıcı ipucuna dokunmak = ringaya kandın (cevaptan bağımsız).
-    private func kirmaSayaclari(_ sozluk: [String: Soru]) -> some View {
-        var bilgi = 0, okuma = 0, ringa = 0, kirilan = 0
-        var kalipDagilimi: [KalipTipi: (bilgi: Int, okuma: Int, ringa: Int)] = [:]
-        for o in soruOlaylari where o.kirmaSuresi != nil {
-            guard let s = sozluk[o.soruGlobalId] else { continue }
-            kirilan += 1
-            let gercek = s.kalipTipi
-            var e = gercek.flatMap { kalipDagilimi[$0] } ?? (0, 0, 0)
-            switch KirmaSinifi.sinifla(kalipTahmini: o.kalipTahmini, gercekKalip: gercek?.rawValue, cevapDogru: o.dogruMu) {
-            case .bilgiEksigi: bilgi += 1; e.bilgi += 1
-            case .okumaEksigi: okuma += 1; e.okuma += 1
-            case nil: break
-            }
-            let ip = s.ipuclari
-            if let i = o.ipucuTahminiIndeks, ip.indices.contains(i), ip[i].yanilticiMi { ringa += 1; e.ringa += 1 }
-            if let gercek { kalipDagilimi[gercek] = e }
-        }
-        let satirlar = KalipTipi.allCases.compactMap { k in kalipDagilimi[k].flatMap { $0.bilgi + $0.okuma + $0.ringa > 0 ? (k, $0) : nil } }
+    private func kirmaSayaclari(_ o: OlcumOzeti) -> some View {
+        let satirlar = KalipTipi.allCases.compactMap { k in o.kirmaKalip[k].flatMap { $0.bilgi + $0.okuma + $0.ringa > 0 ? (k, $0) : nil } }
         return VStack(alignment: .leading, spacing: 6) {
-            Text("Soru kırma · \(kirilan) soru").font(.system(size: 13, weight: .semibold)).foregroundStyle(Tema.ikincil)
+            Text("Soru kırma · \(o.kirma.kirilan) soru").font(.system(size: 13, weight: .semibold)).foregroundStyle(Tema.ikincil)
             HStack(spacing: 8) {
-                SayiKutusu(deger: "\(bilgi)", ad: "Bilgi eksiği")
-                SayiKutusu(deger: "\(okuma)", ad: "Okuma eksiği")
-                SayiKutusu(deger: "\(ringa)", ad: "Ringaya kandın")
+                SayiKutusu(deger: "\(o.kirma.bilgi)", ad: "Bilgi eksiği")
+                SayiKutusu(deger: "\(o.kirma.okuma)", ad: "Okuma eksiği")
+                SayiKutusu(deger: "\(o.kirma.ringa)", ad: "Ringaya kandın")
             }
             if satirlar.isEmpty {
-                Text(kirilan == 0 ? "Henüz kırma ile çözülmüş soru yok." : "Kırılan sorularda eksik yok.")
+                Text(o.kirma.kirilan == 0 ? "Henüz kırma ile çözülmüş soru yok." : "Kırılan sorularda eksik yok.")
                     .font(.system(size: 13)).foregroundStyle(Tema.ikincil)
             } else {
                 HStack {
@@ -279,24 +245,17 @@ struct OlcumSekmesi: View {
     }
 
     /// İpucu gecikmesi = ortalama(açılan ipucu / toplam ipucu), son 14 gün; düşük = erken tanı.
-    private func ipucuGecikmesi(_ sozluk: [String: Soru]) -> some View {
-        let sinir = Calendar.current.date(byAdding: .day, value: -14, to: .now) ?? .now
-        let son = ipucuOlaylari.filter { $0.tarih >= sinir }
-        var kaliplar: [KalipTipi: [Double]] = [:]
-        for o in son {
-            guard let k = sozluk[o.soruGlobalId]?.kalipTipi else { continue }
-            kaliplar[k, default: []].append(o.gecikme)
-        }
+    private func ipucuGecikmesi(_ o: OlcumOzeti) -> some View {
         func ort(_ x: [Double]) -> String { x.isEmpty ? "—" : "%\(Int((x.reduce(0, +) / Double(x.count) * 100).rounded()))" }
-        let puanOrt = son.isEmpty ? "—" : Bicim.sayi((Double(son.map(\.puan).reduce(0, +)) / Double(son.count)).rounded())
+        let puanOrt = o.ipucuPuan.isEmpty ? "—" : Bicim.sayi((Double(o.ipucuPuan.reduce(0, +)) / Double(o.ipucuPuan.count)).rounded())
         return VStack(alignment: .leading, spacing: 6) {
             Text("İpucu gecikmesi · son 14 gün").font(.system(size: 13, weight: .semibold)).foregroundStyle(Tema.ikincil)
             HStack(spacing: 8) {
-                SayiKutusu(deger: ort(son.map(\.gecikme)), ad: "ortalama gecikme (düşük = erken)")
-                SayiKutusu(deger: puanOrt, ad: "ortalama puan · n=\(son.count)")
+                SayiKutusu(deger: ort(o.ipucuGecikme), ad: "ortalama gecikme (düşük = erken)")
+                SayiKutusu(deger: puanOrt, ad: "ortalama puan · n=\(o.ipucuPuan.count)")
             }
-            ForEach(KalipTipi.allCases.filter { kaliplar[$0] != nil }, id: \.self) { k in
-                let x = kaliplar[k] ?? []
+            ForEach(KalipTipi.allCases.filter { o.ipucuKalip[$0] != nil }, id: \.self) { k in
+                let x = o.ipucuKalip[k] ?? []
                 HStack {
                     Text(k.ad).font(.system(size: 13.5))
                     Spacer()
@@ -307,36 +266,22 @@ struct OlcumSekmesi: View {
         }
     }
 
-    private func karistirmaMatrisi(_ sozluk: [String: Soru]) -> some View {
-        struct Cift: Hashable { let secilen: String; let dogru: String }
-        var sayac: [Cift: Int] = [:]
-        var ipucu: [Cift: String] = [:]
-        for o in soruOlaylari where !o.dogruMu {
-            guard let s = sozluk[o.soruGlobalId] else { continue }
-            let aile = s.secenekAileleri
-            guard let x = aile[o.secilen], let y = aile[s.dogru], x != y else { continue }
-            let c = Cift(secilen: x, dogru: y)
-            sayac[c, default: 0] += 1
-            if ipucu[c] == nil {
-                ipucu[c] = s.konuPaketi?.aileler.lazy.compactMap { $0.ayiriciIpucu(x, y) }.first
-            }
-        }
-        let ilk10 = sayac.sorted { ($0.value, $1.key.secilen) > ($1.value, $0.key.secilen) }.prefix(10)
-        return VStack(alignment: .leading, spacing: 8) {
+    private func karistirmaMatrisi(_ o: OlcumOzeti) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
             Text("Karıştırma matrisi").font(.system(size: 13, weight: .semibold)).foregroundStyle(Tema.ikincil)
-            if ilk10.isEmpty {
+            if o.karistirma.isEmpty {
                 Text("Henüz aile eşlemeli yanlış yok.").font(.system(size: 13)).foregroundStyle(Tema.ikincil)
             }
-            ForEach(Array(ilk10), id: \.key) { c, n in
+            ForEach(o.karistirma, id: \.self) { c in
                 VStack(alignment: .leading, spacing: 2) {
                     // Ek almayan kalıp: "X ile Y karışıyor" (Türkçe ek, ünlü uyumuna göre değişir).
-                    Text("«\(c.dogru)» ile «\(c.secilen)» karışıyor · \(n) kez")
+                    Text("«\(c.dogru)» ile «\(c.secilen)» karışıyor · \(c.sayi) kez")
                         .font(.system(size: 13.5, weight: .semibold))
                         .foregroundStyle(Tema.metin)
                     Text("Doğrusu «\(c.dogru)», sen «\(c.secilen)» dedin.")
                         .font(.system(size: 12))
                         .foregroundStyle(Tema.ikincil)
-                    if let i = ipucu[c] {
+                    if let i = c.ipucu {
                         Text("Ayırıcı: \(i)").font(.system(size: 12.5)).foregroundStyle(RenkSeti.sari.yazi)
                     }
                 }
@@ -344,53 +289,56 @@ struct OlcumSekmesi: View {
         }
     }
 
-    private func tahminiNet(_ sozluk: [String: Soru]) -> some View {
-        let sinir = Calendar.current.date(byAdding: .day, value: -14, to: .now) ?? .now
-        var dersler: [String: [(sorulabilirlik: Int, dogru: Bool)]] = [:]
-        for o in soruOlaylari where o.tarih >= sinir {
-            guard let s = sozluk[o.soruGlobalId], let ders = s.konuPaketi?.ders else { continue }
-            dersler[ders, default: []].append((s.sorulabilirlik ?? 3, o.dogruMu))
-        }
-        let ceza = SinavAyarlari.ceza
-        let siralı = dersler.keys.sorted()
-        return VStack(alignment: .leading, spacing: 6) {
+    private func tahminiNet(_ o: OlcumOzeti) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
             Text("Tahmini net · son 14 gün").font(.system(size: 13, weight: .semibold)).foregroundStyle(Tema.ikincil)
-            if siralı.isEmpty {
+            if o.netler.isEmpty {
                 Text("Son 14 günde soru çözülmedi.").font(.system(size: 13)).foregroundStyle(Tema.ikincil)
             }
-            ForEach(siralı, id: \.self) { ders in
-                let N = SinavAyarlari.soruSayisi(ders)
-                let t = NetHesabi.tahmin(cevaplar: dersler[ders] ?? [], N: N, ceza: ceza)
+            ForEach(o.netler, id: \.ders) { satir in
+                let t = satir.tahmin
                 HStack(alignment: .firstTextBaseline) {
-                    Text(ders).font(.system(size: 14.5, weight: .bold))
+                    Text(satir.ders).font(.system(size: 14.5, weight: .bold))
                     Spacer()
                     if t.yetersiz {
                         Text("yetersiz veri (n=\(t.n))").font(.system(size: 13)).foregroundStyle(Tema.ikincil)
                     } else {
                         Text("\(Bicim.sayi(t.alt.rounded()))–\(Bicim.sayi(t.ust.rounded())) net")
                             .font(.system(size: 16, weight: .heavy).monospacedDigit())
-                        Text("/\(N) · n=\(t.n)").font(.system(size: 12)).foregroundStyle(Tema.ikincil)
+                        Text("/\(satir.N) · n=\(t.n)").font(.system(size: 12)).foregroundStyle(Tema.ikincil)
                     }
                 }
             }
         }
     }
 
-    private func tahminVerimliligi(_ sozluk: [String: Soru]) -> some View {
+    /// Tahmini net vs gerçek net: son Mini sınavın neti ile sınav günü hesaplanan tahmin yan yana.
+    private func sinavKalibrasyonu(_ o: OlcumOzeti) -> some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Tahmini net vs gerçek net").font(.system(size: 13, weight: .semibold)).foregroundStyle(Tema.ikincil)
+            if let s = o.sonSinav {
+                HStack(spacing: 8) {
+                    SayiKutusu(deger: Bicim.sayi(s.net), ad: "gerçek net · \(s.soruSayisi) soru · \(Bicim.tarih(s.tarih))")
+                    SayiKutusu(deger: s.tahminAlt.flatMap { a in s.tahminUst.map { "\(Bicim.sayi(a.rounded()))–\(Bicim.sayi($0.rounded()))" } } ?? "—",
+                               ad: s.tahminAlt == nil ? "sınav günü tahmin yoktu (az veri)" : "sınav günkü tahmin")
+                }
+                if let a = s.tahminAlt, let u = s.tahminUst {
+                    let icinde = s.net >= a.rounded() && s.net <= u.rounded()
+                    Text(icinde ? "Gerçek net tahmin aralığında: tahmin kalibre." :
+                            (s.net > u ? "Gerçek net tahminin üstünde: tahmin seni küçümsüyor." : "Gerçek net tahminin altında: tahmin iyimser."))
+                        .font(.system(size: 12.5))
+                        .foregroundStyle(icinde ? RenkSeti.yesil.yazi : RenkSeti.sari.yazi)
+                }
+            } else {
+                Text("Henüz Mini sınav yok. Soru › Mini sınav.").font(.system(size: 13)).foregroundStyle(Tema.ikincil)
+            }
+        }
+    }
+
+    private func tahminVerimliligi(_ o: OlcumOzeti) -> some View {
         let esik = NetHesabi.tahminEsigi(ceza: SinavAyarlari.ceza)
-        let guvenli = soruOlaylari.filter { $0.guven != nil }
-        func dogruluk(_ g: Int) -> (d: Int, n: Int) {
-            let x = guvenli.filter { $0.guven == g }
-            return (x.filter(\.dogruMu).count, x.count)
-        }
-        let tahmin = dogruluk(3)
-        var kalipTahmin: [KalipTipi: (d: Int, n: Int)] = [:]
-        for o in guvenli where o.guven == 3 {
-            guard let s = sozluk[o.soruGlobalId], let k = kalip(s) else { continue }
-            let e = kalipTahmin[k] ?? (0, 0)
-            kalipTahmin[k] = (e.d + (o.dogruMu ? 1 : 0), e.n + 1)
-        }
-        func etiket(_ e: (d: Int, n: Int)) -> (String, RenkSeti) {
+        let tahmin = o.guven[3] ?? Sayac()
+        func etiket(_ e: Sayac) -> (String, RenkSeti) {
             guard e.n > 0 else { return ("veri yok", .gri) }
             return Double(e.d) / Double(e.n) > esik ? ("tahmin et", .yesil) : ("boş bırak", .kirmizi)
         }
@@ -399,53 +347,39 @@ struct OlcumSekmesi: View {
                 .font(.system(size: 13, weight: .semibold)).foregroundStyle(Tema.ikincil)
             let (e, r) = etiket(tahmin)
             HStack {
-                Text("Tahmin dediklerin: \(oran(tahmin.d, tahmin.n)) doğru (n=\(tahmin.n))").font(.system(size: 13.5))
+                Text("Tahmin dediklerin: \(oran(tahmin)) doğru (n=\(tahmin.n))").font(.system(size: 13.5))
                 Spacer()
                 Rozet(metin: e, renk: r)
             }
-            ForEach(KalipTipi.allCases.filter { kalipTahmin[$0] != nil }, id: \.self) { k in
-                let v = kalipTahmin[k] ?? (0, 0)
+            ForEach(KalipTipi.allCases.filter { o.kalipTahmin[$0] != nil }, id: \.self) { k in
+                let v = o.kalipTahmin[k] ?? Sayac()
                 let (e, r) = etiket(v)
                 HStack {
-                    Text("· \(k.ad): \(oran(v.d, v.n)) (n=\(v.n))").font(.system(size: 12.5)).foregroundStyle(Tema.ikincil)
+                    Text("· \(k.ad): \(oran(v)) (n=\(v.n))").font(.system(size: 12.5)).foregroundStyle(Tema.ikincil)
                     Spacer()
                     Rozet(metin: e, renk: r)
                 }
             }
-            let emin = dogruluk(1), sanirim = dogruluk(2)
-            Text("Kalibrasyon: Eminim dediklerinin \(oran(emin.d, emin.n))'i (n=\(emin.n)), Sanırım dediklerinin \(oran(sanirim.d, sanirim.n))'i (n=\(sanirim.n)) doğru.")
+            let emin = o.guven[1] ?? Sayac(), sanirim = o.guven[2] ?? Sayac()
+            Text("Kalibrasyon: Eminim dediklerinin \(oran(emin))'i (n=\(emin.n)), Sanırım dediklerinin \(oran(sanirim))'i (n=\(sanirim.n)) doğru.")
                 .font(.system(size: 13))
                 .foregroundStyle(Tema.metin)
-            let eski = soruOlaylari.count - guvenli.count
-            if eski > 0 {
-                Text("Güven kaydı olmayan \(eski) cevap hariç (İpucu avı ve eski kayıtlar).").font(.system(size: 11.5)).foregroundStyle(Tema.ikincil)
+            if o.guvensiz > 0 {
+                Text("Güven kaydı olmayan \(o.guvensiz) cevap hariç (İpucu avı, güven seçilmemiş sınav cevapları, eski kayıtlar).")
+                    .font(.system(size: 11.5)).foregroundStyle(Tema.ikincil)
             }
         }
     }
 
     // MARK: - 4. Kullanım
 
-    private var kullanimGrubu: some View {
-        let takvim = Calendar.current
-        let bugun = Zamanlayici.calismaGunu(.now, takvim: takvim)
-        let sozluk = Dictionary(kullanim.map { ($0.gun, $0.saniye) }, uniquingKeysWith: +)
-        // Çalışma gününün öğlesi: 04:00 kaydırması anahtarı bir önceki güne düşürmesin.
-        func anahtar(_ g: Date) -> String { Zamanlayici.gunAnahtari(g.addingTimeInterval(12 * 3600), takvim: takvim) }
-        let gunler: [(gun: Date, dk: Int)] = (0..<14).reversed().compactMap { geri in
-            guard let g = takvim.date(byAdding: .day, value: -geri, to: bugun) else { return nil }
-            return (g, Int(((sozluk[anahtar(g)] ?? 0) / 60).rounded()))
-        }
-        let anahtarlar = Set(gunler.map { anahtar($0.gun) })
-        let sonTurlar = turlar.filter { anahtarlar.contains($0.gun) }
-        let tamamlanan = sonTurlar.reduce(0) { $0 + TurPlanlayici.tamamlananDakika($1) }
-        let planlanan = sonTurlar.reduce(0) { $0 + TurPlanlayici.planlananDakika($1) }
-        let yerler = CalismaYeri.allCases.map { y in (ad: y.ad, n: sonTurlar.filter { $0.calismaYeri == y.rawValue }.count) }
-        return OlcumKarti(baslik: "Kullanım", simge: "clock") {
+    private func kullanimGrubu(_ o: OlcumOzeti) -> some View {
+        OlcumKarti(baslik: "Kullanım", simge: "clock") {
             Text("Günlük dakika · son 14 gün").font(.system(size: 13, weight: .semibold)).foregroundStyle(Tema.ikincil)
             // Gün etiketleri kategorik: çalışma günü (04:00 dönüşü) ile takvim günü arasında kayma olmaz.
-            let etiketler = gunler.map { Bicim.tarih($0.gun) }
+            let etiketler = o.gunler.map { Bicim.tarih($0.gun) }
             let gosterilen = Set(etiketler.enumerated().filter { ($0.offset - (etiketler.count - 1)) % 3 == 0 }.map(\.element))
-            Chart(Array(zip(etiketler, gunler.map(\.dk))), id: \.0) { gun, dk in
+            Chart(Array(zip(etiketler, o.gunler.map(\.dk))), id: \.0) { gun, dk in
                 BarMark(x: .value("Gün", gun), y: .value("Dakika", dk))
                     .foregroundStyle(Tema.metin)
             }
@@ -456,15 +390,46 @@ struct OlcumSekmesi: View {
             }
             .frame(height: 120)
             HStack(spacing: 8) {
-                SayiKutusu(deger: oran(tamamlanan, planlanan), ad: "tur tamamlama (\(tamamlanan)/\(planlanan) dk)")
-                SayiKutusu(deger: "\(gunler.reduce(0) { $0 + $1.dk })", ad: "toplam dakika")
+                SayiKutusu(deger: oran(o.turTamamlanan, o.turPlanlanan), ad: "tur tamamlama (\(o.turTamamlanan)/\(o.turPlanlanan) dk)")
+                SayiKutusu(deger: "\(o.gunler.reduce(0) { $0 + $1.dk })", ad: "toplam dakika")
             }
             Text("Çalışma yeri (gün)").font(.system(size: 13, weight: .semibold)).foregroundStyle(Tema.ikincil)
             HStack(spacing: 8) {
-                ForEach(yerler, id: \.ad) { SayiKutusu(deger: "\($0.n)", ad: $0.ad) }
+                ForEach(o.yerler, id: \.ad) { SayiKutusu(deger: "\($0.n)", ad: $0.ad) }
             }
+            Text("Model kullanımı").font(.system(size: 13, weight: .semibold)).foregroundStyle(Tema.ikincil)
+            Text("Bu ay: \(o.llm.cagri) çağrı, \(Bicim.sayi(Double(o.llm.giris))) giriş / \(Bicim.sayi(Double(o.llm.cikis))) çıkış token")
+                .font(.system(size: 13.5))
+                .foregroundStyle(Tema.metin)
         }
     }
+}
+
+/// A/B kartında bir ölçüt: iki grubun oranı, fark ve z-testi p değeri.
+struct ABSatiri: View {
+    let ad: String
+    let levha: Sayac
+    let metin: Sayac
+
+    var body: some View {
+        let k = ABTesti.ikiOran(d1: levha.d, n1: levha.n, d2: metin.d, n2: metin.n)
+        VStack(alignment: .leading, spacing: 4) {
+            HStack {
+                Text(ad).font(.system(size: 13.5, weight: .semibold))
+                Spacer()
+                if k == nil || k?.yetersiz == true { Rozet(metin: "n < \(ABTesti.enAzOrneklem) · yetersiz", renk: .gri) }
+            }
+            HStack(spacing: 8) {
+                SayiKutusu(deger: oranMetni(levha), ad: "levha · n=\(levha.n)")
+                SayiKutusu(deger: oranMetni(metin), ad: "metin · n=\(metin.n)")
+                SayiKutusu(deger: k.map { "\($0.fark >= 0 ? "+" : "−")\(Int((abs($0.fark) * 100).rounded()))" } ?? "—",
+                           ad: k.map { "puan fark · p=\(Bicim.sayi(($0.pDegeri * 1000).rounded() / 1000))" } ?? "fark")
+            }
+        }
+        .foregroundStyle(Tema.metin)
+    }
+
+    private func oranMetni(_ s: Sayac) -> String { s.n == 0 ? "—" : "%\(Int((Double(s.d) / Double(s.n) * 100).rounded()))" }
 }
 
 // MARK: - Parçalar
@@ -558,15 +523,21 @@ enum CSVDisaAktarim {
                 .joined(separator: "\n")
             try? metin.write(to: klasor.appending(path: "\(ad).csv"), atomically: true, encoding: .utf8)
         }
-        yaz("ortme", OrtmeOlayi.self, ["levhaId", "dugumId", "tarih", "bildim"]) { [$0.levhaId, $0.dugumId, t($0.tarih), "\($0.bildim)"] }
+        yaz("ortme", OrtmeOlayi.self, ["levhaId", "dugumId", "tarih", "bildim", "abGrup"]) { [$0.levhaId, $0.dugumId, t($0.tarih), "\($0.bildim)", $0.abGrup ?? ""] }
         yaz("soru", SoruOlayi.self, ["soruGlobalId", "levhaId", "secilen", "dogruMu", "guven", "sureSaniye", "tarih",
-                                     "kalipTahmini", "ipucuTahminiIndeks", "kirmaSuresi"]) {
+                                     "kalipTahmini", "ipucuTahminiIndeks", "kirmaSuresi", "baglam", "abGrup"]) {
             [$0.soruGlobalId, $0.levhaId, "\($0.secilen)", "\($0.dogruMu)", $0.guven.map(String.init) ?? "", String(format: "%.1f", $0.sureSaniye), t($0.tarih),
-             $0.kalipTahmini ?? "", $0.ipucuTahminiIndeks.map(String.init) ?? "", $0.kirmaSuresi.map { String(format: "%.1f", $0) } ?? ""]
+             $0.kalipTahmini ?? "", $0.ipucuTahminiIndeks.map(String.init) ?? "", $0.kirmaSuresi.map { String(format: "%.1f", $0) } ?? "",
+             $0.baglam ?? "", $0.abGrup ?? ""]
         }
         yaz("ipucu", IpucuOlayi.self, ["soruGlobalId", "ipucuIndeks", "toplamIpucu", "dogru", "puan", "tarih"]) {
             [$0.soruGlobalId, "\($0.ipucuIndeks)", "\($0.toplamIpucu)", "\($0.dogru)", "\($0.puan)", t($0.tarih)]
         }
+        yaz("sinav", SinavOlayi.self, ["tarih", "soruSayisi", "net", "dogru", "yanlis", "bos", "sureSaniye", "tahminAlt", "tahminUst"]) {
+            [t($0.tarih), "\($0.soruSayisi)", String(format: "%.2f", $0.net), "\($0.dogru)", "\($0.yanlis)", "\($0.bos)",
+             String(format: "%.0f", $0.sureSaniye), $0.tahminAlt.map { String(format: "%.2f", $0) } ?? "", $0.tahminUst.map { String(format: "%.2f", $0) } ?? ""]
+        }
+        yaz("model_kullanimi", LLMKullanim.self, ["tarih", "amac", "giris", "cikis"]) { [t($0.tarih), $0.amac, "\($0.giris)", "\($0.cikis)"] }
         yaz("editor", EditorOlayi.self, ["levhaId", "puan", "kaydedildi", "tarih"]) {
             [$0.levhaId, $0.puan.map(String.init) ?? "", "\($0.kaydedildi)", t($0.tarih)]
         }

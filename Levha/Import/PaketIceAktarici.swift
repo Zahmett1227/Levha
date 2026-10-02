@@ -65,11 +65,15 @@ enum PaketIceAktarici {
 
         // Sorular her zaman yeniden yazılır.
         for s in paket.sorular { context.delete(s) }
+        let kazanimSozlugu = Dictionary((json.kazanimlar ?? []).map { ($0.id, $0) }, uniquingKeysWith: { a, _ in a })
         for (i, sj) in (json.sorular ?? []).enumerated() {
             let s = Soru(sj, paketId: pid, sira: i)
             context.insert(s)
             s.paket = paket
+            let k = sj.kazanim.flatMap { kazanimSozlugu[$0] }
+            s.cozumle(ders: json.ders, kazanimKalibi: k?.kalip, kazanimSorulabilirligi: k?.sorulabilirlik)
         }
+        SoruOnbellegi.temizle()
 
         do {
             try context.save()
@@ -77,6 +81,8 @@ enum PaketIceAktarici {
             return Sonuc(dosyaAdi: dosyaAdi, basarili: false, paketId: pid,
                          bulgular: [LintBulgusu("", "kaydedilemedi: \(error.localizedDescription)")], duzenKorunan: [])
         }
+        YedekServisi.bekleyenleriBagla(context)
+        OlayDefteri.degisti()
         return Sonuc(dosyaAdi: dosyaAdi, basarili: true, paketId: pid,
                      bulgular: denetim.bulgular, duzenKorunan: korunan)
     }

@@ -12,7 +12,8 @@ enum WidgetYazici {
 
     static func yaz(_ context: ModelContext) {
         let tur = TurPlanlayici.bugun(context)
-        let levhalar = TurPlanlayici.siraliLevhalar(context)
+        // A/B: metin grubundaki levhalar görsel olarak gösterilmez.
+        let levhalar = TurPlanlayici.siraliLevhalar(context).filter { !ABDeneyi.ortak.metinMi($0) }
         let durumlar = DurumServisi.tumDurumlar(context)
         let vadeli = levhalar.filter { DurumServisi.vadeliMi(durumlar[$0.id]) }
         let sirali = DurumServisi.oncelikSirala(vadeli.isEmpty ? levhalar : vadeli, context)
