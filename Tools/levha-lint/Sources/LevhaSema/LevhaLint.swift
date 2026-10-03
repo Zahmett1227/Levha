@@ -27,7 +27,7 @@ public struct LintSonucu {
 }
 
 public enum LevhaLint {
-    public static let desteklenenSurumler = 1...4
+    public static let desteklenenSurumler = 1...5
     public static let etiketSiniri = 28
     public static let dugumAraligi = 6...20
     public static let hucreAraligi = 6...24
@@ -71,11 +71,15 @@ public enum LevhaLint {
     public static func denetle(_ p: PaketJSON) -> [LintBulgusu] {
         var b: [LintBulgusu] = []
         if !desteklenenSurumler.contains(p.sema_surumu) {
-            b.append(.init("sema_surumu", "desteklenmeyen sürüm \(p.sema_surumu) (beklenen 1–4)"))
+            b.append(.init("sema_surumu", "desteklenmeyen sürüm \(p.sema_surumu) (beklenen 1–5)"))
         }
         for (ad, deger) in [("paket_id", p.paket_id), ("ders", p.ders), ("bolum", p.bolum), ("alt_konu", p.alt_konu)] where bos(deger) {
             b.append(.init(ad, "boş olamaz"))
         }
+        if let t = p.tur, !p.soruPaketiMi {
+            b.append(.init("tur", "bilinmeyen tür \"\(t)\" (izinli: \(PaketJSON.soruPaketiTuru))"))
+        }
+        if p.soruPaketiMi { return b + soruPaketiDenetle(p) }
         if p.levhalar.isEmpty { b.append(.init("levhalar", "en az bir levha olmalı")) }
 
         var levhaDugumleri: [String: Set<String>] = [:]
@@ -88,38 +92,8 @@ public enum LevhaLint {
         let v4 = p.sema_surumu >= 4
 
         let v3 = p.sema_surumu >= 3
-        // Aileler ve kazanımlar (v3)
-        var aileler: [String: AileJSON] = [:]
-        for a in p.aileler ?? [] {
-            let yer = "aile «\(a.id)»"
-            if aileler[a.id] != nil { b.append(.init(yer, "aile id tekrar ediyor")) }
-            aileler[a.id] = a
-            if a.uyeler.count < 2 { b.append(.init(yer + " › uyeler", "en az 2 üye olmalı", engelleyici: false)) }
-            for anahtar in (a.ayirici ?? [:]).keys.sorted() {
-                let parca = anahtar.split(separator: "|").map(String.init)
-                if parca.count != 2 || !parca.allSatisfy(a.uyeler.contains) {
-                    b.append(.init(yer + " › ayirici", "\"\(anahtar)\" iki aile üyesini \"A|B\" biçiminde vermeli", engelleyici: false))
-                }
-            }
-        }
         let tumDugumler = levhaDugumleri.values.reduce(into: Set<String>()) { $0.formUnion($1) }
-        var kazanimlar: [String: KazanimJSON] = [:]
-        for k in p.kazanimlar ?? [] {
-            let yer = "kazanım «\(k.id)»"
-            if kazanimlar[k.id] != nil { b.append(.init(yer, "kazanım id tekrar ediyor")) }
-            kazanimlar[k.id] = k
-            if bos(k.metin) { b.append(.init(yer + " › metin", "boş olamaz")) }
-            if KalipTipi(rawValue: k.kalip) == nil { b.append(.init(yer + " › kalip", "tanımsız kalıp \"\(k.kalip)\"")) }
-            if !(1...5).contains(k.sorulabilirlik) { b.append(.init(yer + " › sorulabilirlik", "1–5 olmalı (\(k.sorulabilirlik))")) }
-            if let a = k.aile, aileler[a] == nil { b.append(.init(yer + " › aile", "bilinmeyen aile \"\(a)\"")) }
-            for d in k.dugumler ?? [] where !tumDugumler.contains(d) {
-                b.append(.init(yer + " › dugumler", "paketin hiçbir levhasında yok: \"\(d)\""))
-            }
-        }
-        let soruluKazanimlar = Set((p.sorular ?? []).compactMap(\.kazanim))
-        for k in p.kazanimlar ?? [] where !soruluKazanimlar.contains(k.id) {
-            b.append(.init("kazanım «\(k.id)»", "sorusuz kazanım", uyari: true))
-        }
+        let (kazanimlar, aileler) = kazanimAileDenetle(p, tumDugumler: tumDugumler, &b)
 
         var soruIdleri = Set<String>()
         for s in p.sorular ?? [] {
@@ -130,9 +104,14 @@ public enum LevhaLint {
             if s.secenekler.count != 5 { b.append(.init(yer + " › secenekler", "5 seçenek olmalı (\(s.secenekler.count) var)")) }
             if !(0...4).contains(s.dogru) { b.append(.init(yer + " › dogru", "0–4 arasında olmalı (\(s.dogru))")) }
             b += soruV3Denetle(s, yer: yer, v3: v3, kazanimlar: kazanimlar, aileler: aileler)
-            b += soruV4Denetle(s, yer: yer, v4: v4, klinik: klinikDersler.contains(p.ders), idler: levhaDugumleri[s.levha])
-            guard let idler = levhaDugumleri[s.levha] else {
-                b.append(.init(yer + " › levha", "bilinmeyen levha \"\(s.levha)\""))
+            b += soruV4Denetle(s, yer: yer, v4: v4, klinik: klinikDersler.contains(p.ders), idler: s.levha.flatMap { levhaDugumleri[$0] })
+            if let ab = s.anlatim_baslik { b += anlatimBaslikDenetle(ab, anlatim: p.anlatim, yer: yer) }
+            guard let lid = s.levha, !bos(lid) else {
+                b.append(.init(yer + " › levha", "zorunlu (levhasız soru yalnız soru paketinde olur)"))
+                continue
+            }
+            guard let idler = levhaDugumleri[lid] else {
+                b.append(.init(yer + " › levha", "bilinmeyen levha \"\(lid)\""))
                 continue
             }
             for d in s.dugumler ?? [] where !idler.contains(d) {
@@ -154,6 +133,142 @@ public enum LevhaLint {
                 }
             }
         }
+        b += anlatimDenetle(p)
+        return b
+    }
+
+    /// Aileler ve kazanımlar (v3). `tumDugumler` nil → kazanım düğümleri denetlenmez (soru paketi).
+    static func kazanimAileDenetle(_ p: PaketJSON, tumDugumler: Set<String>?, _ b: inout [LintBulgusu])
+        -> (kazanimlar: [String: KazanimJSON], aileler: [String: AileJSON]) {
+        var aileler: [String: AileJSON] = [:]
+        for a in p.aileler ?? [] {
+            let yer = "aile «\(a.id)»"
+            if aileler[a.id] != nil { b.append(.init(yer, "aile id tekrar ediyor")) }
+            aileler[a.id] = a
+            if a.uyeler.count < 2 { b.append(.init(yer + " › uyeler", "en az 2 üye olmalı", engelleyici: false)) }
+            for anahtar in (a.ayirici ?? [:]).keys.sorted() {
+                let parca = anahtar.split(separator: "|").map(String.init)
+                if parca.count != 2 || !parca.allSatisfy(a.uyeler.contains) {
+                    b.append(.init(yer + " › ayirici", "\"\(anahtar)\" iki aile üyesini \"A|B\" biçiminde vermeli", engelleyici: false))
+                }
+            }
+        }
+        var kazanimlar: [String: KazanimJSON] = [:]
+        for k in p.kazanimlar ?? [] {
+            let yer = "kazanım «\(k.id)»"
+            if kazanimlar[k.id] != nil { b.append(.init(yer, "kazanım id tekrar ediyor")) }
+            kazanimlar[k.id] = k
+            if bos(k.metin) { b.append(.init(yer + " › metin", "boş olamaz")) }
+            if KalipTipi(rawValue: k.kalip) == nil { b.append(.init(yer + " › kalip", "tanımsız kalıp \"\(k.kalip)\"")) }
+            if !(1...5).contains(k.sorulabilirlik) { b.append(.init(yer + " › sorulabilirlik", "1–5 olmalı (\(k.sorulabilirlik))")) }
+            if let a = k.aile, aileler[a] == nil { b.append(.init(yer + " › aile", "bilinmeyen aile \"\(a)\"")) }
+            if let tumDugumler {
+                for d in k.dugumler ?? [] where !tumDugumler.contains(d) {
+                    b.append(.init(yer + " › dugumler", "paketin hiçbir levhasında yok: \"\(d)\""))
+                }
+            }
+        }
+        let soruluKazanimlar = Set((p.sorular ?? []).compactMap(\.kazanim))
+        for k in p.kazanimlar ?? [] where !soruluKazanimlar.contains(k.id) {
+            b.append(.init("kazanım «\(k.id)»", "sorusuz kazanım", uyari: true))
+        }
+        return (kazanimlar, aileler)
+    }
+
+    // MARK: - v5: anlatım ve soru paketi
+
+    /// Anlatım: `[[...]]` referansları paketteki düğüm/levha olmalı (hata, içe aktarmayı durdurmaz);
+    /// 2.000–6.000 kelime ve `##` başlıklar beklenir (uyarı).
+    static func anlatimDenetle(_ p: PaketJSON) -> [LintBulgusu] {
+        guard let a = p.anlatim else { return [] }
+        let yer = "anlatim"
+        guard !bos(a) else { return [.init(yer, "boş olamaz", engelleyici: false)] }
+        var b: [LintBulgusu] = []
+        let n = AnlatimMetni.kelimeSayisi(a)
+        if !AnlatimMetni.kelimeAraligi.contains(n) {
+            b.append(.init(yer, "\(n) kelime (beklenen \(AnlatimMetni.kelimeAraligi.lowerBound)–\(AnlatimMetni.kelimeAraligi.upperBound))", uyari: true))
+        }
+        let basliklar = AnlatimMetni.basliklar(a)
+        if !basliklar.contains(where: { $0.seviye == 2 }) { b.append(.init(yer, "## başlık yok", uyari: true)) }
+        var gorulen = Set<String>()
+        for h in basliklar where !gorulen.insert(AnlatimMetni.baslikAnahtari(h.metin)).inserted {
+            b.append(.init(yer, "başlık tekrar ediyor: \"\(h.metin)\" (anlatim_baslik ilkine gider)", uyari: true))
+        }
+        let levhalar = p.levhalar.map { (id: $0.id, dugumler: Set(dugumKimlikleri($0))) }
+        for r in AnlatimMetni.referanslar(a) {
+            let ryer = "\(yer) › [[\(r.ham)]]"
+            guard !bos(r.hedef) else {
+                b.append(.init(ryer, "boş referans", engelleyici: false))
+                continue
+            }
+            switch AnlatimMetni.coz(r, paketId: p.paket_id, levhalar: levhalar) {
+            case .levha, .dugum:
+                break
+            case .belirsiz(let levha, _, let adaylar):
+                b.append(.init(ryer, "düğüm \(adaylar.count) levhada var; \(levha) açılır (belirli levha için levha_id#düğüm yaz)", uyari: true))
+            case .disPaket(let id):
+                b.append(.init(ryer, "başka paketin levhası (\(id)); o paket içe aktarılmışsa açılır", uyari: true))
+            case .yok:
+                b.append(.init(ryer, r.dugum == nil ? "bilinmeyen düğüm/levha \"\(r.hedef)\"" : "bilinmeyen levha ya da düğüm", engelleyici: false))
+            }
+        }
+        return b
+    }
+
+    /// `anlatim_baslik` paketin anlatımında bir başlık olmalı.
+    static func anlatimBaslikDenetle(_ baslik: String, anlatim: String?, yer: String) -> [LintBulgusu] {
+        let yer = yer + " › anlatim_baslik"
+        guard let anlatim, !bos(anlatim) else { return [.init(yer, "paketin anlatımı yok", engelleyici: false)] }
+        let anahtar = AnlatimMetni.baslikAnahtari(baslik)
+        guard !AnlatimMetni.basliklar(anlatim).contains(where: { AnlatimMetni.baslikAnahtari($0.metin) == anahtar }) else { return [] }
+        return [.init(yer, "anlatımda böyle başlık yok: \"\(baslik)\"", engelleyici: false)]
+    }
+
+    /// `tur: "soru_paketi"`: levhasız soru dosyası. 5 şık, doğru şık ve açıklama zorunlu; kalıp ve kazanım
+    /// zorunlu değil (uyarı). `levha` başka paketin levhası olabilir (burada doğrulanamaz); yoksa soru bağımsızdır
+    /// ve düğüm alanı taşıyamaz.
+    static func soruPaketiDenetle(_ p: PaketJSON) -> [LintBulgusu] {
+        var b: [LintBulgusu] = []
+        if !p.levhalar.isEmpty { b.append(.init("levhalar", "soru paketinde levha olmaz (levhalar konu paketine yazılır)")) }
+        let sorular = p.sorular ?? []
+        if sorular.isEmpty { b.append(.init("sorular", "en az bir soru olmalı")) }
+        let (kazanimlar, aileler) = kazanimAileDenetle(p, tumDugumler: nil, &b)
+        var soruIdleri = Set<String>()
+        for s in sorular {
+            let yer = "soru «\(s.id)»"
+            if !soruIdleri.insert(s.id).inserted { b.append(.init(yer, "soru id tekrar ediyor")) }
+            if bos(s.kok) { b.append(.init(yer + " › kok", "boş olamaz")) }
+            if bos(s.aciklama) { b.append(.init(yer + " › aciklama", "boş olamaz (soru paketinde zorunlu)")) }
+            if s.secenekler.count != 5 { b.append(.init(yer + " › secenekler", "5 seçenek olmalı (\(s.secenekler.count) var)")) }
+            if s.secenekler.contains(where: bos) { b.append(.init(yer + " › secenekler", "boş seçenek var")) }
+            if !(0...4).contains(s.dogru) { b.append(.init(yer + " › dogru", "0–4 arasında olmalı (\(s.dogru))")) }
+            if let z = s.zorluk, !(1...3).contains(z) { b.append(.init(yer + " › zorluk", "1–3 olmalı (\(z))")) }
+            var kazanim: KazanimJSON?
+            if let kalip = s.kalip {
+                if KalipTipi(rawValue: kalip) == nil { b.append(.init(yer + " › kalip", "tanımsız kalıp \"\(kalip)\"")) }
+            }
+            if let kid = s.kazanim {
+                kazanim = kazanimlar[kid]
+                if kazanim == nil {
+                    b.append(.init(yer + " › kazanim", "pakette yok: \"\(kid)\" (içe aktarmada bağlı levhanın ya da aynı alt konunun paketinde aranır)", uyari: true))
+                }
+            } else {
+                b.append(.init(yer + " › kazanim", "yok (yanlışlar alt konu düzeyinde sayılır)", uyari: true))
+            }
+            if s.kalip == nil && kazanim == nil { b.append(.init(yer + " › kalip", "yok (kalıp istatistiğine girmez)", uyari: true)) }
+            b += secenekAileDenetle(s, yer: yer, kazanim: kazanim, aileler: aileler)
+            let levhali = !bos(s.levha ?? "")
+            if !levhali {
+                for (alan, dolu) in [("dugumler", !(s.dugumler ?? []).isEmpty), ("aciklama_yolu", !(s.aciklama_yolu ?? []).isEmpty),
+                                     ("celdirici_dugum", !(s.celdirici_dugum ?? [:]).isEmpty),
+                                     ("ipucu_sirasi.dugum", (s.ipucu_sirasi ?? []).contains { $0.dugum != nil })] where dolu {
+                    b.append(.init(yer + " › \(alan)", "levhası olmayan soruda düğüm olmaz"))
+                }
+            }
+            b += soruV4Denetle(s, yer: yer, v4: true, klinik: klinikDersler.contains(p.ders), idler: nil)
+            if let ab = s.anlatim_baslik, p.anlatim != nil { b += anlatimBaslikDenetle(ab, anlatim: p.anlatim, yer: yer) }
+        }
+        b += anlatimDenetle(p)
         return b
     }
 
@@ -202,22 +317,27 @@ public enum LevhaLint {
         } else if v3 {
             b.append(.init(yer + " › kazanim", "v3 pakette her sorunun kazanımı olmalı"))
         }
-        if let sa = s.secenek_aile, !sa.isEmpty {
-            // Kazanımın ailesi varsa ona, yoksa paketin tüm ailelerine bakılır.
-            let uyeler: Set<String> = kazanim?.aile.flatMap { aileler[$0] }.map { Set($0.uyeler) }
-                ?? aileler.values.reduce(into: Set<String>()) { $0.formUnion($1.uyeler) }
-            var celdiriciSayisi = 0
-            for (anahtar, uye) in sa.sorted(by: { $0.key < $1.key }) {
-                guard let i = Int(anahtar), (0...4).contains(i) else {
-                    b.append(.init(yer + " › secenek_aile", "geçersiz şık anahtarı \"\(anahtar)\" (0–4 olmalı)"))
-                    continue
-                }
-                if !uyeler.contains(uye) { b.append(.init(yer + " › secenek_aile", "\"\(uye)\" ailede yok")) }
-                if i != s.dogru { celdiriciSayisi += 1 }
+        b += secenekAileDenetle(s, yer: yer, kazanim: kazanim, aileler: aileler)
+        return b
+    }
+
+    static func secenekAileDenetle(_ s: SoruJSON, yer: String, kazanim: KazanimJSON?, aileler: [String: AileJSON]) -> [LintBulgusu] {
+        guard let sa = s.secenek_aile, !sa.isEmpty else { return [] }
+        var b: [LintBulgusu] = []
+        // Kazanımın ailesi varsa ona, yoksa paketin tüm ailelerine bakılır.
+        let uyeler: Set<String> = kazanim?.aile.flatMap { aileler[$0] }.map { Set($0.uyeler) }
+            ?? aileler.values.reduce(into: Set<String>()) { $0.formUnion($1.uyeler) }
+        var celdiriciSayisi = 0
+        for (anahtar, uye) in sa.sorted(by: { $0.key < $1.key }) {
+            guard let i = Int(anahtar), (0...4).contains(i) else {
+                b.append(.init(yer + " › secenek_aile", "geçersiz şık anahtarı \"\(anahtar)\" (0–4 olmalı)"))
+                continue
             }
-            if celdiriciSayisi < 3 {
-                b.append(.init(yer + " › secenek_aile", "4 çeldiricinin yalnız \(celdiriciSayisi) tanesi aileden", uyari: true))
-            }
+            if !uyeler.contains(uye) { b.append(.init(yer + " › secenek_aile", "\"\(uye)\" ailede yok")) }
+            if i != s.dogru { celdiriciSayisi += 1 }
+        }
+        if celdiriciSayisi < 3 {
+            b.append(.init(yer + " › secenek_aile", "4 çeldiricinin yalnız \(celdiriciSayisi) tanesi aileden", uyari: true))
         }
         return b
     }

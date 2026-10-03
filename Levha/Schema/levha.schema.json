@@ -1,16 +1,14 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "levha.schema.json",
-  "title": "LEVHA paketi (şema v4)",
-  "description": "Bir paket = bir alt konu = bir .json dosyası. Yapısal kurallar (ızgara içinde/çakışmasız konum, referans bütünlüğü, etiket ≤ 28 karakter, düğüm sayıları) levha-lint ile denetlenir. Sürüm 1–2 paketler okunmaya devam eder.",
+  "title": "LEVHA paketi (şema v5)",
+  "description": "Bir paket = bir alt konu = bir .json dosyası. Yapısal kurallar (ızgara içinde/çakışmasız konum, referans bütünlüğü, etiket ≤ 28 karakter, düğüm sayıları, anlatımdaki [[...]] referansları) levha-lint ile denetlenir. \"tur\": \"soru_paketi\" olan dosya levhasız soru paketidir. Sürüm 1–4 paketler okunmaya devam eder.",
   "type": "object",
   "required": [
-    "sema_surumu",
     "paket_id",
     "ders",
     "bolum",
-    "alt_konu",
-    "levhalar"
+    "alt_konu"
   ],
   "properties": {
     "sema_surumu": {
@@ -18,8 +16,15 @@
         1,
         2,
         3,
-        4
+        4,
+        5
       ]
+    },
+    "tur": {
+      "enum": [
+        "soru_paketi"
+      ],
+      "description": "v5: yoksa konu paketi; \"soru_paketi\" → yalnız sorular (levhalar yazılmaz)."
     },
     "paket_id": {
       "type": "string",
@@ -42,7 +47,6 @@
     },
     "levhalar": {
       "type": "array",
-      "minItems": 1,
       "items": {
         "$ref": "#/$defs/levha"
       }
@@ -64,6 +68,10 @@
       "items": {
         "$ref": "#/$defs/aile"
       }
+    },
+    "anlatim": {
+      "type": "string",
+      "description": "v5: konu anlatımı (markdown, 2.000–6.000 kelime; ## başlıklar, **kalın** terimler, tablolar). [[n2]] paketteki düğüm, [[levha_id]] levha (tam ya da paket içi kısa id), [[levha_id#n2]] belirli levhanın düğümü; [[ref|görünen metin]] görünen metni değiştirir."
     }
   },
   "$defs": {
@@ -535,7 +543,6 @@
       "type": "object",
       "required": [
         "id",
-        "levha",
         "kok",
         "secenekler",
         "dogru",
@@ -548,7 +555,7 @@
         },
         "levha": {
           "type": "string",
-          "description": "Bu paketteki bir levhanın id'si."
+          "description": "Konu paketinde zorunlu: bu paketteki bir levhanın id'si. Soru paketinde isteğe bağlı: başka paketin levhası (tam id, ör. ped.neo.sarilik.algoritma); yoksa soru bağımsızdır ve düğüm alanı taşımaz."
         },
         "dugumler": {
           "type": "array",
@@ -626,6 +633,10 @@
           "items": {
             "$ref": "#/$defs/kirilim"
           }
+        },
+        "anlatim_baslik": {
+          "type": "string",
+          "description": "v5: anlatımdaki bir ## başlığı; cevaptan sonra \"Anlatımda oku\" o başlığa gider."
         }
       }
     },
@@ -1062,6 +1073,37 @@
         "aciklama": {
           "type": "string"
         }
+      }
+    }
+  },
+  "if": {
+    "properties": {
+      "tur": {
+        "const": "soru_paketi"
+      }
+    },
+    "required": [
+      "tur"
+    ]
+  },
+  "then": {
+    "required": [
+      "sorular"
+    ],
+    "properties": {
+      "levhalar": {
+        "maxItems": 0
+      }
+    }
+  },
+  "else": {
+    "required": [
+      "sema_surumu",
+      "levhalar"
+    ],
+    "properties": {
+      "levhalar": {
+        "minItems": 1
       }
     }
   }

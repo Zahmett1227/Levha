@@ -1,6 +1,6 @@
 import Foundation
 
-// Şema v4'ün Codable karşılığı (v1–v3 paketler de okunur). Alan adları JSON anahtarlarıyla birebir aynıdır.
+// Şema v5'in Codable karşılığı (v1–v4 paketler de okunur). Alan adları JSON anahtarlarıyla birebir aynıdır.
 // Bu dosya hem levha-lint'te hem de iOS uygulamasında derlenir.
 
 public enum LevhaTipi: String, Codable, CaseIterable {
@@ -169,11 +169,39 @@ public struct PaketJSON: Codable {
     public var ders: String
     public var bolum: String
     public var alt_konu: String
+    /// Soru paketinde yok (boş dizi olarak okunur).
     public var levhalar: [LevhaJSON]
     public var sorular: [SoruJSON]?
     // v3
     public var kazanimlar: [KazanimJSON]?
     public var aileler: [AileJSON]?
+    // v5
+    /// nil → konu paketi; "soru_paketi" → yalnız sorular (levhasız).
+    public var tur: String? = nil
+    /// Konu anlatımı (markdown; `[[düğüm]]`, `[[levha_id]]`, `[[levha_id#düğüm]]` referansları).
+    public var anlatim: String? = nil
+
+    public static let soruPaketiTuru = "soru_paketi"
+    public var soruPaketiMi: Bool { tur == Self.soruPaketiTuru }
+}
+
+extension PaketJSON {
+    /// Soru paketinde `levhalar` yazılmaz; `sema_surumu` yazılmazsa 5 sayılır. Konu paketinde ikisi de zorunlu.
+    public init(from decoder: Decoder) throws {
+        let c = try decoder.container(keyedBy: CodingKeys.self)
+        tur = try c.decodeIfPresent(String.self, forKey: .tur)
+        let soruPaketi = tur == Self.soruPaketiTuru
+        sema_surumu = soruPaketi ? try c.decodeIfPresent(Int.self, forKey: .sema_surumu) ?? 5 : try c.decode(Int.self, forKey: .sema_surumu)
+        paket_id = try c.decode(String.self, forKey: .paket_id)
+        ders = try c.decode(String.self, forKey: .ders)
+        bolum = try c.decode(String.self, forKey: .bolum)
+        alt_konu = try c.decode(String.self, forKey: .alt_konu)
+        levhalar = soruPaketi ? try c.decodeIfPresent([LevhaJSON].self, forKey: .levhalar) ?? [] : try c.decode([LevhaJSON].self, forKey: .levhalar)
+        sorular = try c.decodeIfPresent([SoruJSON].self, forKey: .sorular)
+        kazanimlar = try c.decodeIfPresent([KazanimJSON].self, forKey: .kazanimlar)
+        aileler = try c.decodeIfPresent([AileJSON].self, forKey: .aileler)
+        anlatim = try c.decodeIfPresent(String.self, forKey: .anlatim)
+    }
 }
 
 public struct KazanimJSON: Codable {
@@ -335,7 +363,9 @@ public struct LevhaJSON: Codable {
 
 public struct SoruJSON: Codable {
     public var id: String
-    public var levha: String
+    /// Konu paketinde zorunlu (paketteki levha). Soru paketinde isteğe bağlı: başka paketin levhası (tam id);
+    /// yoksa soru bağımsızdır.
+    public var levha: String?
     public var dugumler: [String]?
     public var kok: String
     public var secenekler: [String]
@@ -353,6 +383,9 @@ public struct SoruJSON: Codable {
     // v4
     public var ipucu_sirasi: [IpucuJSON]?
     public var kirilimlar: [KirilimJSON]?
+    // v5
+    /// Anlatımdaki bir `##` başlığı; cevaptan sonra "Anlatımda oku" o başlığa gider.
+    public var anlatim_baslik: String? = nil
 }
 
 /// Kökte birebir geçen ipucu (v4). `tur` ham metin: enum dışı değer lint'te hata olur, decode'u bozmaz.
