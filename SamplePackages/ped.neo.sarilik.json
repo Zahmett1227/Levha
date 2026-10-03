@@ -1,5 +1,5 @@
 {
-  "sema_surumu": 4,
+  "sema_surumu": 5,
   "paket_id": "ped.neo.sarilik",
   "ders": "Pediatri",
   "bolum": "Neonatoloji",
@@ -535,7 +535,8 @@
           "agirlik": 0,
           "yaniltici": true
         }
-      ]
+      ],
+      "anlatim_baslik": "İlk 24 saatte sarılık: hemoliz"
     },
     {
       "id": "q2",
@@ -605,7 +606,8 @@
           "agirlik": 0,
           "yaniltici": true
         }
-      ]
+      ],
+      "anlatim_baslik": "Biliyer atrezi"
     },
     {
       "id": "q3",
@@ -690,7 +692,8 @@
           "yeni_dogru": 2,
           "aciklama": "Uzamış indirekt sarılıkta tarama TSH'si yüksekse tanı konjenital hipotiroididir; anne sütü sarılığı ancak hipotiroidi dışlandıktan sonra düşünülür."
         }
-      ]
+      ],
+      "anlatim_baslik": "Emzirme sarılığı ve anne sütü sarılığı"
     },
     {
       "id": "q4",
@@ -757,7 +760,8 @@
           "agirlik": 0,
           "yaniltici": true
         }
-      ]
+      ],
+      "anlatim_baslik": "Fizyolojik sarılık"
     },
     {
       "id": "q5",
@@ -833,7 +837,8 @@
           "agirlik": 0,
           "yaniltici": true
         }
-      ]
+      ],
+      "anlatim_baslik": "Coombs negatif hemoliz"
     },
     {
       "id": "q6",
@@ -887,7 +892,8 @@
           "agirlik": 0,
           "yaniltici": true
         }
-      ]
+      ],
+      "anlatim_baslik": "Fizyolojik sarılık"
     },
     {
       "id": "q7",
@@ -952,7 +958,8 @@
           "agirlik": 0,
           "yaniltici": true
         }
-      ]
+      ],
+      "anlatim_baslik": "ABO uyuşmazlığı"
     },
     {
       "id": "q8",
@@ -1017,7 +1024,8 @@
           "agirlik": 0,
           "yaniltici": true
         }
-      ]
+      ],
+      "anlatim_baslik": "Uzamış sarılık"
     },
     {
       "id": "q9",
@@ -1046,7 +1054,8 @@
       },
       "kazanim": "k6",
       "kalip": "yas_sira",
-      "zorluk": 1
+      "zorluk": 1,
+      "anlatim_baslik": "Fizyolojik sarılık"
     },
     {
       "id": "q10",
@@ -1113,7 +1122,8 @@
           "agirlik": 0,
           "yaniltici": true
         }
-      ]
+      ],
+      "anlatim_baslik": "Rh uyuşmazlığı"
     },
     {
       "id": "q11",
@@ -1146,7 +1156,8 @@
         "1": "Erişkinde görünür sarılık",
         "2": "Yenidoğanda görünür sarılık",
         "3": "Fizyolojik üst sınır"
-      }
+      },
+      "anlatim_baslik": "Bilirubin ölçümü ve nomogram"
     },
     {
       "id": "q12",
@@ -1216,7 +1227,8 @@
           "yeni_dogru": 0,
           "aciklama": "10 mg/dL, term bebekte klasik fizyolojik üst sınırın (12,9 mg/dL) altında kalır; direkt bilirubin düşük ve bebek iyi olduğundan izlem yeterlidir. Fototerapi kararı yine nomogramdan okunur."
         }
-      ]
+      ],
+      "anlatim_baslik": "Patolojik sarılık ölçütleri"
     },
     {
       "id": "q13",
@@ -1275,7 +1287,8 @@
           "agirlik": 0,
           "yaniltici": true
         }
-      ]
+      ],
+      "anlatim_baslik": "Akut bilirubin ensefalopatisi ve kernikterus"
     },
     {
       "id": "q14",
@@ -1329,7 +1342,8 @@
           "agirlik": 0,
           "yaniltici": true
         }
-      ]
+      ],
+      "anlatim_baslik": "Bilirubin ölçümü ve nomogram"
     }
   ],
   "kazanimlar": [
@@ -1615,5 +1629,6 @@
         "İzlem ve beslenme desteği|Emzirmeye ara verme": "Fizyolojik ve anne sütü sarılığında emzirme kesilmez; beslenme desteklenir."
       }
     }
-  ]
+  ],
+  "anlatim": "Yenidoğan sarılığı, yaşamın ilk haftalarında en sık karşılaşılan klinik bulgudur ve term bebeklerin büyük çoğunluğunda bir dereceye kadar görülür. Çoğu sarılık fizyolojiktir ve kendiliğinden geriler; ancak aynı tablonun içinde hemoliz, kolestaz ve kernikterus gibi gecikmeye tahammülü olmayan durumlar da gizlenir. TUS soruları bu ayrımı üç soruyla kurar: sarılık **ne zaman başladı**, **hangi bilirubin** arttı ve **ne kadar hızlı** arttı? Bu anlatım boyunca üç levhaya bağlantı göreceksin: yaklaşım algoritması ([[algoritma]]), fizyolojik–patolojik karşılaştırma matrisi ([[matris]]) ve bilirubin eşikleri cetveli ([[cetvel]]). Mavi altı noktalı ifadelere dokununca ilgili düğüm levhada vurgulu açılır.\n\n## Bilirubin metabolizması\n\nBilirubin, hemin yıkım ürünüdür. Eritrositlerden açığa çıkan hem, **hem oksijenaz** ile biliverdine, biliverdin de **biliverdin redüktaz** ile bilirubine dönüşür. Bu aşamadaki bilirubin **konjuge olmamış (indirekt)** bilirubindir: suda çözünmez, plazmada **albümine bağlı** taşınır. Albüminden ayrılan serbest bilirubin yağda çözünür; bu yüzden kan-beyin bariyerini geçebilir ve nörotoksisitenin asıl sorumlusudur.\n\nKaraciğere gelen bilirubin hepatosite alınır, hücre içinde ligandin gibi proteinlere bağlanır ve **UDP-glukuronil transferaz (UGT1A1)** enzimiyle glukuronik aside bağlanarak **konjuge (direkt)** bilirubine dönüşür. Konjuge bilirubin suda çözünür, safraya atılır ve bağırsağa geçer. Erişkinde bağırsak bakterileri bilirubini ürobilinojene çevirir; yenidoğanın bağırsağı ise ilk günlerde bakteriden fakirdir ve bağırsak mukozasındaki **beta-glukuronidaz** konjuge bilirubini yeniden indirekt hâle getirir. Bu bilirubin tekrar emilir: buna **enterohepatik dolaşım** denir.\n\n> TUS ipucu: İndirekt bilirubin nörotoksiktir ama idrara geçmez; direkt bilirubin nörotoksik değildir ama idrara geçer ve idrarı koyulaştırır. Koyu idrar ve açık renkli dışkı her zaman direkt (konjuge) artışı düşündürür.\n\n## Yenidoğan neden sarılır?\n\nYenidoğanda üç mekanizma aynı anda çalışır ve fizyolojik sarılığı açıklar:\n\n1. **Artmış bilirubin yükü:** Yenidoğanın eritrosit kütlesi görece yüksek, eritrosit ömrü ise erişkine göre kısadır; her gün daha fazla hem yıkılır.\n2. **Azalmış konjugasyon:** UGT1A1 enziminin etkinliği doğumda düşüktür ve ilk haftalarda olgunlaşır; hepatosite alım da sınırlıdır.\n3. **Artmış enterohepatik dolaşım:** Steril bağırsak, beta-glukuronidaz etkinliği ve ilk günlerde az beslenme, bağırsaktaki bilirubinin geri emilimini artırır.\n\nBu üçü birlikte, sağlıklı term bebekte bile indirekt bilirubinin ilk günlerde yükselmesine yol açar. Levhadaki karşılığı matristeki [[r0c2|fizyolojik sarılıkta indirekt artış]] hücresidir.\n\nSarılık klinik olarak baştan aşağı doğru ilerler: önce yüzde, sonra gövdede, en son ekstremitelerde görülür. Yenidoğanda sarılık ancak total bilirubin [[m2|yaklaşık 5 mg/dL'yi aştığında]] gözle fark edilir; erişkinde bu düzey çok daha düşüktür. Yayılımın düzeyine bakarak bilirubin tahmin etmek güvenilir değildir; ölçüm şarttır.\n\n## Fizyolojik sarılık\n\nFizyolojik sarılığın kimliği zamanlamasındadır: **hiçbir zaman ilk 24 saatte başlamaz** ([[r0c0]]). Term bebekte genellikle 2–3. günde fark edilir, bilirubin [[r0c1|3–4. günde zirve yapar]] ve yaklaşık bir haftada geriler. Zirvede indirekt bilirubin ortalama 6–8 mg/dL düzeyindedir ([[m3]]); bu bir ortalamadır ve bebekler arasında belirgin fark vardır. Pretermde zirve daha geç ve daha yüksektir, sarılık iki haftaya kadar sürebilir.\n\nAlgoritmada [[n3|2–7. günde başlayan sarılık]] dalı, sağlıklı görünen ve iyi beslenen bebekte [[n6|izlem]] ile sonlanır. Fizyolojik sarılık bir dışlama tanısıdır: bebek iyi görünüyor, iyi emiyor, idrar ve dışkı rengi normal, bilirubin yavaş artıyor ve artış indirekt ağırlıklı ise bu tanı konur.\n\nTedavi gerekmez. Yapılacaklar şunlardır:\n\n- Beslenme desteklenir; emzirme sıklığı artırılır, anneye emzirme tekniği konusunda yardım edilir.\n- Bilirubin, transkutan (TcB) ya da serum (TSB) ölçümüyle bebeğin saat cinsinden yaşına göre **nomogramda** izlenir ([[r0c3]]).\n- Taburculuk öncesi her bebek sarılık açısından değerlendirilir; kontrol zamanı bilirubin düzeyine ve risk faktörlerine göre planlanır.\n\n> TUS ipucu: \"Sağlıklı, iyi emen, 3. gününde sarılığı fark edilen bebekte ilk yaklaşım\" sorusunun cevabı tetkik yağmuru değil, **beslenmeyi desteklemek ve bilirubini nomograma göre izlemektir**.\n\n## Patolojik sarılık ölçütleri\n\nAşağıdakilerden herhangi biri sarılığı fizyolojik saymayı engeller ve araştırma gerektirir:\n\n| Ölçüt | Ne düşündürür | Levhada |\n|---|---|---|\n| **İlk 24 saatte** başlayan sarılık | Hemoliz (ABO, Rh, G6PD, sferositoz), sepsis | [[n2]] |\n| Bilirubinin **günde 5 mg/dL'den hızlı** artması | Hemoliz | [[r1c1]] |\n| Term bebekte total bilirubinin **12,9 mg/dL'yi** aşması (klasik ölçüt) | Patolojik nedenler araştırılır | [[m4]] |\n| **Direkt bilirubin artışı** | Kolestaz; her zaman patolojik | [[r2c2]] |\n| Term bebekte **2 haftadan** (pretermde 3 haftadan) uzun süren sarılık | Uzamış sarılık; direkt bilirubin ölçülür | [[n4]] |\n| Hasta görünüm, beslenme bozukluğu, letarji | Sepsis, metabolik hastalık, ensefalopati | [[n1]] |\n\nKlasik üst sınır (term 12,9 mg/dL, pretermde yaklaşık 15 mg/dL) patolojik sarılığı tanımlamak için kullanılır; **tedavi kararı ise bu sabit sayıya göre değil, saate göre nomogramla verilir**. Bu ayrım TUS'ta sık sorulur: 5 günlük term bebekte total bilirubin 15 mg/dL ise değer klasik fizyolojik sınırı aşmıştır, ama fototerapi gerekip gerekmediğini nomogram söyler.\n\n## İlk 24 saatte sarılık: hemoliz\n\nAlgoritmanın en kırmızı dalı [[n2]] dalıdır ve akılda kalan cümlesi tektir: **ilk 24 saat = her zaman patolojik**. Bu dönemde en sık neden **hemolizdir** ([[n5]]). Hemolizde eritrosit yıkımı karaciğerin konjugasyon kapasitesini aşar; artan bilirubin indirekttir ([[r1c2]]). Anemi, retikülositoz ve hepatosplenomegali eşlik edebilir.\n\nİlk tetkikler hemolizin kaynağını bulmaya yöneliktir ([[n8]], [[r1c3]]):\n\n- **Anne ve bebeğin kan grubu** (ABO ve Rh)\n- **Direkt Coombs testi:** Bebeğin eritrositlerine bağlı anne antikorlarını gösterir; pozitifliği **immün hemolizi** (Rh, ABO) düşündürür.\n- **Hemogram, retikülosit sayımı ve periferik yayma:** Anemi, retikülositoz, sferositler ya da fragmante eritrositler aranır.\n- Total ve direkt bilirubin; bebek hasta görünüyorsa sepsis taraması.\n\nSepsis ve konjenital enfeksiyonlar da ilk 24 saatte sarılık yapabilir; sepsiste hem hemoliz hem konjugasyon bozukluğu olduğu için bilirubin karışık tipte artabilir.\n\n> TUS ipucu: \"Doğumdan 12 saat sonra sarılık fark edilen, annesi O grubu bebekte ilk istenecek tetkik\" sorusunda cevap **direkt Coombs testi**dir; kan grubu ile birlikte istenir.\n\n## Rh uyuşmazlığı\n\nAnne **Rh(−)**, bebek **Rh(+)** olduğunda, önceki bir gebelik, düşük ya da kan transfüzyonu sırasında anne fetal Rh(+) eritrositlerle karşılaşırsa **anti-D antikoru** geliştirir (duyarlanma). Bu IgG yapısındaki antikorlar sonraki gebelikte plasentayı geçer ve fetal eritrositleri yıkar. Bu yüzden **ilk gebelik genellikle etkilenmez**; hastalık sonraki gebeliklerde ve giderek ağırlaşarak ortaya çıkar.\n\nKlinik yelpaze geniştir: hafif anemi ve sarılıktan, ağır fetal anemiye, kalp yetmezliğine ve **hidrops fetalise** kadar uzanır. Sarılık doğumdan sonraki ilk saatlerde başlar ve hızla artar; direkt Coombs **kuvvetli pozitiftir**. Duyarlanmamış Rh(−) anneye uygun zamanlarda **anti-D immünoglobulin** yapılması duyarlanmayı önler (uygulama zamanları için kaynağa bak). Soru kökünde \"önceki gebelikten sonra anti-D yapılmadı\" bilgisi gördüğünde Rh uyuşmazlığını düşün.\n\n## ABO uyuşmazlığı\n\nEn sık izoimmün hemoliz nedenidir. Tipik olarak anne **O grubu**, bebek **A ya da B grubudur**. O grubu annelerde doğal olarak bulunan anti-A ve anti-B antikorlarının bir kısmı IgG yapısındadır ve plasentayı geçer. Bu nedenle ABO uyuşmazlığı Rh'tan farklı olarak **ilk gebelikte de** görülebilir.\n\n| Özellik | Rh uyuşmazlığı | ABO uyuşmazlığı |\n|---|---|---|\n| Tipik eşleşme | Anne Rh(−), bebek Rh(+) | Anne O, bebek A ya da B |\n| İlk gebelik | Genellikle etkilenmez | Etkilenebilir |\n| Ağırlık | Daha ağır; hidrops fetalise gidebilir | Genellikle hafif–orta |\n| Direkt Coombs | Kuvvetli pozitif | Zayıf pozitif ya da negatif |\n| Periferik yayma | Retikülositoz, eritroblastlar | **Mikrosferositler** |\n| Önleme | Anti-D immünoglobulin | Önleme yöntemi yok |\n\nABO uyuşmazlığında Coombs testinin zayıf ya da negatif çıkabilmesi önemlidir: ilk 24 saatte başlayan ve [[r1c1|hızla artan]] sarılıkta anne O, bebek A grubuysa Coombs negatif de olsa ABO hemolizi akla gelir. Yaymadaki mikrosferositler herediter sferositozla karışabilir; ayrımı kan grubu eşleşmesi ve aile öyküsü yapar.\n\n## Coombs negatif hemoliz\n\nDirekt Coombs testi negatif olan hemolizde eritrositin kendi kusuru aranır ([[n5]]).\n\n**G6PD eksikliği:** X'e bağlı kalıtılır, bu yüzden çoğunlukla erkek bebeklerde görülür. Eritrosit oksidan strese dayanıksızdır; enfeksiyon, bazı ilaçlar, naftalin ve bakla (favizm) hemolizi tetikler. Yaymada Heinz cisimcikleri ve \"ısırık\" hücreleri görülebilir. G6PD eksikliği olan bebekte belirgin hemoliz olmadan da ağır hiperbilirubinemi gelişebilir; nedeni eşlik eden konjugasyon yetersizliğidir. Bu yüzden G6PD eksikliği nörotoksisite risk faktörleri arasında sayılır.\n\n**Herediter sferositoz:** Çoğunlukla otozomal dominant kalıtılan bir eritrosit zarı (spektrin, ankirin) hastalığıdır. Ailede anemi, sarılık, splenektomi ya da genç yaşta safra taşı öyküsü tipiktir. Yaymada sferositler, laboratuvarda yüksek MCHC görülür; tanı ozmotik frajilite ya da EMA bağlanma testiyle desteklenir.\n\n> TUS ipucu: Doğumdan 20 saat sonra sarılık, düşük hemoglobin, yüksek retikülosit; anne ve bebek aynı kan grubunda, direkt Coombs negatif, yaymada sferositler ve babada splenektomi öyküsü → **herediter sferositoz**.\n\nDiğer indirekt hiperbilirubinemi nedenleri de unutulmamalıdır: polisitemi, sefal hematom ve geniş ekimozlar (ekstravasküler kanın yıkımı), diyabetik anne bebeği, bağırsak tıkanıklığı ve pilor stenozu (artmış enterohepatik dolaşım).\n\n## Emzirme sarılığı ve anne sütü sarılığı\n\nİki kavram adları benzediği için sık karıştırılır; TUS bu ikiliyi sever.\n\n**Emzirme sarılığı** (yetersiz alıma bağlı sarılık) ilk haftada görülür. Süt yeterince gelmeyen ya da etkin ememeyen bebekte kalori ve sıvı alımı azalır, kilo kaybı fazladır, dışkılama seyrekleşir ve enterohepatik dolaşım artar. Çözüm emzirmeyi kesmek değil, **emzirmeyi sıklaştırmak ve etkinleştirmektir**; gerekirse ek beslenme desteği verilir.\n\n**Anne sütü sarılığı** ise ilk haftanın sonundan itibaren belirginleşir ve haftalarca sürebilir. Bebek iyi beslenir, kilo alır, sağlıklı görünür; dışkısı sarı, idrarı açık renklidir. Sütteki bazı maddelerin (beta-glukuronidaz gibi) enterohepatik dolaşımı artırdığı düşünülür. Uzamış indirekt hiperbilirubineminin **en sık nedenidir** ([[n10]]). Tanı dışlama yoluyla konur: direkt bilirubin normal olmalı, hemoliz ve hipotiroidi dışlanmalıdır. **Emzirme kesilmez.**\n\n| | Emzirme sarılığı | Anne sütü sarılığı |\n|---|---|---|\n| Zamanı | İlk hafta | İlk haftanın sonundan itibaren, uzun sürebilir |\n| Mekanizma | Yetersiz alım, artmış enterohepatik dolaşım | Sütteki maddeler, artmış enterohepatik dolaşım |\n| Bebeğin durumu | Kilo kaybı fazla, az dışkılama | İyi beslenir, kilo alır |\n| Yaklaşım | Emzirmeyi sıklaştır, destekle | Emzirmeye devam; diğer nedenleri dışla |\n\n## Konjugasyon bozuklukları\n\n**Gilbert sendromu**, UGT1A1 geninin promotör bölgesindeki değişikliğe bağlı hafif bir konjugasyon azalmasıdır. Açlık, stres ve enfeksiyonda indirekt bilirubin hafifçe yükselir. Yenidoğanda tek başına belirgin sorun yapmaz; ancak G6PD eksikliği ya da hemolizle birlikteyse ağır sarılık riskini artırır.\n\n**Crigler-Najjar sendromu** daha ağırdır:\n\n| | Tip 1 | Tip 2 (Arias) |\n|---|---|---|\n| UGT1A1 etkinliği | Yok | Belirgin azalmış |\n| Sarılık | Ağır, kalıcı indirekt | Orta düzeyde |\n| Fenobarbitale yanıt | Yok | Var (bilirubin düşer) |\n| Kernikterus riski | Yüksek | Düşük |\n| Tedavi | Uzun süreli fototerapi, karaciğer nakli | Fenobarbital |\n\nFenobarbital yenidoğan sarılığında rutin tedavi değildir; Crigler-Najjar tip 1 ile tip 2'yi ayırmada kullanılan bir yanıt testi olarak akılda tutulmalıdır.\n\n## Uzamış sarılık\n\nTerm bebekte **2 haftadan**, pretermde **3 haftadan** uzun süren sarılık uzamış sarılıktır ([[n4]], [[r2c0]]). Bu noktada algoritma tek bir soruya kilitlenir: [[n7]] Yani **ilk adım total ve direkt bilirubini birlikte ölçmektir.** Bebek iyi görünse bile kolestaz olabilir; \"anne sütü sarılığı\" demeden önce direkt bilirubine bakılır.\n\n- **İndirekt ağırlıklı** uzamış sarılık: anne sütü sarılığı en sık nedendir; **konjenital hipotiroidi** mutlaka dışlanır (tarama sonucu, TSH ve sT4). Hemoliz, G6PD eksikliği, Gilbert ve Crigler-Najjar sendromları ayırıcı tanıdadır ([[n10]]).\n- **Direkt ağırlıklı** uzamış sarılık: kolestaz demektir ve gecikmeden değerlendirilir ([[n9]]).\n\nDışkı ve idrar rengi her uzamış sarılıkta mutlaka sorulur. Açık renkli (akolik, kil renkli) dışkı ve koyu idrar kolestazı gösterir; bu bulgular ailenin gözünden kaçabilir, bu yüzden dışkı rengi aktif olarak sorgulanmalıdır.\n\n## Direkt hiperbilirubinemi ve kolestaz\n\nKlasik ölçüte göre **direkt bilirubinin 2 mg/dL'yi ya da totalin %20'sini aşması** kolestaz demektir; güncel kılavuzlar direkt (konjuge) bilirubinin **1 mg/dL'yi** aşmasını da anormal kabul eder ([[m1]], [[r2c2]]). Direkt hiperbilirubinemi **her zaman patolojiktir**; fizyolojik sarılık gibi kendiliğinden gerilemez ([[r2c1]]).\n\nYenidoğan kolestazının başlıca nedenleri:\n\n- **Biliyer atrezi** (cerrahi gerektiren en önemli neden)\n- İdiyopatik neonatal hepatit\n- Enfeksiyonlar: TORCH grubu, sepsis, idrar yolu enfeksiyonu\n- Metabolik hastalıklar: **galaktozemi** (kusma, hepatomegali, katarakt, E. coli sepsisi), tirozinemi, alfa-1 antitripsin eksikliği\n- **Alagille sendromu:** safra kanalı azlığı, kelebek vertebra, posterior embriyotokson, periferik pulmoner stenoz, karakteristik yüz\n- Kistik fibrozis, koledok kisti, uzun süreli total parenteral beslenme\n\nDeğerlendirme sırası levhada da aynıdır ([[r2c3]]): önce total ve direkt bilirubin birlikte ölçülür; direkt artış varsa **ilk görüntüleme batın ultrasonografisidir**. Karaciğer fonksiyon testleri, GGT, pıhtılaşma testleri ve metabolik tarama eklenir.\n\n## Biliyer atrezi\n\nBiliyer atrezi, ekstrahepatik safra yollarının ilerleyici obliterasyonudur. Tipik tablo: doğumdan beri süren ya da ilk haftalardan sonra belirginleşen sarılık, **akolik dışkı, koyu idrar ve hepatomegali**; bebek başlangıçta iyi görünür ve iyi kilo alır. Bu yanıltıcı \"iyi görünüm\" tanının gecikmesinin en sık nedenidir ([[n9]]).\n\nTanı basamakları:\n\n1. Direkt hiperbilirubinemi ve yüksek **GGT**\n2. **Batın ultrasonografisi:** safra kesesi küçük ya da görülmez; portal bölgede fibröz doku bulgusu\n3. **Hepatobiliyer sintigrafi:** radyoaktif maddenin bağırsağa atılmaması\n4. **Karaciğer biyopsisi:** duktüler proliferasyon ve safra tıkaçları\n5. **Kesin tanı: intraoperatif kolanjiyografi**\n\nTedavi **Kasai portoenterostomisidir**. Ameliyat ne kadar erken yapılırsa safra akımının sağlanma olasılığı o kadar yüksektir; ideal olarak yaşamın **ilk 2 ayında** yapılmalıdır. Kasai'ye rağmen ilerleyen hastalıkta karaciğer nakli gerekir; biliyer atrezi çocukluk çağında karaciğer naklinin en sık nedenidir.\n\n> TUS ipucu: \"Beş haftalık, anne sütü alan, açık renkli dışkı ve koyu idrarı olan, hepatomegalili bebek\" → **biliyer atrezi**. \"Anne sütü sarılığı\" çeldiricisinde dışkı sarı ve idrar açık renklidir.\n\n## Bilirubin ölçümü ve nomogram\n\nGözle tahmin güvenilir değildir; sarılığı olan her yenidoğanda bilirubin ölçülür:\n\n- **Transkutan bilirubin (TcB):** Ağrısız tarama yöntemidir. Değer tedavi eşiğine yaklaşıyorsa ya da fototerapi başlamışsa serum ölçümüyle doğrulanır.\n- **Serum total bilirubin (TSB):** Tedavi kararının dayandığı ölçümdür. Uzamış sarılıkta ve kolestaz şüphesinde mutlaka direkt bilirubinle birlikte istenir.\n\nÖlçülen değer bebeğin **saat cinsinden yaşına** göre **nomogramda** yorumlanır ([[r0c3]]). Aynı bilirubin değeri 24 saatlik bebekte tehlikeli, 5 günlük bebekte olağan olabilir. Fototerapi ve kan değişimi eşikleri sabit sayılar değildir: **gebelik haftasına** ve **nörotoksisite risk faktörlerine** göre değişir ([[m5]], [[m6]]). Eşik değerleri için nomograma bak.\n\nNörotoksisite risk faktörleri şunlardır:\n\n- Düşük gebelik haftası (prematürite arttıkça risk artar)\n- İzoimmün hemolitik hastalık, G6PD eksikliği ya da başka hemolitik durum\n- Sepsis\n- Albüminin 3 g/dL'nin altında olması\n- Belirgin klinik instabilite\n\nBu risk faktörlerinden biri varsa nomogramda daha düşük eşik eğrisi kullanılır.\n\n> TUS ipucu: \"36 saatlik term bebekte total bilirubin 11 mg/dL; fototerapi kararı neye göre verilir?\" → **saat cinsinden yaş, gebelik haftası ve risk faktörlerine göre nomogram**. Sabit bir \"fototerapi eşiği\" şıkkı çeldiricidir ([[cetvel]]).\n\n## Fototerapi\n\nFototerapi, deriye ulaşan mavi-yeşil ışığın bilirubini suda çözünebilen izomerlere dönüştürmesiyle etki eder. En önemli mekanizma **yapısal izomerizasyondur** (lumirubin oluşumu); bu ürünler konjugasyona gerek kalmadan safra ve idrarla atılır. Etkinlik ışığın şiddetine ve ışığa maruz kalan deri yüzeyine bağlıdır: bebek mümkün olduğunca çıplak bırakılır, gözleri korunur. Yoğun fototerapide bebeğin altına ve üstüne ışık kaynağı yerleştirilir.\n\nDikkat edilecekler:\n\n- **Emzirme sürdürülür;** beslenme ve sıvı dengesi izlenir (insensibl su kaybı artar).\n- Yan etkiler: gevşek dışkı, döküntü, ısı dengesizliği, sıvı kaybı.\n- **Bronz bebek sendromu:** Direkt hiperbilirubinemisi olan bebekte fototerapi derinin bronz renge boyanmasına yol açar. Kolestazda fototerapinin yeri sınırlıdır; önce direkt bilirubin ölçülmüş olmalıdır.\n- Konjenital porfiri ve ailede porfiri öyküsü fototerapi için kontrendikasyondur.\n- Fototerapi başladıktan sonra bilirubin serum ölçümüyle izlenir; transkutan ölçüm ışık gören deride güvenilir değildir.\n\nBilirubini albüminden ayıran ilaçlar (örneğin seftriakson, sülfonamidler) serbest bilirubini artırarak nörotoksisite riskini yükseltir; sarılıklı yenidoğanda bu ilaçlardan kaçınılır.\n\n## Kan değişimi ve IVIG\n\n**Kan değişimi** (çift volüm), dolaşımdaki bilirubini ve anneden geçen antikorları uzaklaştırır, anemiyi düzeltir. Endikasyonları:\n\n- Bilirubinin, saat ve risk faktörlerine göre nomogramdaki **kan değişimi eşiğini** aşması ([[m6]])\n- Yoğun fototerapiye rağmen bilirubinin eşiğe doğru hızla artması\n- **Akut bilirubin ensefalopatisi bulguları:** bu durumda bilirubin düzeyinden bağımsız olarak **acil kan değişimi** yapılır\n\nKan değişiminin komplikasyonları önemlidir: elektrolit bozuklukları (hipokalsemi, hiperkalemi), trombositopeni, enfeksiyon, tromboz, nekrotizan enterokolit ve aritmi. Bu nedenle yalnız deneyimli merkezlerde yapılır.\n\n**İntravenöz immünoglobulin (IVIG)**, izoimmün hemolitik hastalıkta (Rh, ABO) yoğun fototerapiye rağmen bilirubin artmaya devam ediyorsa ya da kan değişimi eşiğine yaklaşıyorsa hemolizi azaltmak ve kan değişimi gereksinimini düşürmek için kullanılır (eşik için nomograma bak).\n\n## Akut bilirubin ensefalopatisi ve kernikterus\n\nAlbümine bağlı olmayan serbest indirekt bilirubin kan-beyin bariyerini geçer ve özellikle **bazal ganglionlarda** (globus pallidus) ve beyin sapı çekirdeklerinde birikir. Prematürite, hemoliz, asidoz, sepsis, hipoalbüminemi ve bilirubini albüminden ayıran ilaçlar bu riski artırır.\n\n**Akut bilirubin ensefalopatisi** üç evrede ilerler:\n\n| Evre | Bulgular |\n|---|---|\n| Erken | Letarji, hipotoni, emmede azalma |\n| Orta | Hipertoni, **retrokollis ve opistotonus**, ateş, **tiz ağlama**, uyku hâlinden huzursuzluğa geçiş |\n| İleri | Belirgin opistotonus, apne, nöbet, koma |\n\nErken evrede hızlı tedaviyle tablo geri dönebilir; bu nedenle hipertoni, opistotonus ya da tiz ağlama görüldüğünde **beklenmeden acil kan değişimi** yapılır ([[m6]]).\n\n**Kernikterus** (kronik bilirubin ensefalopatisi) kalıcı hasardır. Klasik dörtlü:\n\n1. **Koreoatetoid serebral palsi** (ekstrapiramidal bulgular)\n2. **Sensörinöral işitme kaybı** (işitsel nöropati)\n3. **Yukarı bakış kısıtlılığı**\n4. **Süt dişlerinde mine displazisi**\n\nAğır hiperbilirubinemi geçiren her bebekte işitme beyin sapı yanıtlarıyla (ABR) değerlendirilir ve nörogelişimsel izleme alınır.\n\n> TUS ipucu: \"Dört günlük sarılıklı term bebekte letarji, emmede azalma, opistotonus ve tiz ağlama\" → **acil kan değişimi**. Fototerapiyle beklemek ya da yalnız bilirubin tekrarı istemek yanlıştır.\n\n## TUS için akılda kalanlar\n\n- [[n2|İlk 24 saatte sarılık]] her zaman patolojiktir; önce hemoliz düşünülür, ilk tetkik **direkt Coombs ve kan grubudur**.\n- Fizyolojik sarılık 24 saatten sonra başlar, term bebekte [[r0c1|3–4. günde zirve yapar]], yaklaşık bir haftada geriler ve indirekt ağırlıklıdır.\n- Bilirubinin günde 5 mg/dL'den hızlı artması hemoliz lehinedir.\n- Rh uyuşmazlığı ABO'dan ağırdır ve ilk gebeliği genellikle etkilemez; ABO ilk gebelikte de görülür, Coombs zayıf ya da negatif olabilir, yaymada mikrosferositler vardır.\n- Coombs negatif hemoliz + sferosit + aile öyküsü → herediter sferositoz; erkek bebek + oksidan tetikleyici → G6PD eksikliği.\n- Uzamış sarılıkta ilk adım total ve direkt bilirubini birlikte ölçmektir; [[n9|direkt artış kolestazdır]] ve her zaman patolojiktir.\n- Akolik dışkı, koyu idrar ve hepatomegali → biliyer atrezi; kesin tanı intraoperatif kolanjiyografi, tedavi erken Kasai.\n- İyi beslenen, kilo alan bebekte uzamış indirekt sarılık → anne sütü sarılığı; emzirme kesilmez, hipotiroidi dışlanır.\n- Fototerapi ve kan değişimi eşikleri sabit sayı değildir; saat, gebelik haftası ve risk faktörlerine göre **nomograma bak**.\n- Akut bilirubin ensefalopatisi bulgusu varsa düzeyden bağımsız acil kan değişimi.\n"
 }

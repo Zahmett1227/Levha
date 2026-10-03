@@ -1,0 +1,246 @@
+{
+  "sema_surumu": 5,
+  "tur": "soru_paketi",
+  "paket_id": "soru.ped.asi.takvimi",
+  "ders": "Pediatri",
+  "bolum": "Sosyal pediatri",
+  "alt_konu": "Aşı takvimi",
+  "kazanimlar": [
+    {
+      "id": "a1",
+      "metin": "BCG ulusal takvimde tek doz olarak 2. ayın sonunda yapılır",
+      "kalip": "yas_sira",
+      "sorulabilirlik": 4
+    },
+    {
+      "id": "a2",
+      "metin": "OPA 6. ve 18. ayda; inaktif polio (İPA) karma aşıların içindedir",
+      "kalip": "yas_sira",
+      "sorulabilirlik": 4
+    },
+    {
+      "id": "a3",
+      "metin": "KKK 12. ayda ve 48. ayda (2020'den beri ilkokul 1. sınıf yerine) yapılır",
+      "kalip": "yas_sira",
+      "sorulabilirlik": 5
+    },
+    {
+      "id": "a4",
+      "metin": "Hepatit A aşısı 18. ve 24. ayda iki doz yapılır",
+      "kalip": "yas_sira",
+      "sorulabilirlik": 3
+    },
+    {
+      "id": "a5",
+      "metin": "Altılı karma aşı (DaBT-İPA-Hib-HepB) 2., 4. ve 6. ayda; pnömokok aşısı (KPA) ayrı yapılır",
+      "kalip": "esleme",
+      "sorulabilirlik": 4
+    },
+    {
+      "id": "a6",
+      "metin": "Takvimdeki canlı aşılar BCG, OPA, KKK ve suçiçeğidir; hepatit A ve karma aşılar inaktiftir",
+      "kalip": "istisna",
+      "sorulabilirlik": 5
+    },
+    {
+      "id": "a7",
+      "metin": "Ağır kombine immün yetmezlikte canlı aşılar (OPA, BCG, KKK, suçiçeği) yapılmaz",
+      "kalip": "istisna",
+      "sorulabilirlik": 4
+    },
+    {
+      "id": "a8",
+      "metin": "Suçiçeği aşısı 12. ayda; 1 Eylül 2026'dan itibaren ikinci doz 48. ayda yapılır",
+      "kalip": "yas_sira",
+      "sorulabilirlik": 3
+    }
+  ],
+  "sorular": [
+    {
+      "id": "s1",
+      "kazanim": "a1",
+      "kalip": "yas_sira",
+      "zorluk": 1,
+      "kok": "Ulusal çocukluk dönemi aşı takvimine göre tek doz olarak 2. ayın sonunda uygulanan aşı aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "BCG",
+        "KKK",
+        "Hepatit A",
+        "Oral polio aşısı (OPA)",
+        "Suçiçeği"
+      ],
+      "dogru": 0,
+      "aciklama": "BCG ulusal takvimde tek doz olarak 2. ayın sonunda intradermal yapılır. KKK ve suçiçeği 12. ayda, hepatit A 18. ayda başlar; OPA'nın ilk dozu 6. aydadır. (Kaynak: Sağlık Bakanlığı Ulusal Çocukluk Dönemi Aşı Takvimi.)"
+    },
+    {
+      "id": "s2",
+      "kazanim": "a2",
+      "kalip": "yas_sira",
+      "zorluk": 1,
+      "kok": "Ulusal aşı takviminde oral polio aşısının (OPA) uygulandığı aylar aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "2. ve 4. ay",
+        "4. ve 6. ay",
+        "6. ve 18. ay",
+        "12. ve 24. ay",
+        "18. ve 48. ay"
+      ],
+      "dogru": 2,
+      "aciklama": "OPA 6. ayın ve 18. ayın sonunda yapılır. 2., 4. ve 6. aylarda verilen inaktif polio (İPA) karma aşının içindedir; 48. ayda ise dörtlü karma (DaBT-İPA) pekiştirme dozu yapılır."
+    },
+    {
+      "id": "s3",
+      "kazanim": "a3",
+      "kalip": "yas_sira",
+      "zorluk": 2,
+      "kok": "Ulusal aşı takvimine göre kızamık-kızamıkçık-kabakulak (KKK) aşısının ikinci dozunun uygulandığı zaman aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "18. ay",
+        "24. ay",
+        "48. ay",
+        "İlkokul 1. sınıf",
+        "13 yaş"
+      ],
+      "dogru": 2,
+      "aciklama": "KKK'nın ilk dozu 12. ayda, ikinci dozu 48. ayda (4 yaş) aile sağlığı merkezinde yapılır. 1 Temmuz 2020'den önce ikinci doz ilkokul 1. sınıfta okulda yapılıyordu; bu şık eski takvimdir. 48. ayda aynı gün dörtlü karma (DaBT-İPA) pekiştirmesi de yapılır."
+    },
+    {
+      "id": "s4",
+      "kazanim": "a4",
+      "kalip": "yas_sira",
+      "zorluk": 1,
+      "kok": "Ulusal aşı takviminde hepatit A aşısının uygulandığı aylar aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "Doğumda ve 6. ay",
+        "6. ve 12. ay",
+        "12. ve 18. ay",
+        "18. ve 24. ay",
+        "24. ve 48. ay"
+      ],
+      "dogru": 3,
+      "aciklama": "Hepatit A aşısı iki doz olarak 18. ayın ve 24. ayın sonunda yapılır. Hepatit A aşısı inaktif bir aşıdır. Doğumda yapılan aşı hepatit B aşısıdır."
+    },
+    {
+      "id": "s5",
+      "kazanim": "a5",
+      "kalip": "esleme",
+      "zorluk": 2,
+      "kok": "Nisan 2025'ten itibaren 2., 4. ve 6. aylarda uygulanan altı bileşenli karma aşının içermediği antijen aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "Difteri toksoidi",
+        "Hemofilus influenza tip b",
+        "Hepatit B",
+        "İnaktif polio",
+        "Pnömokok"
+      ],
+      "dogru": 4,
+      "aciklama": "Altı bileşenli karma aşı (DaBT-İPA-Hib-HepB) difteri, aselüler boğmaca, tetanoz, inaktif polio, Hemofilus influenza tip b ve hepatit B'yi içerir; 14 Nisan 2025'te beşli karmanın yerine programa girmiştir. Doğumdaki hepatit B dozu sürer. Pnömokok aşısı (KPA) ayrı bir enjeksiyondur: 2. ve 4. ay, 12. ayda pekiştirme."
+    },
+    {
+      "id": "s6",
+      "kazanim": "a6",
+      "kalip": "istisna",
+      "zorluk": 1,
+      "kok": "Ulusal çocukluk dönemi aşı takviminde yer alan ve canlı aşı olmayan aşı aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "BCG",
+        "Oral polio aşısı (OPA)",
+        "KKK",
+        "Suçiçeği",
+        "Hepatit A"
+      ],
+      "dogru": 4,
+      "aciklama": "Takvimdeki canlı aşılar BCG, OPA, KKK ve suçiçeğidir. Hepatit A aşısı inaktiftir; karma aşılar (DaBT-İPA-Hib-HepB, DaBT-İPA), pnömokok konjuge aşısı ve Td de canlı değildir."
+    },
+    {
+      "id": "s7",
+      "kazanim": "a7",
+      "kalip": "istisna",
+      "zorluk": 2,
+      "kok": "Altı aylık erkek bebek tekrarlayan pnömoni, uzamış ishal ve ağızda inatçı pamukçuk nedeniyle getiriliyor. Doğumdan beri kilo alımı yetersiz olan bebeğin ağabeyi bebekken ağır bir enfeksiyonla kaybedilmiş. Annesi gebelikte demir ve folik asit kullanmış. Tetkiklerde belirgin lenfopeni saptanıyor ve ağır kombine immün yetmezlik tanısı konuyor. Bu bebeğe 6. ay aşıları sırasında uygulanmaması gereken aşı aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "Altı bileşenli karma aşı",
+        "Oral polio aşısı (OPA)",
+        "Pnömokok konjuge aşısı",
+        "Hepatit B aşısı",
+        "İnaktif influenza aşısı"
+      ],
+      "dogru": 1,
+      "aciklama": "Ağır kombine immün yetmezlikte canlı aşılar kontrendikedir; 6. ay aşılarından OPA canlı bir aşıdır ve yapılmaz (aynı nedenle BCG, KKK ve suçiçeği de yapılmaz). İnaktif aşılar güvenlidir ama yanıt yetersiz kalabilir. Ağabeyde erken ölüm ve erkek cinsiyet X'e bağlı kalıtımı düşündürür; gebelikte demir ve folik asit kullanımı tanıyla ilgisizdir.",
+      "ipucu_sirasi": [
+        {
+          "metin": "ağır kombine immün yetmezlik tanısı konuyor",
+          "tur": "lab",
+          "agirlik": 3
+        },
+        {
+          "metin": "belirgin lenfopeni saptanıyor",
+          "tur": "lab",
+          "agirlik": 2
+        },
+        {
+          "metin": "tekrarlayan pnömoni, uzamış ishal ve ağızda inatçı pamukçuk",
+          "tur": "oyku",
+          "agirlik": 2
+        },
+        {
+          "metin": "ağabeyi bebekken ağır bir enfeksiyonla kaybedilmiş",
+          "tur": "oyku",
+          "agirlik": 1
+        },
+        {
+          "metin": "gebelikte demir ve folik asit kullanmış",
+          "tur": "ilac",
+          "agirlik": 0,
+          "yaniltici": true
+        }
+      ]
+    },
+    {
+      "id": "s8",
+      "kalip": "esik_sayi",
+      "zorluk": 2,
+      "kok": "Aynı gün uygulanmayan KKK ve suçiçeği aşıları arasında bırakılması gereken en kısa süre aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "1 hafta",
+        "2 hafta",
+        "4 hafta",
+        "3 ay",
+        "6 ay"
+      ],
+      "dogru": 2,
+      "aciklama": "İki canlı parenteral aşı aynı gün yapılabilir; aynı gün yapılmazsa aralarında en az 4 hafta bırakılır. Daha kısa aralıkla yapılan ikinci canlı aşı geçersiz sayılır ve tekrarlanır. İnaktif aşılar için böyle bir kısıtlama yoktur."
+    },
+    {
+      "id": "s9",
+      "kazanim": "a8",
+      "kalip": "yas_sira",
+      "zorluk": 2,
+      "kok": "1 Eylül 2026'dan itibaren ulusal aşı takvimine eklenen suçiçeği aşısının ikinci dozunun uygulandığı zaman aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "18. ay",
+        "24. ay",
+        "36. ay",
+        "48. ay",
+        "13 yaş"
+      ],
+      "dogru": 3,
+      "aciklama": "Suçiçeği aşısının ilk dozu 12. ayda, ikinci dozu 1 Eylül 2026'dan itibaren 48. ayda (4 yaş) yapılır. Aynı tarihten itibaren ikinci dozu olmayan ve 72 aydan küçük çocuklara yakalama aşılaması yapılır. (Kaynak: Sağlık Bakanlığı, Aşı Takvimindeki Son Güncellemeler.)"
+    },
+    {
+      "id": "s10",
+      "kalip": "ilk_adim",
+      "zorluk": 2,
+      "kok": "Annesi HBsAg pozitif olan term yenidoğan için doğumdan hemen sonra yapılması gereken uygulama aşağıdakilerden hangisidir?",
+      "secenekler": [
+        "Yalnız hepatit B aşısı yapılması",
+        "Yalnız hepatit B immünoglobulini (HBIG) verilmesi",
+        "Hepatit B aşısı ve HBIG'nin farklı bölgelere birlikte yapılması",
+        "Aşının 1. ayda, HBIG'nin doğumda yapılması",
+        "Emzirmenin kesilmesi ve aşının ertelenmesi"
+      ],
+      "dogru": 2,
+      "aciklama": "HBsAg pozitif anneden doğan bebeğe doğumdan hemen sonra hepatit B aşısı ve hepatit B immünoglobulini (HBIG) farklı ekstremitelere birlikte yapılır; aşı serisi takvime göre tamamlanır ve sonrasında bebeğin HBsAg ve anti-HBs durumu kontrol edilir (zamanlama için kaynağa bak). Emzirme kesilmez."
+    }
+  ]
+}
