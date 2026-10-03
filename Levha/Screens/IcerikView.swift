@@ -76,34 +76,62 @@ struct IcerikView: View {
                     }
                 }
 
-                Section("Klasördeki dosyalar") {
-                    if klasor.dosyalar.isEmpty {
-                        Text("Klasörde .json dosyası yok.")
+                Section("Klasördeki paketler") {
+                    let konular = klasor.dosyalar.filter { !$0.soruPaketi }
+                    if konular.isEmpty {
+                        Text("Klasörde .json paket dosyası yok.")
                             .foregroundStyle(Tema.ikincil)
                     }
-                    ForEach(klasor.dosyalar) { d in
+                    ForEach(konular) { d in
                         DosyaSatiri(dosya: d, iceAktarildi: iceAktarildiMi(d))
                     }
                 }
+                let soruDosyalari = klasor.dosyalar.filter(\.soruPaketi)
+                if !soruDosyalari.isEmpty {
+                    Section {
+                        ForEach(soruDosyalari) { d in
+                            DosyaSatiri(dosya: d, iceAktarildi: iceAktarildiMi(d))
+                        }
+                    } header: {
+                        Text("Klasördeki soru paketleri")
+                    } footer: {
+                        Text("\"tur\": \"soru_paketi\" olan dosyalar: levhasız sorular. Levhası yazılan soru o levhaya bağlanır (levha başka paketteyse tam id); yazılmayan soru bağımsızdır.")
+                    }
+                }
 
+                let konuPaketleri = paketler.filter { !$0.soruPaketiMi }
                 Section {
-                    ForEach(paketler) { p in
+                    ForEach(konuPaketleri) { p in
                         VStack(alignment: .leading, spacing: 3) {
                             Text("\(p.ders) › \(p.bolum) › \(p.alt_konu)")
                                 .font(.system(size: 15, weight: .semibold))
-                            Text("\(p.levhalar.count) levha · \(p.sorular.count) soru · \(p.paket_id)")
+                            Text("\(p.levhalar.count) levha · \(p.sorular.count) soru" + (p.anlatimVar ? " · anlatım" : "") + " · \(p.paket_id)")
                                 .font(.system(size: 12.5))
                                 .foregroundStyle(Tema.ikincil)
                         }
                     }
-                    .onDelete { indeksler in
-                        for i in indeksler { context.delete(paketler[i]) }
-                        try? context.save()
-                    }
+                    .onDelete { sil($0.map { konuPaketleri[$0] }) }
                 } header: {
                     Text("İçe aktarılmış paketler")
                 } footer: {
                     Text("Aynı id'li levha yeniden içe aktarılınca düzen ve taslaktan eklenen düğümler korunur; paketteki revizyon daha büyükse paketin düzeni kazanır. Notların (Notum) hiçbir durumda silinmez.")
+                }
+
+                let soruPaketleri = paketler.filter(\.soruPaketiMi)
+                if !soruPaketleri.isEmpty {
+                    Section("Soru paketleri") {
+                        ForEach(soruPaketleri) { p in
+                            let bagimsiz = p.sorular.filter(\.bagimsiz).count
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text("\(p.ders) › \(p.bolum) › \(p.alt_konu)")
+                                    .font(.system(size: 15, weight: .semibold))
+                                Text("\(p.sorular.count) soru · \(bagimsiz) bağımsız · \(p.sorular.count - bagimsiz) levhaya bağlı · \(p.paket_id)")
+                                    .font(.system(size: 12.5))
+                                    .foregroundStyle(Tema.ikincil)
+                            }
+                        }
+                        .onDelete { sil($0.map { soruPaketleri[$0] }) }
+                    }
                 }
             }
             .scrollContentBackground(.hidden)
@@ -183,17 +211,27 @@ struct IcerikView: View {
         try? context.fetch(FetchDescriptor<Levha>(predicate: #Predicate { $0.id == id })).first
     }
 
+    /// Paket silinince ona bağlı soru paketi soruları bağımsız kalır.
+    private func sil(_ silinecek: [Paket]) {
+        for p in silinecek { context.delete(p) }
+        try? context.save()
+        SoruBaglayici.yenidenBagla(context)
+        OlayDefteri.degisti()
+    }
+
     private var gecerliDosyalar: [PaketKlasoru.Dosya] {
         klasor.dosyalar.filter { if case .gecerli = $0.durum { return true } else { return false } }
     }
 
     private func iceAktarildiMi(_ d: PaketKlasoru.Dosya) -> Bool {
-        guard case .gecerli(let pid, _, _, _, _) = d.durum else { return false }
-        return paketler.contains { $0.paket_id == pid }
+        guard case .gecerli(let o) = d.durum else { return false }
+        return paketler.contains { $0.paket_id == o.paketId }
     }
 
+    /// Konu paketleri önce: soru paketlerinin levha referansları aynı turda bağlanır.
     private func hepsiniIceAktar() {
-        sonuclar = klasor.dosyalar.compactMap { d in
+        let sirali = klasor.dosyalar.filter { !$0.soruPaketi } + klasor.dosyalar.filter(\.soruPaketi)
+        sonuclar = sirali.compactMap { d in
             guard case .gecerli = d.durum, let veri = PaketKlasoru.oku(d.url) else { return nil }
             return PaketIceAktarici.iceAktar(veri: veri, dosyaAdi: d.ad, context: context)
         }
@@ -244,11 +282,13 @@ private struct DosyaSatiri: View {
                 Text("iCloud'dan indiriliyor… Biraz sonra aşağı çekip yenile.")
                     .font(.system(size: 12.5))
                     .foregroundStyle(Tema.ikincil)
-            case .gecerli(_, let altKonu, let levha, let soru, let uyarilar):
-                Text("\(altKonu) · \(levha) levha · \(soru) soru")
+            case .gecerli(let o):
+                Text(dosya.soruPaketi
+                     ? "\(o.altKonu) · \(o.soru) soru · \(o.bagimsiz) bağımsız"
+                     : "\(o.altKonu) · \(o.levha) levha · \(o.soru) soru" + (o.anlatimKelime.map { " · anlatım \(Bicim.sayi(Double($0))) kelime" } ?? ""))
                     .font(.system(size: 12.5))
                     .foregroundStyle(Tema.ikincil)
-                BulguListesi(bulgular: uyarilar, renk: .sari)
+                BulguListesi(bulgular: o.uyarilar, renk: .sari)
             case .hatali(let bulgular):
                 Text("Şema hatası — paket atlanır")
                     .font(.system(size: 12.5, weight: .bold))

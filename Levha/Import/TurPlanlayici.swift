@@ -68,6 +68,8 @@ struct TurKuyrugu: Codable, Equatable {
     var ipucuAvi: [String]?
     /// Kitap sayfası eşlemesinden seçilen levhalar; Yeni bloğuna girer (Kitaplı modda alt konunun yerine).
     var kitap: [String]?
+    /// Bugün "Önce oku" ile anlatımı açılmış paketler.
+    var okunan: [String]?
 }
 
 /// Günlük turun planı ve ilerlemesi. Gün 04:00'te döner (`Zamanlayici.gunAnahtari`).
@@ -185,7 +187,20 @@ enum TurPlanlayici {
             let yanlislar = ((try? context.fetch(FetchDescriptor<SoruOlayi>(sortBy: [SortDescriptor(\.tarih)]))) ?? [])
                 .filter { !$0.dogruMu && $0.tarih >= bugun && idler.contains($0.soruGlobalId) }
             var levhalar: [String] = []
-            for o in yanlislar where !levhalar.contains(o.levhaId) { levhalar.append(o.levhaId) }
+            var sorular: [String: Soru]?
+            for o in yanlislar {
+                if !o.levhaId.isEmpty {
+                    if !levhalar.contains(o.levhaId) { levhalar.append(o.levhaId) }
+                    continue
+                }
+                // Bağımsız soru: kazanımının düğümlerinin levhaları.
+                if sorular == nil {
+                    let hepsi = (try? context.fetch(FetchDescriptor<Soru>())) ?? []
+                    sorular = Dictionary(hepsi.map { ($0.kimlik, $0) }, uniquingKeysWith: { a, _ in a })
+                }
+                guard let s = sorular?[o.soruGlobalId] else { continue }
+                for l in DurumServisi.kazanimLevhalari(s, context) where !levhalar.contains(l) { levhalar.append(l) }
+            }
             k.pekistirme = DurumServisi.oncelikSirala(self.levhalar(levhalar, context), context).map(\.id)
             if !t.tamamlananlar.contains(TurBlogu.kapanis.rawValue) {
                 k.kapanis = kapanisSec(k, siraliLevhalar(context), context)
@@ -212,6 +227,16 @@ enum TurPlanlayici {
         if t.calismaYeri == CalismaYeri.sadeceTekrar.rawValue { t.calismaYeri = CalismaYeri.kitapli.rawValue }
         t.kisa = false
         planla(t, context)
+    }
+
+    /// "Önce oku" kapanınca: bugünün kuyruğunda okundu işareti.
+    static func okundu(_ paketId: String, _ t: TurDurumu, _ context: ModelContext) {
+        var k = kuyruk(t)
+        guard !(k.okunan ?? []).contains(paketId) else { return }
+        k.okunan = (k.okunan ?? []) + [paketId]
+        t.kuyruk = try? JSONEncoder().encode(k)
+        try? context.save()
+        OlayDefteri.degisti()
     }
 
     static func kitapTemizle(_ t: TurDurumu, _ context: ModelContext) {
@@ -273,7 +298,7 @@ enum SoruSecici {
         let karisik = agirlikliKaristir(havuz, rng: &rng)
         func grup(_ s: Soru) -> Int {
             if yanlis7.contains(s.kimlik) { return 0 }
-            if DurumServisi.vadeliMi(durumlar[s.levha]) { return 1 }
+            if !s.bagimsiz && DurumServisi.vadeliMi(durumlar[s.levha]) { return 1 }
             if !cozulen.contains(s.kimlik) { return 2 }
             return 3
         }

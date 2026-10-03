@@ -56,6 +56,8 @@ struct OlcumOzeti {
     var kazanimSayisi = 0
     var sorusuzKazanim = 0
     var yazdiklarim = 0
+    var soruPaketiSayisi = 0
+    var bagimsizSoru = 0
     var dersBolumler: [(ad: String, levha: Int)] = []
     var dersler: [String] = []
     // Öğrenme
@@ -78,6 +80,8 @@ struct OlcumOzeti {
     var kalipTahmin: [KalipTipi: Sayac] = [:]
     var guvensiz = 0
     var sonSinav: SinavKarsilastirmasi?
+    /// Bağımsız sorularda en çok yanlış yapılan kazanım/alt konular.
+    var konuZayifliklari: [(ad: String, yanlis: Int, dogru: Int)] = []
     // Kullanım
     var gunler: [(gun: Date, dk: Int)] = []
     var turTamamlanan = 0
@@ -145,7 +149,7 @@ enum OlcumHesaplayici {
 
         // İçerik
         let paketler = al(FetchDescriptor<Paket>(sortBy: [SortDescriptor(\.ders), SortDescriptor(\.bolum), SortDescriptor(\.alt_konu)]))
-        let icerik = paketler.filter { !$0.kullaniciMi }
+        let icerik = paketler.filter(\.konuPaketiMi)
         let sorular = al(FetchDescriptor<Soru>())
         let kazanimlar = al(FetchDescriptor<Kazanim>())
         let soruSozlugu = Dictionary(sorular.map { ($0.kimlik, $0) }, uniquingKeysWith: { a, _ in a })
@@ -153,20 +157,26 @@ enum OlcumHesaplayici {
         o.soruSayisi = sorular.count
         o.kazanimSayisi = kazanimlar.count
         o.yazdiklarim = sorular.filter(\.kullaniciSorusu).count
+        o.soruPaketiSayisi = paketler.filter(\.soruPaketiMi).count
+        o.bagimsizSoru = sorular.filter(\.bagimsiz).count
         var sira: [String] = []
         var sayi: [String: Int] = [:]
         for p in paketler {
             let levhalar = p.levhalar
             o.levhaSayisi += levhalar.count
-            guard !p.kullaniciMi else { continue }
+            guard p.konuPaketiMi else { continue }
             let ad = "\(p.ders) › \(p.bolum)"
             if sayi[ad] == nil { sira.append(ad) }
             sayi[ad, default: 0] += levhalar.count
             if !o.dersler.contains(p.ders) { o.dersler.append(p.ders) }
         }
         o.dersBolumler = sira.map { ($0, sayi[$0] ?? 0) }
-        let soruluKazanim = Set(sorular.compactMap { s in s.kazanim.map { "\(s.paket?.paket_id ?? "").\($0)" } })
+        let soruluKazanim = Set(sorular.compactMap { s in s.kazanimKisaId.map { "\(s.kazanimPaketId ?? s.paket?.paket_id ?? "").\($0)" } })
         o.sorusuzKazanim = kazanimlar.filter { !soruluKazanim.contains("\($0.paket?.paket_id ?? "").\($0.id)") }.count
+        o.konuZayifliklari = al(FetchDescriptor<KonuZayiflik>()).filter { $0.yanlis > 0 }
+            .sorted { ($0.yanlis, $1.dogru) > ($1.yanlis, $0.dogru) }
+            .prefix(6)
+            .map { ($0.kazanimMetni.map { "\($0)" } ?? "\($0.altKonu) (alt konu)", $0.yanlis, $0.dogru) }
 
         // Öğrenme
         let durumlar = al(FetchDescriptor<LevhaDurumu>())

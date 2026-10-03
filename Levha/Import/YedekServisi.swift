@@ -30,6 +30,8 @@ struct YedekPaketi: Codable {
     var yerelEkler: [YerelEkK] = []
     var abGruplar: [ABK] = []
     var ayarlar: AyarlarK?
+    /// v5: bağımsız soru zayıflıkları (eski yedeklerde yok).
+    var konuZayiflik: [KonuZayiflikK]?
 
     /// Özet ve "olay sayıları eşit mi?" denetimi için.
     var olaySayisi: Int { ortme.count + soru.count + sabotaj.count + insa.count + ipucu.count + editor.count + sinav.count + llm.count }
@@ -57,6 +59,9 @@ struct YedekPaketi: Codable {
     }
     struct LevhaDurumuK: Codable { var levhaId: String; var kutu: Int; var sonrakiTarih: Date?; var saglamlik: Double; var sonGorulme: Date? }
     struct ZayiflikK: Codable { var levhaId, dugumId: String; var sayac: Int }
+    struct KonuZayiflikK: Codable {
+        var anahtar, ders, altKonu: String; var kazanimId, kazanimMetni: String?; var yanlis, dogru: Int; var sonTarih: Date
+    }
     struct NotK: Codable { var levhaId, dugumId, metin: String; var tarih: Date }
     struct SorK: Codable { var levhaId: String; var dugumId: String?; var soru, cevap: String; var tarih: Date }
     struct TaslakK: Codable { var levhaId: String; var tarih: Date; var ham: String; var json: Data?; var hatalar: [String]; var eklendi: Bool }
@@ -117,6 +122,10 @@ enum YedekServisi {
         y.tur = al(TurDurumu.self).map { .init(gun: $0.gun, calismaYeri: $0.calismaYeri, altKonuPaketId: $0.altKonuPaketId, kisa: $0.kisa, tamamlananlar: $0.tamamlananlar, kuyruk: $0.kuyruk) }
         y.levhaDurumu = al(LevhaDurumu.self).map { .init(levhaId: $0.levhaId, kutu: $0.kutu, sonrakiTarih: $0.sonrakiTarih, saglamlik: $0.saglamlik, sonGorulme: $0.sonGorulme) }
         y.zayiflik = al(DugumZayiflik.self).map { .init(levhaId: $0.levhaId, dugumId: $0.dugumId, sayac: $0.sayac) }
+        y.konuZayiflik = al(KonuZayiflik.self).map {
+            .init(anahtar: $0.anahtar, ders: $0.ders, altKonu: $0.altKonu, kazanimId: $0.kazanimId, kazanimMetni: $0.kazanimMetni,
+                  yanlis: $0.yanlis, dogru: $0.dogru, sonTarih: $0.sonTarih)
+        }
         y.notlar = al(DugumNotu.self).map { .init(levhaId: $0.levhaId, dugumId: $0.dugumId, metin: $0.metin, tarih: $0.tarih) }
         y.sorKayitlari = al(SorKaydi.self).map { .init(levhaId: $0.levhaId, dugumId: $0.dugumId, soru: $0.soru, cevap: $0.cevap, tarih: $0.tarih) }
         y.taslaklar = al(Taslak.self).map { .init(levhaId: $0.levhaId, tarih: $0.tarih, ham: $0.ham, json: $0.json, hatalar: $0.hatalar, eklendi: $0.eklendi) }
@@ -247,6 +256,14 @@ enum YedekServisi {
         for k in y.zayiflik where mevcut.insert("\(k.levhaId)|\(k.dugumId)").inserted {
             context.insert(DugumZayiflik(levhaId: k.levhaId, dugumId: k.dugumId, sayac: k.sayac))
         }
+        mevcut = Set(birlestir ? al(KonuZayiflik.self).map(\.anahtar) : [])
+        for k in y.konuZayiflik ?? [] where mevcut.insert(k.anahtar).inserted {
+            let z = KonuZayiflik(anahtar: k.anahtar, ders: k.ders, altKonu: k.altKonu, kazanimId: k.kazanimId, kazanimMetni: k.kazanimMetni)
+            z.yanlis = k.yanlis
+            z.dogru = k.dogru
+            z.sonTarih = k.sonTarih
+            context.insert(z)
+        }
         mevcut = Set(birlestir ? al(DugumNotu.self).map { "\($0.levhaId)|\($0.dugumId)|\(ts($0.tarih))" } : [])
         for k in y.notlar where mevcut.insert("\(k.levhaId)|\(k.dugumId)|\(ts(k.tarih))").inserted {
             context.insert(DugumNotu(levhaId: k.levhaId, dugumId: k.dugumId, metin: k.metin, tarih: k.tarih))
@@ -366,7 +383,7 @@ enum YedekServisi {
         sil(OrtmeOlayi.self); sil(SoruOlayi.self); sil(SabotajOlayi.self); sil(InsaOlayi.self); sil(IpucuOlayi.self)
         sil(EditorOlayi.self); sil(SinavOlayi.self); sil(LLMKullanim.self); sil(KullanimKaydi.self); sil(TurDurumu.self)
         sil(LevhaDurumu.self); sil(DugumZayiflik.self); sil(DugumNotu.self); sil(SorKaydi.self); sil(Taslak.self)
-        sil(ABGrup.self); sil(BekleyenYedek.self)
+        sil(ABGrup.self); sil(BekleyenYedek.self); sil(KonuZayiflik.self)
         for s in ((try? context.fetch(FetchDescriptor<Soru>())) ?? []) where s.kullaniciSorusu { context.delete(s) }
         for d in ((try? context.fetch(FetchDescriptor<Dugum>())) ?? []) where d.yerel == true { context.delete(d) }
         for b in ((try? context.fetch(FetchDescriptor<Baglanti>())) ?? []) where b.yerel == true { context.delete(b) }

@@ -86,8 +86,11 @@ struct SoruSekmesi: View {
                 Section("Konu seç") {
                     Picker("Alt konu", selection: $seciliPaket) {
                         Text("Tümü").tag("")
-                        ForEach(paketler.filter { !$0.kullaniciMi }) { p in
+                        ForEach(paketler.filter(\.konuPaketiMi)) { p in
                             Text("\(p.bolum) › \(p.alt_konu)").tag(p.paket_id)
+                        }
+                        ForEach(paketler.filter(\.soruPaketiMi)) { p in
+                            Text("\(p.alt_konu) · soru paketi (\(p.sorular.count))").tag(p.paket_id)
                         }
                         if let k = paketler.first(where: \.kullaniciMi), !k.sorular.isEmpty {
                             Text("Yazdıklarım (\(k.sorular.count))").tag(k.paket_id)
@@ -123,6 +126,10 @@ struct SoruSekmesi: View {
                 }
             }
             .onAppear { tur = TurPlanlayici.bugun(context) }
+            // Seçili paket silindiyse seçim "Tümü"ye döner (Picker geçersiz etiket göstermesin).
+            .onChange(of: paketler.map(\.paket_id), initial: true) { _, idler in
+                if !seciliPaket.isEmpty && !idler.contains(seciliPaket) { seciliPaket = "" }
+            }
             .onChange(of: OlayDefteri.ortak.surum) {
                 if tur == nil || tur?.isDeleted == true || tur?.modelContext == nil { tur = TurPlanlayici.bugun(context) }
             }
@@ -148,7 +155,19 @@ struct SoruSekmesi: View {
 
     private func konuOturumuBaslat() {
         let tumu = (try? context.fetch(FetchDescriptor<Soru>(sortBy: [SortDescriptor(\.sira)]))) ?? []
-        let havuz = seciliPaket.isEmpty ? tumu : tumu.filter { $0.paket?.paket_id == seciliPaket }
+        let havuz: [Soru]
+        if seciliPaket.isEmpty {
+            havuz = tumu
+        } else if let konu = paketler.first(where: { $0.paket_id == seciliPaket }), konu.konuPaketiMi {
+            // Konu: kendi soruları + levhalarına bağlı ya da aynı ders/alt konudaki soru paketi soruları.
+            havuz = tumu.filter { s in
+                if s.paket?.paket_id == seciliPaket { return true }
+                guard let sp = s.paket, sp.soruPaketiMi else { return false }
+                return s.levhaPaketId == seciliPaket || (s.bagimsiz && sp.ders == konu.ders && sp.alt_konu == konu.alt_konu)
+            }
+        } else {
+            havuz = tumu.filter { $0.paket?.paket_id == seciliPaket }
+        }
         oturumSayaci += 1
         let idler = SoruSecici.konu(havuz, sayi: sayi, tohum: "konu|\(DurumServisi.gunAnahtari())|\(seciliPaket)|\(oturumSayaci)", context)
         let ad = paketler.first { $0.paket_id == seciliPaket }?.alt_konu ?? "Tüm konular"
@@ -282,6 +301,8 @@ struct SoruOturumuView: View {
                                 .padding(.vertical, 4)
                                 .background(RenkSeti.mavi.zemin, in: Capsule())
                                 .accessibilityLabel("Levha: \(l.baslik)")
+                        } else {
+                            BagimsizRozeti()
                         }
                     }
                     .id("ust")
@@ -410,7 +431,7 @@ struct SoruOturumuView: View {
                 .font(.system(size: 14))
                 .foregroundStyle(Tema.metin)
                 .fixedSize(horizontal: false, vertical: true)
-            if !s.aciklama_yolu.isEmpty {
+            if l != nil, !s.aciklama_yolu.isEmpty {
                 Text("CEVAP YOLU")
                     .font(.system(size: 10, weight: .heavy))
                     .tracking(0.7)
@@ -441,12 +462,15 @@ struct SoruOturumuView: View {
                     }
                 }
             }
+            // Bağımsız soru: "Levhada göster" yerine açıklama + (varsa) anlatım başlığı.
+            AnlatimBaglantisi(soru: s)
             HStack(spacing: 10) {
-                PanelDugmesi(baslik: "Levhada göster", renk: .mavi, dolu: false) {
-                    gosterim = LevhaGosterimi(levhaId: s.levha, yol: s.aciklama_yolu.isEmpty ? s.dugumler : s.aciklama_yolu,
-                                              celdirici: celdirici)
+                if l != nil {
+                    PanelDugmesi(baslik: "Levhada göster", renk: .mavi, dolu: false) {
+                        gosterim = LevhaGosterimi(levhaId: s.levha, yol: s.aciklama_yolu.isEmpty ? s.dugumler : s.aciklama_yolu,
+                                                  celdirici: celdirici)
+                    }
                 }
-                .disabled(l == nil)
                 Button(action: sonraki) {
                     Text(indeks + 1 < sorular.count ? "Sonraki" : "Bitir")
                         .font(.system(size: 14.5, weight: .bold))
@@ -476,6 +500,19 @@ struct SoruOturumuView: View {
                 .frame(maxWidth: 220)
         }
         .padding(24)
+    }
+}
+
+/// Levhası olmayan soru (soru paketi).
+struct BagimsizRozeti: View {
+    var body: some View {
+        Label("Bağımsız", systemImage: "doc.text")
+            .font(.system(size: 11, weight: .bold))
+            .foregroundStyle(RenkSeti.gri.yazi)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 4)
+            .background(RenkSeti.gri.zemin, in: Capsule())
+            .accessibilityLabel("Bağımsız soru, levhası yok")
     }
 }
 

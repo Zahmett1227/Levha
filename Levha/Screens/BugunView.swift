@@ -26,6 +26,9 @@ struct BugunView: View {
     @State private var tur: TurDurumu?
     @State private var acikBlok: TurBlogu?
     @State private var kitapAcik = false
+    /// "Önce oku": açık anlatım ve kapanınca okundu işaretlenecek paket.
+    @State private var okunan: AnlatimHedefi?
+    @State private var sonOkunan: String?
     @Query(sort: \SinavOlayi.tarih, order: .reverse) private var sinavlar: [SinavOlayi]
 
     /// Pazar günleri, son 6 günde sınav yoksa "Mini sınav zamanı" kartı.
@@ -35,8 +38,8 @@ struct BugunView: View {
         return pazar && Date.now.timeIntervalSince(son) > 6 * 86_400 && !icerikPaketleri.isEmpty
     }
 
-    /// Editör'ün "Yazdıklarım" paketi alt konu sayılmaz.
-    private var icerikPaketleri: [Paket] { paketler.filter { !$0.kullaniciMi } }
+    /// Editör'ün "Yazdıklarım" paketi ve soru paketleri alt konu sayılmaz.
+    private var icerikPaketleri: [Paket] { paketler.filter(\.konuPaketiMi) }
 
     var body: some View {
         NavigationStack {
@@ -64,6 +67,9 @@ struct BugunView: View {
                 }
                 tumAltKonular
             }
+            .fullScreenCover(item: $okunan, onDismiss: {
+                if let id = sonOkunan, let tur = gecerliTur { TurPlanlayici.okundu(id, tur, context) }
+            }) { AnlatimView(paket: $0.paket, baslik: $0.baslik) }
             .scrollContentBackground(.hidden)
             .background(Tema.arkaPlan)
             .navigationTitle("Bugün")
@@ -129,6 +135,15 @@ struct BugunView: View {
                      kisa: Binding(get: { tur.kisa }, set: { tur.kisa = $0; try? context.save() }))
             let kuyruk = TurPlanlayici.kuyruk(tur)
             ForEach(TurPlanlayici.aktifBloklar(tur)) { blok in
+                if blok == .yeni, let p = onceOkunacak(tur, kuyruk) {
+                    Button {
+                        sonOkunan = p.paket_id
+                        okunan = AnlatimHedefi(paket: p, baslik: nil)
+                    } label: {
+                        OnceOkuSatiri(paket: p, tamam: (kuyruk.okunan ?? []).contains(p.paket_id))
+                    }
+                    .buttonStyle(.plain)
+                }
                 let ayrinti = blokAyrintisi(blok, kuyruk, tur)
                 Button {
                     acikBlok = blok
@@ -145,6 +160,12 @@ struct BugunView: View {
         } header: {
             Text("Bugünün turu")
         }
+    }
+
+    /// Kitapsız modda Yeni bloğunun başında: Yeni levhalarından anlatımı olan ilk alt konu.
+    private func onceOkunacak(_ tur: TurDurumu, _ k: TurKuyrugu) -> Paket? {
+        guard tur.calismaYeri == CalismaYeri.kitapsiz.rawValue, !tur.kisa, !k.yeni.isEmpty else { return nil }
+        return TurPlanlayici.levhalar(k.yeni, context).lazy.compactMap(\.paket).first(where: \.anlatimVar)
     }
 
     private func blokAyrintisi(_ blok: TurBlogu, _ k: TurKuyrugu, _ tur: TurDurumu) -> (metin: String, acik: Bool) {
@@ -378,6 +399,42 @@ struct BlokSatiri: View {
         .padding(.vertical, 4)
         .opacity(blok.hazir ? 1 : 0.45)
         .contentShape(Rectangle())
+    }
+}
+
+/// Kitapsız modda Yeni bloğundan önce: alt konunun anlatımı (5 dk).
+struct OnceOkuSatiri: View {
+    let paket: Paket
+    let tamam: Bool
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: tamam ? "checkmark.circle.fill" : "book")
+                .font(.system(size: 20))
+                .foregroundStyle(tamam ? RenkSeti.yesil.kenar : Tema.metin)
+                .frame(width: 28)
+            VStack(alignment: .leading, spacing: 2) {
+                HStack(spacing: 6) {
+                    Text("Önce oku")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundStyle(Tema.metin)
+                    Text("5 dk")
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundStyle(Tema.ikincil)
+                }
+                Text("\(paket.alt_konu) · konu anlatımı")
+                    .font(.system(size: 13))
+                    .foregroundStyle(Tema.ikincil)
+                    .lineLimit(1)
+            }
+            Spacer()
+            Image(systemName: "chevron.right")
+                .font(.system(size: 13, weight: .semibold))
+                .foregroundStyle(Tema.cizgi)
+        }
+        .padding(.vertical, 4)
+        .contentShape(Rectangle())
+        .accessibilityElement(children: .combine)
     }
 }
 

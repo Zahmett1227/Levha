@@ -480,8 +480,15 @@ struct MiniSinavSonucView: View {
 
     @Environment(\.modelContext) private var context
     @State private var gosterim: LevhaGosterimi?
+    @State private var aciklama: AciklamaGosterimi?
     @State private var tumTahmin = Sayac()
     private let harfler = ["A", "B", "C", "D", "E"]
+
+    struct AciklamaGosterimi: Identifiable {
+        let id = UUID()
+        let soru: Soru
+        let secilen: Int?
+    }
 
     private var detay: [(soru: Soru, cevap: SinavSorusu)] {
         let sozluk = Dictionary(sorular.map { ($0.kimlik, $0) }, uniquingKeysWith: { a, _ in a })
@@ -553,21 +560,30 @@ struct MiniSinavSonucView: View {
                                     .font(.system(size: 12)).foregroundStyle(Tema.ikincil).lineLimit(1)
                             }
                             Spacer()
-                            Button("Levhada göster") {
-                                let celdirici = x.cevap.secilen.flatMap { $0 == x.soru.dogru ? nil : x.soru.celdiriciler[$0] }
-                                gosterim = LevhaGosterimi(levhaId: x.soru.levha,
-                                                          yol: x.soru.aciklama_yolu.isEmpty ? x.soru.dugumler : x.soru.aciklama_yolu,
-                                                          celdirici: celdirici)
+                            if x.soru.bagimsiz {
+                                // Levhası yok: açıklama + anlatım başlığı.
+                                Button("Açıklama") { aciklama = AciklamaGosterimi(soru: x.soru, secilen: x.cevap.secilen) }
+                                    .font(.system(size: 12, weight: .semibold))
+                                    .buttonStyle(.bordered)
+                                    .tint(RenkSeti.gri.kenar)
+                            } else {
+                                Button("Levhada göster") {
+                                    let celdirici = x.cevap.secilen.flatMap { $0 == x.soru.dogru ? nil : x.soru.celdiriciler[$0] }
+                                    gosterim = LevhaGosterimi(levhaId: x.soru.levha,
+                                                              yol: x.soru.aciklama_yolu.isEmpty ? x.soru.dugumler : x.soru.aciklama_yolu,
+                                                              celdirici: celdirici)
+                                }
+                                .font(.system(size: 12, weight: .semibold))
+                                .buttonStyle(.bordered)
+                                .tint(RenkSeti.mavi.kenar)
                             }
-                            .font(.system(size: 12, weight: .semibold))
-                            .buttonStyle(.bordered)
-                            .tint(RenkSeti.mavi.kenar)
                         }
                     }
                 }
             }
             .padding(16)
         }
+        .sheet(item: $aciklama) { a in SoruAciklamasi(soru: a.soru, secilen: a.secilen) }
         .navigationDestination(item: $gosterim) { g in
             let id = g.levhaId
             if let levha = try? context.fetch(FetchDescriptor<Levha>(predicate: #Predicate { $0.id == id })).first {

@@ -14,6 +14,10 @@ final class Paket {
     var alt_konu: String
     var dosyaAdi: String
     var iceAktarilma: Date
+    /// v5: nil → konu paketi; "soru_paketi" → yalnız sorular.
+    var tur: String?
+    /// v5: konu anlatımı (markdown).
+    var anlatim: String?
     @Relationship(deleteRule: .cascade, inverse: \Levha.paket) var levhalar: [Levha] = []
     @Relationship(deleteRule: .cascade, inverse: \Soru.paket) var sorular: [Soru] = []
     @Relationship(deleteRule: .cascade, inverse: \Kazanim.paket) var kazanimlar: [Kazanim] = []
@@ -33,6 +37,10 @@ final class Paket {
     static let kullaniciId = "kullanici.yazdiklarim"
     static let kullaniciKaynak = "kullanici"
     var kullaniciMi: Bool { paket_id == Paket.kullaniciId }
+    var soruPaketiMi: Bool { tur == PaketJSON.soruPaketiTuru }
+    /// Levhası olan alt konu: Yazdıklarım ve soru paketleri değil.
+    var konuPaketiMi: Bool { !kullaniciMi && !soruPaketiMi }
+    var anlatimVar: Bool { !(anlatim ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
 
     var siraliLevhalar: [Levha] { levhalar.sorted { $0.sira < $1.sira } }
     var sonCalisma: Date? { levhalar.compactMap(\.sonCalisma).max() }
@@ -266,11 +274,18 @@ final class Soru {
     var konuDers: String?
     var kalipCozulmus: String?
     var sorulabilirlikDegeri: Int?
+    // v5
+    var anlatimBaslik: String?
+    /// Soru paketinde yazılan levha referansı; çözülemezse `levha` boş kalır (bağımsız), paket gelince yeniden denenir.
+    var levhaRef: String?
+    /// Kazanımın bulunduğu paket (soru paketinde kazanım başka paketten gelebilir).
+    var kazanimPaketId: String?
 
     init(_ j: SoruJSON, paketId: String, sira: Int) {
         id = j.id
         globalId = "\(paketId).\(j.id)"
-        levha = j.levha
+        levha = j.levha ?? ""
+        anlatimBaslik = j.anlatim_baslik
         dugumler = j.dugumler ?? []
         kok = j.kok
         secenekler = j.secenekler
@@ -288,11 +303,21 @@ final class Soru {
     }
 
     var kullaniciSorusu: Bool { kaynakTuru == Paket.kullaniciKaynak }
+    /// Levhası olmayan soru (yalnız soru paketinde).
+    var bagimsiz: Bool { levha.isEmpty }
 
-    /// Ders, kazanım ve aile bilgisinin geldiği paket: kullanıcı sorusunda levhanın paketi.
+    /// Ders, kazanım ve aile bilgisinin geldiği paket: kullanıcı sorusunda ve levhaya bağlı soru paketi sorusunda
+    /// levhanın paketi.
     var konuPaketi: Paket? {
-        guard kullaniciSorusu, let pid = levhaPaketId, let ctx = modelContext else { return paket }
+        guard kullaniciSorusu || paket?.soruPaketiMi == true, let pid = levhaPaketId, let ctx = modelContext else { return paket }
         return (try? ctx.fetch(FetchDescriptor<Paket>(predicate: #Predicate { $0.paket_id == pid })).first) ?? paket
+    }
+
+    /// Kazanımın paket içi id'si (`paket_id.k3` tam yolu kısaltılır).
+    var kazanimKisaId: String? {
+        guard let k = kazanim else { return nil }
+        if let pid = kazanimPaketId, k.hasPrefix(pid + ".") { return String(k.dropFirst(pid.count + 1)) }
+        return k
     }
 
     /// Kazanımın sorulabilirliği (1–5); kazanımı yoksa nil.
@@ -630,6 +655,34 @@ final class DugumZayiflik {
     }
 }
 
+/// Bağımsız soruların (levhası yok) zayıflık/sağlamlık sayacı: kazanımı varsa kazanım, yoksa alt konu düzeyinde.
+@Model
+final class KonuZayiflik {
+    /// "kazanim|<paket_id>|<kazanım id>" ya da "konu|<ders>|<alt konu>".
+    @Attribute(.unique) var anahtar: String
+    var ders: String
+    var altKonu: String
+    var kazanimId: String?
+    var kazanimMetni: String?
+    var yanlis: Int
+    var dogru: Int
+    var sonTarih: Date
+
+    init(anahtar: String, ders: String, altKonu: String, kazanimId: String?, kazanimMetni: String?) {
+        self.anahtar = anahtar
+        self.ders = ders
+        self.altKonu = altKonu
+        self.kazanimId = kazanimId
+        self.kazanimMetni = kazanimMetni
+        yanlis = 0
+        dogru = 0
+        sonTarih = .now
+    }
+
+    /// Doğru oranı (0–1); cevap yoksa nil.
+    var saglamlik: Double? { yanlis + dogru > 0 ? Double(dogru) / Double(yanlis + dogru) : nil }
+}
+
 /// Zamanlayıcı durumunun kalıcı karşılığı (`ZamanDurumu`).
 @Model
 final class LevhaDurumu {
@@ -681,7 +734,7 @@ enum Depo {
         SabotajOlayi.self, SoruOlayi.self, DugumZayiflik.self, LevhaDurumu.self, TurDurumu.self,
         Kazanim.self, Aile.self, InsaOlayi.self, KullanimKaydi.self,
         IpucuOlayi.self, SorKaydi.self, DugumNotu.self, Taslak.self, EditorOlayi.self,
-        SinavOlayi.self, LLMKullanim.self, ABGrup.self, BekleyenYedek.self,
+        SinavOlayi.self, LLMKullanim.self, ABGrup.self, BekleyenYedek.self, KonuZayiflik.self,
     ]
 
     /// Depo App Group container'ında durur (widget ve Part 4+ eklentileri erişebilsin). App Group yoksa

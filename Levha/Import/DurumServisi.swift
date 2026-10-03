@@ -71,6 +71,7 @@ enum DurumServisi {
     }
 
     /// Yanlış cevapta sorunun düğümleri ve seçilen şıkkın çeldirici düğümü zayıflık sayacına +1 yazılır.
+    /// Bağımsız soru (levhasız) kazanım ya da alt konu düzeyinde sayılır (`KonuZayiflik`).
     static func soruKaydet(soru: Soru, secilen: Int, guven: Int?, sure: TimeInterval, kirma: KirmaKaydi? = nil,
                            baglam: String? = nil, tarih: Date = .now, toplu: Bool = false, _ context: ModelContext) {
         let dogru = secilen == soru.dogru
@@ -84,12 +85,16 @@ enum DurumServisi {
             olay.kirmaSuresi = kirma.sure
         }
         context.insert(olay)
-        if !dogru {
-            var dugumler = soru.dugumler
-            if let c = soru.celdiriciler[secilen], !dugumler.contains(c) { dugumler.append(c) }
-            for id in dugumler { zayiflikArtir(levhaId: soru.levha, dugumId: id, context) }
+        if soru.bagimsiz {
+            bagimsizKaydet(soru, dogru: dogru, context)
+        } else {
+            if !dogru {
+                var dugumler = soru.dugumler
+                if let c = soru.celdiriciler[secilen], !dugumler.contains(c) { dugumler.append(c) }
+                for id in dugumler { zayiflikArtir(levhaId: soru.levha, dugumId: id, context) }
+            }
+            saglamlikGuncelle(soru.levha, context)
         }
-        saglamlikGuncelle(soru.levha, context)
         // Toplu yazımda (Mini sınav) kaydetme, widget ve özet tazeleme çağırana kalır.
         guard !toplu else { return }
         try? context.save()
@@ -110,6 +115,46 @@ enum DurumServisi {
         OlayDefteri.degisti()
     }
 
+    /// Bağımsız soru: kazanımı çözülmüşse kazanım düzeyinde sayılır ve yanlışta kazanımın düğümleri (levhalarında)
+    /// zayıflık alır; kazanımı yoksa soru paketinin alt konusu düzeyinde.
+    private static func bagimsizKaydet(_ soru: Soru, dogru: Bool, _ context: ModelContext) {
+        let kazanim = cozulmusKazanim(soru, context)
+        let konu = kazanim?.paket ?? soru.paket
+        let (ders, altKonu) = (konu?.ders ?? soru.ders ?? "", konu?.alt_konu ?? "")
+        let anahtar = kazanim.map { "kazanim|\($0.paket?.paket_id ?? "")|\($0.id)" } ?? "konu|\(ders)|\(altKonu)"
+        let z: KonuZayiflik
+        if let mevcut = try? context.fetch(FetchDescriptor<KonuZayiflik>(predicate: #Predicate { $0.anahtar == anahtar })).first {
+            z = mevcut
+        } else {
+            z = KonuZayiflik(anahtar: anahtar, ders: ders, altKonu: altKonu, kazanimId: kazanim?.id, kazanimMetni: kazanim?.metin)
+            context.insert(z)
+        }
+        if dogru { z.dogru += 1 } else { z.yanlis += 1 }
+        z.sonTarih = .now
+        guard !dogru, let kazanim else { return }
+        for (levhaId, dugumId) in kazanimDugumleri(kazanim) { zayiflikArtir(levhaId: levhaId, dugumId: dugumId, context) }
+    }
+
+    static func cozulmusKazanim(_ soru: Soru, _ context: ModelContext) -> Kazanim? {
+        guard let pid = soru.kazanimPaketId, let kid = soru.kazanimKisaId else { return nil }
+        let paket = try? context.fetch(FetchDescriptor<Paket>(predicate: #Predicate { $0.paket_id == pid })).first
+        return paket?.kazanimlar.first { $0.id == kid }
+    }
+
+    /// Kazanımın düğümleri, paketinin hangi levhasında bulunuyorsa (levha, düğüm) çiftleri.
+    private static func kazanimDugumleri(_ k: Kazanim) -> [(String, String)] {
+        guard let levhalar = k.paket?.siraliLevhalar else { return [] }
+        return k.dugumler.flatMap { d in levhalar.filter { l in l.dugumler.contains { $0.id == d } }.map { ($0.id, d) } }
+    }
+
+    /// Bağımsız sorunun kazanımına bağlı levhalar (Pekiştirme için).
+    static func kazanimLevhalari(_ soru: Soru, _ context: ModelContext) -> [String] {
+        guard let k = cozulmusKazanim(soru, context) else { return [] }
+        var sonuc: [String] = []
+        for (l, _) in kazanimDugumleri(k) where !sonuc.contains(l) { sonuc.append(l) }
+        return sonuc
+    }
+
     private static func zayiflikArtir(levhaId: String, dugumId: String, _ context: ModelContext) {
         let (l, d) = (levhaId, dugumId)
         if let z = try? context.fetch(FetchDescriptor<DugumZayiflik>(predicate: #Predicate { $0.levhaId == l && $0.dugumId == d })).first {
@@ -127,6 +172,7 @@ enum DurumServisi {
 
     /// Sağlamlık olay geçmişinden yeniden hesaplanır (formül `Zamanlayici.saglamlik`).
     static func saglamlikGuncelle(_ levhaId: String, _ context: ModelContext) {
+        guard !levhaId.isEmpty else { return }
         let l = levhaId
         let ortmeler = (try? context.fetch(FetchDescriptor<OrtmeOlayi>(predicate: #Predicate { $0.levhaId == l },
                                                                       sortBy: [SortDescriptor(\.tarih)]))) ?? []

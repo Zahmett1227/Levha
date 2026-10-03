@@ -26,10 +26,10 @@ final class ABDeneyi {
     func metinMi(_ paketId: String?) -> Bool { grup(paketId) == Self.metin }
     func metinMi(_ levha: Levha) -> Bool { metinMi(levha.paket?.paket_id) }
 
-    /// Tüm alt konuları (Yazdıklarım hariç) karıştırıp ikiye böler; tek sayıda fazlası levha grubuna.
+    /// Tüm alt konuları (Yazdıklarım ve soru paketleri hariç) karıştırıp ikiye böler; tek sayıda fazlası levha grubuna.
     func baslat(_ context: ModelContext) {
         temizle(context)
-        let paketler = ((try? context.fetch(FetchDescriptor<Paket>())) ?? []).filter { !$0.kullaniciMi }.shuffled()
+        let paketler = ((try? context.fetch(FetchDescriptor<Paket>())) ?? []).filter(\.konuPaketiMi).shuffled()
         let simdi = Date.now
         let levhaSayisi = (paketler.count + 1) / 2
         for (i, p) in paketler.enumerated() {

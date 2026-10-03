@@ -415,10 +415,13 @@ struct IpucuAviKarti: View {
                 .font(.system(size: 14))
                 .foregroundStyle(Tema.metin)
                 .fixedSize(horizontal: false, vertical: true)
+            AnlatimBaglantisi(soru: soru)
             HStack(spacing: 10) {
-                PanelDugmesi(baslik: "Levhada göster", renk: .mavi, dolu: false) {
-                    levhaGoster(LevhaGosterimi(levhaId: soru.levha, yol: soru.aciklama_yolu.isEmpty ? soru.dugumler : soru.aciklama_yolu,
-                                               celdirici: dogru ? nil : soru.celdiriciler[secilen]))
+                if !soru.bagimsiz {
+                    PanelDugmesi(baslik: "Levhada göster", renk: .mavi, dolu: false) {
+                        levhaGoster(LevhaGosterimi(levhaId: soru.levha, yol: soru.aciklama_yolu.isEmpty ? soru.dugumler : soru.aciklama_yolu,
+                                                   celdirici: dogru ? nil : soru.celdiriciler[secilen]))
+                    }
                 }
                 Button(action: sonraki) {
                     Text(sonIndeks ? "Bitir" : "Sonraki")

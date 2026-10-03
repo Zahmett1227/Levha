@@ -5,8 +5,19 @@ import SwiftData
 /// "Bu iPhone'da › Levha › Paketler" klasörüne düşer (Files'ta görünür).
 @MainActor
 final class PaketKlasoru: ObservableObject {
+    struct Ozet {
+        var paketId: String
+        var altKonu: String
+        var levha: Int
+        var soru: Int
+        /// Levhasız sorular (soru paketi).
+        var bagimsiz: Int
+        var anlatimKelime: Int?
+        var uyarilar: [LintBulgusu]
+    }
+
     enum Durum {
-        case gecerli(paketId: String, altKonu: String, levha: Int, soru: Int, uyarilar: [LintBulgusu])
+        case gecerli(Ozet)
         case hatali([LintBulgusu])
         case indiriliyor
     }
@@ -14,6 +25,8 @@ final class PaketKlasoru: ObservableObject {
     struct Dosya: Identifiable {
         let url: URL
         let durum: Durum
+        /// `tur: "soru_paketi"` (hatalı dosyada da JSON'dan okunur).
+        var soruPaketi = false
         var id: String { url.lastPathComponent }
         var ad: String { url.lastPathComponent }
     }
@@ -55,7 +68,8 @@ final class PaketKlasoru: ObservableObject {
                 try? fm.startDownloadingUbiquitousItem(at: gercek)
                 sonuc.append(Dosya(url: gercek, durum: .indiriliyor))
             } else if url.pathExtension.lowercased() == "json" {
-                sonuc.append(Dosya(url: url, durum: Self.incele(url)))
+                let veri = Self.oku(url)
+                sonuc.append(Dosya(url: url, durum: Self.incele(veri), soruPaketi: veri.map(Self.soruPaketiMi) ?? false))
             }
         }
         dosyalar = sonuc.sorted { $0.ad.localizedStandardCompare($1.ad) == .orderedAscending }
@@ -70,14 +84,21 @@ final class PaketKlasoru: ObservableObject {
         return veri
     }
 
-    static func incele(_ url: URL) -> Durum {
-        guard let veri = oku(url) else { return .hatali([LintBulgusu("", "dosya okunamadı")]) }
+    static func incele(_ veri: Data?) -> Durum {
+        guard let veri else { return .hatali([LintBulgusu("", "dosya okunamadı")]) }
         let s = LevhaLint.denetle(veri: veri)
         guard let p = s.paket, !s.engelleyiciVar else {
             return .hatali(s.bulgular.filter(\.engelleyici) + s.bulgular.filter { !$0.engelleyici })
         }
-        return .gecerli(paketId: p.paket_id, altKonu: p.alt_konu, levha: p.levhalar.count,
-                        soru: p.sorular?.count ?? 0, uyarilar: s.bulgular)
+        let sorular = p.sorular ?? []
+        return .gecerli(Ozet(paketId: p.paket_id, altKonu: p.alt_konu, levha: p.levhalar.count, soru: sorular.count,
+                             bagimsiz: p.soruPaketiMi ? sorular.filter { ($0.levha ?? "").isEmpty }.count : 0,
+                             anlatimKelime: p.anlatim.map(AnlatimMetni.kelimeSayisi), uyarilar: s.bulgular))
+    }
+
+    /// JSON'un kökünde `"tur": "soru_paketi"` var mı (şema hatalı olsa da).
+    static func soruPaketiMi(_ veri: Data) -> Bool {
+        ((try? JSONSerialization.jsonObject(with: veri)) as? [String: Any])?["tur"] as? String == PaketJSON.soruPaketiTuru
     }
 
     /// Elle seçilen dosyayı klasöre kopyalar; böylece listede kalıcı olarak görünür.

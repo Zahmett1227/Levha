@@ -37,6 +37,8 @@ enum PaketIceAktarici {
         paket.alt_konu = json.alt_konu
         paket.dosyaAdi = dosyaAdi
         paket.iceAktarilma = .now
+        paket.tur = json.tur
+        paket.anlatim = json.anlatim
 
         var korunan: [String] = []
         var guncelIdler = Set<String>()
@@ -66,12 +68,21 @@ enum PaketIceAktarici {
         // Sorular her zaman yeniden yazılır.
         for s in paket.sorular { context.delete(s) }
         let kazanimSozlugu = Dictionary((json.kazanimlar ?? []).map { ($0.id, $0) }, uniquingKeysWith: { a, _ in a })
+        let ozKazanimlar = kazanimSozlugu.mapValues {
+            SoruBaglayici.KazanimBilgisi(paketId: pid, id: $0.id, kalip: $0.kalip, sorulabilirlik: $0.sorulabilirlik)
+        }
         for (i, sj) in (json.sorular ?? []).enumerated() {
             let s = Soru(sj, paketId: pid, sira: i)
             context.insert(s)
             s.paket = paket
-            let k = sj.kazanim.flatMap { kazanimSozlugu[$0] }
-            s.cozumle(ders: json.ders, kazanimKalibi: k?.kalip, kazanimSorulabilirligi: k?.sorulabilirlik)
+            if json.soruPaketiMi {
+                // Levha başka paketten (tam id); bulunamazsa soru bağımsız kalır, paket gelince bağlanır.
+                s.levhaRef = sj.levha.flatMap { $0.isEmpty ? nil : $0 }
+                SoruBaglayici.bagla(s, paket: paket, ozKazanimlar: ozKazanimlar, context)
+            } else {
+                let k = sj.kazanim.flatMap { kazanimSozlugu[$0] }
+                s.cozumle(ders: json.ders, kazanimKalibi: k?.kalip, kazanimSorulabilirligi: k?.sorulabilirlik)
+            }
         }
         SoruOnbellegi.temizle()
 
@@ -82,6 +93,8 @@ enum PaketIceAktarici {
                          bulgular: [LintBulgusu("", "kaydedilemedi: \(error.localizedDescription)")], duzenKorunan: [])
         }
         YedekServisi.bekleyenleriBagla(context)
+        // Önceden gelmiş soru paketleri bu paketin levha/kazanımlarına bağlanabilir.
+        SoruBaglayici.yenidenBagla(context)
         OlayDefteri.degisti()
         return Sonuc(dosyaAdi: dosyaAdi, basarili: true, paketId: pid,
                      bulgular: denetim.bulgular, duzenKorunan: korunan)

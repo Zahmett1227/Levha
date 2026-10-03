@@ -12,7 +12,7 @@ struct LevhaSekmesi: View {
     var body: some View {
         NavigationStack {
             Group {
-                let icerik = paketler.filter { !$0.kullaniciMi }
+                let icerik = paketler.filter(\.konuPaketiMi)
                 if let paket = icerik.first(where: { $0.paket_id == aktifPaketId }) ?? icerik.first {
                     LevhaPager(levhalar: paket.siraliLevhalar, mod: $mod, onek: paket.bolum,
                                baslangicId: yonlendirici.hedefLevhaId) {
@@ -64,6 +64,7 @@ struct LevhaPager<Sag: View>: View {
 
     @State private var indeks = 0
     @State private var hazir = false
+    @State private var okunan: AnlatimHedefi?
 
     var body: some View {
         VStack(spacing: 6) {
@@ -74,6 +75,19 @@ struct LevhaPager<Sag: View>: View {
                         .foregroundStyle(Tema.ikincil)
                         .lineLimit(1)
                         .minimumScaleFactor(0.8)
+                    if let p = levhalar[indeks].paket, p.anlatimVar {
+                        Button { okunan = AnlatimHedefi(paket: p, baslik: nil) } label: {
+                            Label("Oku", systemImage: "book")
+                                .font(.system(size: 12.5, weight: .semibold))
+                                .foregroundStyle(Tema.metin)
+                                .padding(.horizontal, 9)
+                                .frame(height: 26)
+                                .background(Color.white, in: Capsule())
+                                .overlay(Capsule().strokeBorder(Tema.kartKenar, lineWidth: 1))
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel("Konu anlatımını oku")
+                    }
                 }
                 Spacer()
                 sag
@@ -91,6 +105,7 @@ struct LevhaPager<Sag: View>: View {
             .tabViewStyle(.page(indexDisplayMode: .never))
         }
         .background(Tema.arkaPlan)
+        .fullScreenCover(item: $okunan) { AnlatimView(paket: $0.paket, baslik: $0.baslik) }
         .onAppear {
             guard !hazir else { return }
             hazir = true

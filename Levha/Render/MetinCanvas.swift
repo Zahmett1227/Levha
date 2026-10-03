@@ -50,6 +50,7 @@ struct MetinCanvas: View {
 
     var body: some View {
         let etiket = Dictionary(cizim.dugumler.map { ($0.id, $0.etiket) }, uniquingKeysWith: { a, _ in a })
+        ScrollViewReader { vekil in
         ScrollView {
             VStack(alignment: .leading, spacing: 5) {
                 ForEach(satirlar) { s in
@@ -59,7 +60,7 @@ struct MetinCanvas: View {
                             .foregroundStyle(Tema.metin)
                             .padding(.top, 4)
                     }
-                    satir(s)
+                    satir(s).id(s.id)
                 }
                 if notlarAcik && !cizim.baglantilar.isEmpty {
                     Text("BAĞLANTILAR")
@@ -80,6 +81,12 @@ struct MetinCanvas: View {
             .frame(maxWidth: .infinity, alignment: .leading)
         }
         .scrollIndicators(.visible)
+        // Açılışta vurgulu (Levhada göster, anlatım referansı) düğüm görünür alana gelir.
+        .onAppear {
+            guard let hedef = durum.halkalar.keys.sorted().first ?? durum.secili else { return }
+            DispatchQueue.main.async { vekil.scrollTo(hedef, anchor: .center) }
+        }
+        }
         .frame(width: boyut.width, height: boyut.height)
         .animation(.easeOut(duration: 0.25), value: durum.gizli)
         .animation(.easeOut(duration: 0.25), value: durum.halkalar)

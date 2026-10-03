@@ -89,6 +89,11 @@ struct OlcumSekmesi: View {
                 SayiKutusu(deger: "\(o.soruSayisi)", ad: "soru")
                 SayiKutusu(deger: "\(o.kazanimSayisi)", ad: "kazanım")
             }
+            if o.soruPaketiSayisi > 0 {
+                Label("\(o.soruPaketiSayisi) soru paketi · \(o.bagimsizSoru) bağımsız soru", systemImage: "doc.on.doc")
+                    .font(.system(size: 13, weight: .semibold))
+                    .foregroundStyle(RenkSeti.mavi.yazi)
+            }
             if o.yazdiklarim > 0 {
                 Label("\(o.yazdiklarim) soru Editör'de yazıldı (Yazdıklarım)", systemImage: "square.and.pencil")
                     .font(.system(size: 13, weight: .semibold))
@@ -175,12 +180,32 @@ struct OlcumSekmesi: View {
             ipucuGecikmesi(o)
             Divider()
             karistirmaMatrisi(o)
+            if !o.konuZayifliklari.isEmpty {
+                Divider()
+                bagimsizZayiflik(o)
+            }
             Divider()
             tahminiNet(o)
             Divider()
             sinavKalibrasyonu(o)
             Divider()
             tahminVerimliligi(o)
+        }
+    }
+
+    /// Bağımsız sorular (levhasız): yanlışlar kazanım ya da alt konu düzeyinde sayılır.
+    private func bagimsizZayiflik(_ o: OlcumOzeti) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text("Bağımsız sorularda zayıf noktalar").font(.system(size: 13, weight: .semibold)).foregroundStyle(Tema.ikincil)
+            ForEach(Array(o.konuZayifliklari.enumerated()), id: \.offset) { _, z in
+                HStack(alignment: .firstTextBaseline) {
+                    Text(z.ad).font(.system(size: 13.5)).lineLimit(2)
+                    Spacer()
+                    Text("\(z.yanlis) yanlış · \(z.dogru) doğru")
+                        .font(.system(size: 12.5, weight: .semibold).monospacedDigit())
+                        .foregroundStyle(RenkSeti.kirmizi.yazi)
+                }
+            }
         }
     }
 
@@ -551,6 +576,9 @@ enum CSVDisaAktarim {
             [$0.levhaId, "\($0.kutu)", String(format: "%.1f", $0.saglamlik), t($0.sonrakiTarih), t($0.sonGorulme)]
         }
         yaz("dugum_zayiflik", DugumZayiflik.self, ["levhaId", "dugumId", "sayac"]) { [$0.levhaId, $0.dugumId, "\($0.sayac)"] }
+        yaz("konu_zayiflik", KonuZayiflik.self, ["anahtar", "ders", "altKonu", "kazanimId", "yanlis", "dogru", "sonTarih"]) {
+            [$0.anahtar, $0.ders, $0.altKonu, $0.kazanimId ?? "", "\($0.yanlis)", "\($0.dogru)", t($0.sonTarih)]
+        }
         yaz("tur", TurDurumu.self, ["gun", "calismaYeri", "altKonuPaketId", "kisa", "tamamlananlar"]) {
             [$0.gun, $0.calismaYeri, $0.altKonuPaketId ?? "", "\($0.kisa)", $0.tamamlananlar.joined(separator: " ")]
         }
